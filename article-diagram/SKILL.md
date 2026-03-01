@@ -1,6 +1,6 @@
 ---
 name: article-diagram
-description: 自动为 Markdown 文章生成专业 SVG 插图。触发场景：(1) 用户要求为文章/博客/文档生成图表，(2) 文章需要可视化流程/架构/概念，(3) 需要将复杂概念转化为易懂图表。支持流程图、架构图、时序图、对比图。
+description: 自动为 Markdown 文章生成专业 SVG 插图，支持导出 JPEG。触发场景：(1) 用户要求为文章/博客/文档生成图表，(2) 文章需要可视化流程/架构/概念，(3) 需要将复杂概念转化为易懂图表，(4) 需要将 SVG 转换为 JPEG 格式。支持流程图、架构图、时序图、对比图。
 ---
 
 # Article Diagram
@@ -107,6 +107,32 @@ grep -E '&[^a]' file.svg | grep -v '&amp;' | grep -v '&lt;' | grep -v '&gt;'
 ![图表标题](./diagrams/filename.svg)
 ```
 
+## 8. 导出为 JPEG（可选）
+
+如需将 SVG 转换为 JPEG 格式：
+
+```bash
+# 转换目录下所有 SVG
+node scripts/svg-to-jpeg.js ./diagrams
+
+# 转换单个文件
+node scripts/svg-to-jpeg.js ./diagrams/chart.svg
+
+# 指定输出目录和质量
+node scripts/svg-to-jpeg.js ./diagrams ./output --quality 95 --bg #FFFFFF
+```
+
+**参数说明**：
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `--quality` | JPEG 质量 (1-100) | 90 |
+| `--bg` | 背景色 (十六进制) | #FFFFFF |
+
+**使用场景**：
+- 平台不支持 SVG 显示（如某些微信公众号编辑器）
+- 需要固定尺寸的预览图
+- 兼容旧版浏览器或文档系统
+
 ## 示例
 
 ```
@@ -140,3 +166,4 @@ grep -E '&[^a]' file.svg | grep -v '&amp;' | grep -v '&lt;' | grep -v '&gt;'
 ### scripts/
 - `validate_svg.py` - SVG 语法验证脚本
 - `generate_diagram.py` - SVG 生成辅助脚本
+- `svg-to-jpeg.js` - SVG 转 JPEG 转换脚本
