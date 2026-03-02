@@ -57,8 +57,6 @@ diagrams/
 # Markdown 源文件
 sources/
 
-# 测试和评估
-evals/
 test-results/
 .pytest_cache/
 .coverage
