@@ -65,3 +65,6 @@ htmlcov/
 # 编辑器
 *.sublime-project
 *.sublime-workspace
+
+# 评估文件
+SOUL/evals/
