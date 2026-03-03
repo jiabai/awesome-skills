@@ -53,6 +53,18 @@ AI 助手的核心人格和行为框架：
 - **核心功能**：提取 know-how 列表 → 设计插图清单 → 生成 SVG → 验证语法 → 覆盖检查 → 合并到 Markdown
 - **附加功能**：支持 SVG 转 JPEG 格式（`scripts/svg-to-jpeg.js`）
 
+### 📊 cycle-investment-analysis
+
+使用周期研究框架分析投资机会：
+
+- **三角验证模型**：需求侧 → 供给侧 → 供需错配
+- **需求侧分析**：判断需求增长类型（稳定增长/快速增长/突发需求/需求萎缩）
+- **供给侧分析**：识别供给约束类型（政策限制/资源约束/技术壁垒/周期约束/政策预期）
+- **供需错配验证**：通过错配强度判断矩阵评估机会
+- **业绩弹性评估**：计算价格上涨对业绩的传导效应
+- **周期类型分类**：供给收缩型/需求激增型/双轮驱动型/政策预期型
+- **输出模板**：标的分析表 + 优先级排序
+
 ## 快速开始
 
 ### 创建新技能
@@ -96,12 +108,14 @@ awesome-skills/
 │       └── evals.json        # SOUL 技能评估配置
 ├── skill-creator/
 │   └── SKILL.md              # 技能创建工具
-└── article-diagram/
-    ├── SKILL.md              # 文章插图生成器
-    ├── package.json          # Node.js 项目配置
-    ├── package-lock.json     # 依赖锁定文件
-    └── scripts/
-        └── svg-to-jpeg.js    # SVG 转 JPEG 工具脚本
+├── article-diagram/
+│   ├── SKILL.md              # 文章插图生成器
+│   ├── package.json          # Node.js 项目配置
+│   ├── package-lock.json     # 依赖锁定文件
+│   └── scripts/
+│       └── svg-to-jpeg.js    # SVG 转 JPEG 工具脚本
+└── cycle-investment-analysis/
+    └── SKILL.md              # 周期投资分析框架
 ```
 
 ## 最佳实践
@@ -126,6 +140,7 @@ awesome-skills/
 - [SOUL Skill](SOUL/SKILL.md) - 核心人格框架文档
 - [Skill Creator](skill-creator/SKILL.md) - 技能创建工具文档
 - [Article Diagram](article-diagram/SKILL.md) - 文章插图生成器文档
+- [Cycle Investment Analysis](cycle-investment-analysis/SKILL.md) - 周期投资分析框架文档
 
 ## 🤝 贡献
 
