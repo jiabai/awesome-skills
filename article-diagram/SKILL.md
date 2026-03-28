@@ -73,9 +73,15 @@ Know-how 列表：
 ## 5. 验证 SVG
 
 **必须验证**：
+
 ```bash
-# 检查未转义的 &
+# Linux/macOS/Git Bash - 检查未转义的 &
 grep -E '&[^a]' file.svg | grep -v '&amp;' | grep -v '&lt;' | grep -v '&gt;'
+```
+
+```powershell
+# Windows PowerShell - 检查未转义的 &
+Select-String -Path "file.svg" -Pattern '&[^a]' | Where-Object { $_.Line -notmatch '&amp;|&lt;|&gt;' }
 ```
 
 **常见错误**：
@@ -164,6 +170,4 @@ node scripts/svg-to-jpeg.js ./diagrams ./output --quality 95 --bg #FFFFFF
 - `design-spec.md` - 详细设计规范（颜色系统、字体样式、组件模板）
 
 ### scripts/
-- `validate_svg.py` - SVG 语法验证脚本
-- `generate_diagram.py` - SVG 生成辅助脚本
 - `svg-to-jpeg.js` - SVG 转 JPEG 转换脚本
