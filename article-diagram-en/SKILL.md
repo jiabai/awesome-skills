@@ -1,6 +1,6 @@
 ---
 name: article-diagram
-description: Automatically generate professional SVG illustrations for Markdown articles, with JPEG export and bilingual illustration pages. Triggers: (1) User requests diagrams for articles/blogs/docs, (2) Articles need visualization of flows/architecture/concepts, (3) Complex concepts need to be converted to easy-to-understand diagrams, (4) SVG to JPEG conversion needed, (5) S-tier content needs standalone bilingual pages. Supports flowcharts, architecture diagrams, sequence diagrams, and comparison diagrams.
+description: "Automatically generate professional SVG illustrations for Markdown articles, with JPEG export and bilingual illustration pages. Triggers: (1) User requests diagrams for articles/blogs/docs, (2) Articles need visualization of flows/architecture/concepts, (3) Complex concepts need to be converted to easy-to-understand diagrams, (4) SVG to JPEG conversion needed, (5) S-tier content needs standalone bilingual pages. Supports flowcharts, architecture diagrams, sequence diagrams, and comparison diagrams."
 ---
 
 # Article Diagram
