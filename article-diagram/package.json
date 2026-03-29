@@ -1,13 +1,13 @@
 {
   "name": "article-diagram",
-  "version": "1.0.0",
-  "description": "为 Markdown 文章自动生成专业 SVG 插图",
+  "version": "2.0.0",
+  "description": "为 Markdown 文章自动生成专业 SVG 插图，支持 JPEG 导出和双语插画网页",
   "scripts": {
     "svg-to-jpeg": "node scripts/svg-to-jpeg.js"
   },
   "dependencies": {
     "sharp": "^0.34.0"
   },
-  "keywords": ["svg", "diagram", "markdown", "visualization"],
+  "keywords": ["svg", "diagram", "markdown", "visualization", "jpeg"],
   "license": "MIT"
 }

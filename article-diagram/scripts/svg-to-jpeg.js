@@ -1,18 +1,3 @@
-/**
- * SVG to JPEG Converter
- * Converts SVG files to JPEG format with white background
- *
- * Usage:
- *   node svg-to-jpeg.js <svg-path-or-dir> [output-dir]
- *   node svg-to-jpeg.js ./diagrams                    # Convert all SVGs in directory
- *   node svg-to-jpeg.js ./diagrams/chart.svg           # Convert single file
- *   node svg-to-jpeg.js ./diagrams ./output            # Specify output directory
- *
- * Options:
- *   --quality <1-100>   JPEG quality (default: 90)
- *   --bg <color>        Background color in hex (default: #FFFFFF)
- */
-
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
@@ -95,7 +80,7 @@ async function processFile(inputPath, outputDir, options) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
-  if (!args.input) {
+  if (!args.input || args.help) {
     console.log(`
 SVG to JPEG Converter
 

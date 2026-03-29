@@ -1,0 +1,21 @@
+[project]
+name = "article-diagram"
+version = "2.0.0"
+description = "为 Markdown 文章自动生成专业 SVG 插图"
+readme = "SKILL.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+validate-svg = "scripts.validate_svg:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scripts*"]

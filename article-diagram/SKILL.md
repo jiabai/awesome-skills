@@ -1,6 +1,6 @@
 ---
 name: article-diagram
-description: 自动为 Markdown 文章生成专业 SVG 插图，支持导出 JPEG。触发场景：(1) 用户要求为文章/博客/文档生成图表，(2) 文章需要可视化流程/架构/概念，(3) 需要将复杂概念转化为易懂图表，(4) 需要将 SVG 转换为 JPEG 格式。支持流程图、架构图、时序图、对比图。
+description: 自动为 Markdown 文章生成专业 SVG 插图，支持导出 JPEG 和双语插画网页。触发场景：(1) 用户要求为文章/博客/文档生成图表，(2) 文章需要可视化流程/架构/概念，(3) 需要将复杂概念转化为易懂图表，(4) 需要 SVG 转换为 JPEG 格式，(5) S 级内容需要独立双语网页。支持流程图、架构图、时序图、对比图。
 ---
 
 # Article Diagram
@@ -10,7 +10,9 @@ description: 自动为 Markdown 文章生成专业 SVG 插图，支持导出 JPE
 ## Workflow
 
 ```
-文章输入 → 提取 know-how → 设计插图清单 → 生成 SVG → 验证语法 → 覆盖检查 → 合并到 Markdown
+文章输入 → 提取 know-how → 设计插图清单 → 生成 SVG → 验证语法 → 覆盖检查 → 合并到 Markdown → (可选) 导出 JPEG
+                                                                                          ↓
+                                                                                    S级内容: 生成双语插画网页
 ```
 
 ## 1. 分析文章结构
@@ -70,17 +72,23 @@ Know-how 列表：
 | sequence | 时序交互 | 1000×500 |
 | comparison | 方案对比 | 900×340 |
 
+**生成辅助**：
+使用 `scripts/generate_diagram.py` 中的 Python 函数辅助生成标准 SVG：
+```python
+from generate_diagram import ColorScheme, card, step_circle, arrow_marker, connection_line, svg_template
+```
+
 ## 5. 验证 SVG
 
 **必须验证**：
-
 ```bash
+# Python 验证脚本（推荐）
+python scripts/validate_svg.py file.svg
+
 # Linux/macOS/Git Bash - 检查未转义的 &
 grep -E '&[^a]' file.svg | grep -v '&amp;' | grep -v '&lt;' | grep -v '&gt;'
-```
 
-```powershell
-# Windows PowerShell - 检查未转义的 &
+# Windows PowerShell
 Select-String -Path "file.svg" -Pattern '&[^a]' | Where-Object { $_.Line -notmatch '&amp;|&lt;|&gt;' }
 ```
 
@@ -113,9 +121,9 @@ Select-String -Path "file.svg" -Pattern '&[^a]' | Where-Object { $_.Line -notmat
 ![图表标题](./diagrams/filename.svg)
 ```
 
-## 8. 导出为 JPEG（可选）
+## 8. 导出 JPEG（可选）
 
-如需将 SVG 转换为 JPEG 格式：
+如需将 SVG 转换为 JPEG 格式（用于不支持 SVG 的平台）：
 
 ```bash
 # 转换目录下所有 SVG
@@ -134,19 +142,79 @@ node scripts/svg-to-jpeg.js ./diagrams ./output --quality 95 --bg #FFFFFF
 | `--quality` | JPEG 质量 (1-100) | 90 |
 | `--bg` | 背景色 (十六进制) | #FFFFFF |
 
-**使用场景**：
-- 平台不支持 SVG 显示（如某些微信公众号编辑器）
-- 需要固定尺寸的预览图
-- 兼容旧版浏览器或文档系统
+## 9. 生成双语插画网页（S 级内容）
+
+**当处理 S 级内容时，必须生成独立双语插画网页**。
+
+### HTML 结构要求
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章标题</title>
+    <style>/* 响应式样式 */</style>
+</head>
+<body>
+    <section>
+        <h2>图表标题</h2>
+        <div class="diagram">
+            <!-- 必须嵌入完整 SVG 代码 -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 550">
+                <defs>...</defs>
+                <!-- 完整 SVG 内容 -->
+            </svg>
+            <div class="diagram-caption">图 1: 说明</div>
+        </div>
+    </section>
+</body>
+</html>
+```
+
+### SVG 嵌入规范（关键）
+
+**必须嵌入完整 SVG 代码**，禁止 placeholder：
+
+```html
+<!-- ✅ 正确 -->
+<div class="diagram">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 550">
+        <defs>
+            <style>.bg { fill: #0B0F19; }</style>
+            <marker id="arrowhead" .../>
+        </defs>
+        <rect class="bg" width="1100" height="550"/>
+        <text x="550" y="40">标题</text>
+        <!-- 所有图形元素 -->
+    </svg>
+</div>
+
+<!-- ❌ 错误：placeholder -->
+<div class="diagram">
+    <svg>📊 请查看独立 SVG 文件</svg>
+</div>
+```
+
+### 验证清单
+
+- [ ] SVG 完整嵌入（非 placeholder）
+- [ ] 包含 `<defs>` 和所有样式定义
+- [ ] 包含 `<marker>` 等引用元素
+- [ ] 所有图形元素完整
+- [ ] HTML 文件大小>10KB（含 SVG）
+- [ ] 移动端响应式（viewport meta tag）
+- [ ] SVG 使用 `max-width: 100%; height: auto;`
 
 ## 示例
 
 ```
-输入：请为 sources/article.md 生成插图
+输入: 请为 sources/article.md 生成插图
 
 步骤:
 1. 提取 know-how 列表：7 个关键点
-2. 设计清单：4 张图
+2. 设计插图清单：4 张图
 3. 生成 SVG...
 4. 覆盖检查：遗漏 GCC Oracle 策略，补充
 5. 最终输出：5 张插图
@@ -170,4 +238,6 @@ node scripts/svg-to-jpeg.js ./diagrams ./output --quality 95 --bg #FFFFFF
 - `design-spec.md` - 详细设计规范（颜色系统、字体样式、组件模板）
 
 ### scripts/
-- `svg-to-jpeg.js` - SVG 转 JPEG 转换脚本
+- `generate_diagram.py` - Python SVG 生成辅助脚本
+- `validate_svg.py` - SVG 语法验证脚本（推荐使用）
+- `svg-to-jpeg.js` - SVG 转 JPEG 转换脚本（需要 Node.js）
