@@ -1,0 +1,13 @@
+{
+  "name": "article-diagram",
+  "version": "2.0.0",
+  "description": "Automatically generate professional SVG illustrations for Markdown articles, with JPEG export and bilingual illustration pages",
+  "scripts": {
+    "svg-to-jpeg": "node scripts/svg-to-jpeg.js"
+  },
+  "dependencies": {
+    "sharp": "^0.34.0"
+  },
+  "keywords": ["svg", "diagram", "markdown", "visualization", "jpeg"],
+  "license": "MIT"
+}

@@ -1,0 +1,21 @@
+[project]
+name = "article-diagram"
+version = "2.0.0"
+description = "Automatically generate professional SVG illustrations for Markdown articles",
+readme = "SKILL.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+validate-svg = "scripts.validate_svg:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scripts*"]
