@@ -1,0 +1,16 @@
+{
+  "name": "wechat-article-writer",
+  "version": "1.1.0",
+  "description": "AI-powered writing assistant for WeChat public account content. Learns author style, generates viral titles, creates structured articles, and removes AI-generated text characteristics.",
+  "author": "Article Skill Contributors",
+  "license": "MIT",
+  "tags": [
+    "writing",
+    "wechat",
+    "article-creation",
+    "ai-writing",
+    "viral-content",
+    "content-creation"
+  ],
+  "language": "zh-CN"
+}

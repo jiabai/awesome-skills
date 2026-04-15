@@ -1,0 +1,35 @@
+{
+  "skill_name": "wechat-article-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我写一篇公众号文章，介绍Cursor这个AI编程工具，我的读者主要是设计师和产品经理，不太懂代码",
+      "expected_output": "Should trigger the skill, load viral-writing-method.md for tool intro type, generate 4 types of viral titles, create a tool introduction article structure (Hook → Pain → Solution → Story → Iteration → Value → CTA), use friendly persona with self-deprecation, and produce flowing paragraph style (not bullet points). Article length should be 2000-3000 words.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我想写一篇关于'为什么自律是一个骗局'的深度思考文章，我自己试过很多时间管理方法都失败了",
+      "expected_output": "Should trigger the skill, load deep-cognition-writing.md for deep thinking type, use the 6-part cognitive upgrade framework (Hook → Pain → Value Promise → Core Content → Quote Extraction → Empowerment Ending), generate contrast-type titles, include 3-5 shareable quotes marked in italic, and avoid empty inspirational slogans. Article length should be 2500-3500 words.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "帮我分析一下最近AI绘画领域有什么热点，我想追一下热点写篇文章",
+      "expected_output": "Should trigger the skill, load trending-analysis.md, perform web searches for AI painting trends, output structured analysis with: trending topics with heat scores, viral title analysis with type classification, borrowable angles with differentiation suggestions. Should reference author-config.md field for relevance filtering.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "我之前写了一段文章内容，你帮我看看能不能优化一下，感觉读起来有点像AI写的：首先，这款工具极大地提升了工作效率。其次，它支持多种格式导出。最后，团队协作功能也非常强大。综上所述，这是一个值得推荐的工具。",
+      "expected_output": "Should trigger the skill, load remove-ai-style.md, identify AI patterns (首先/其次/最后/综上所述), replace with natural flowing paragraphs, convert passive voice to active, add human details and personal insights, adjust structure to avoid rigid 总分总 format. Output should read naturally without mechanical connectors.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "帮我生成5个关于'零代码开发'这个主题的爆款标题",
+      "expected_output": "Should trigger the skill, generate 5 viral titles across the 4 types (Contrast, Question, Number+Effect, Negation+Reversal), each title should include type label and brief explanation of why it works. Titles should be under 30 characters, have contrast/surprise elements, and be specific rather than vague.",
+      "files": []
+    }
+  ]
+}
