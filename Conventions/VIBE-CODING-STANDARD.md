@@ -18,7 +18,7 @@
 
 ---
 
-## 核心理念
+## 核心原则（不可协商）
 
 ```
 Humans steer. Agents execute.
@@ -64,7 +64,7 @@ Humans steer. Agents execute.
 ### 文件结构规范
 
 ```
-AGENTS.md (~100行) → 目录/地图，不写百科全书
+AGENTS.md (~150行) → 目录/地图，不写百科全书
 docs/
 ├── design-docs/
 │   ├── index.md              # 设计文档索引

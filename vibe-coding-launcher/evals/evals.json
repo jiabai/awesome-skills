@@ -1,0 +1,23 @@
+{
+  "skill_name": "vibe-coding-launcher",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我想用 vibe coding 开发一个项目，帮我做一个记账的小网页",
+      "expected_output": "应先询问3个问题了解用户情况，然后推荐HTML+CSS+JS技术栈，生成包含AGENTS.md和docs/目录的项目结构，建立知识体系，创建首个ExecPlan（如Hello World页面），并逐步指导",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我是个新手，想做一个能自动发邮件的工具，用的是Mac",
+      "expected_output": "推荐Python技术栈，生成包含AGENTS.md、docs/ARCHITECTURE.md、docs/exec-plans/的项目结构，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "帮我写个AI聊天机器人，我懂一点Python",
+      "expected_output": "推荐Python+Claude/OpenAI API，生成包含Interface→Agent→Service→Config→Types分层架构的项目结构，在AGENTS.md中声明架构不变量，创建ExecPlan从最小可运行版本开始",
+      "files": []
+    }
+  ]
+}
