@@ -1,0 +1,23 @@
+{
+  "skill_name": "canvas-architect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "分析这个项目的架构，生成 Obsidian Canvas 格式的架构图",
+      "expected_output": "生成包含架构模式识别节点、潜在风险节点和执行摘要的 .canvas 文件",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "帮我可视化 awesome-skills 这个仓库的组织结构，我想看到各个技能模块之间的关系",
+      "expected_output": "生成展示技能模块及其依赖的 canvas 架构图，包含必须的洞察节点",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "生成一个 architecture.canvas 文件，展示当前项目的架构洞察，包括核心组件、关键关系和潜在风险",
+      "expected_output": "生成包含架构模式识别、风险节点和置信度的 canvas 文件",
+      "files": []
+    }
+  ]
+}
