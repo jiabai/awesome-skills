@@ -1,0 +1,23 @@
+{
+  "skill_name": "canvas-sequence",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "分析 open-skillhub 项目中的用户认证流程，生成交互序列图",
+      "expected_output": "生成包含生命线、消息流、激活条的序列图",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "帮我可视化 skill 上传的完整流程，从 API 入口到数据库存储",
+      "expected_output": "生成展示完整调用链的序列图",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "生成一个 skill_download_sequence.canvas，展示技能下载的执行流程",
+      "expected_output": "生成包含场景识别节点和交互洞察节点的序列图",
+      "files": []
+    }
+  ]
+}
