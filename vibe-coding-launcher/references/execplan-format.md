@@ -50,3 +50,22 @@ This ExecPlan is a living document.
 - 单文件脚本：一个能运行并输出结果的 main 函数
 
 文件保存到 `docs/exec-plans/active/`，文件名格式：`YYYY-MM-DD-简短描述.md`。
+
+## 进阶：开发循环
+
+当项目完成首个 ExecPlan 并进入日常迭代后，逐步引入更高效的工作循环：
+
+```
+描述任务 → 运行代理（按 ExecPlan 执行）→ 验证结果 → 处理反馈 → 合并
+```
+
+核心原则：
+
+| 原则 | 说明 |
+|------|------|
+| 短生命周期 | 每个 ExecPlan 聚焦一个功能，快速完成 |
+| 最小阻塞 | 单个测试失败不阻塞整体，后续运行处理 |
+| 修正便宜，等待昂贵 | 先完成再优化，不过度追求完美 |
+| 代理自审查 | 代理执行后自行检查 linter 和测试，再交付人类审查 |
+
+日常迭代的 ExecPlan 更轻量——可以省略 Context and Orientation 章节（已有 AGENTS.md 提供），但 Purpose、Progress、Concrete Steps、Validation 仍然必须。

@@ -18,6 +18,36 @@
       "prompt": "帮我写个AI聊天机器人，我懂一点Python",
       "expected_output": "推荐Python+Claude/OpenAI API，生成包含Interface→Agent→Service→Config→Types分层架构的项目结构，在AGENTS.md中声明架构不变量，创建ExecPlan从最小可运行版本开始",
       "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "继续开发上次的项目，上次做到添加登录功能那一步",
+      "expected_output": "应进入恢复模式：先读取AGENTS.md和tasks.md恢复上下文，确认当前进度，找到上次断点，从断点继续而非从第一阶段开始",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "帮我写个Python脚本，把一个文件夹里的图片批量重命名",
+      "expected_output": "识别为单文件脚本项目，推荐Python，只生成核心集（AGENTS.md + tasks.md + README.md），不生成docs/目录，架构约束声明'保持单文件直到超过200行'，创建轻量ExecPlan",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "我想做一个网站，但我只会一点HTML，不想学React那些复杂的",
+      "expected_output": "尊重用户偏好，推荐Vue.js或纯HTML+CSS+JS而非Next.js/React，如果用户仍拒绝则提供备选，不强行推荐用户明确拒绝的技术",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "帮我写个函数，算斐波那契数列",
+      "expected_output": "不应触发此skill——这是单函数级别的请求，不是项目开发。应直接帮助写函数，而非启动7阶段流程",
+      "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "我的项目跑不起来了，帮我修个bug",
+      "expected_output": "不应触发此skill的7阶段流程——这是bug修复场景，不是项目启动。如果有AGENTS.md可以参考架构信息辅助定位，但不应从第一阶段开始",
+      "files": []
     }
   ]
 }
