@@ -3,50 +3,111 @@
   "evals": [
     {
       "id": 1,
+      "eval_name": "新手记账网页",
       "prompt": "我想用 vibe coding 开发一个项目，帮我做一个记账的小网页",
       "expected_output": "应先询问3个问题了解用户情况，然后推荐HTML+CSS+JS技术栈，生成包含AGENTS.md和docs/目录的项目结构，建立知识体系，创建首个ExecPlan（如Hello World页面），并逐步指导",
+      "assertions": [
+        {"name": "问了3个基础问题", "check": "询问了项目描述、编程语言熟悉度、操作系统这3个问题"},
+        {"name": "推荐了技术栈", "check": "推荐了具体的技术栈（如HTML+CSS+JS或类似）"},
+        {"name": "生成了AGENTS.md", "check": "生成了AGENTS.md文件"},
+        {"name": "创建了docs目录", "check": "创建了docs/目录结构"},
+        {"name": "创建了ExecPlan", "check": "在docs/exec-plans/active/创建了执行计划文档"},
+        {"name": "进入阶段执行", "check": "按7阶段流程执行，而非直接写代码"}
+      ],
       "files": []
     },
     {
       "id": 2,
+      "eval_name": "新手邮件工具Mac",
       "prompt": "我是个新手，想做一个能自动发邮件的工具，用的是Mac",
       "expected_output": "推荐Python技术栈，生成包含AGENTS.md、docs/ARCHITECTURE.md、docs/exec-plans/的项目结构，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
+      "assertions": [
+        {"name": "识别用户信息", "check": "识别了用户是新手、使用Mac"},
+        {"name": "推荐Python", "check": "推荐了Python技术栈"},
+        {"name": "生成了核心文档", "check": "生成了AGENTS.md和docs/ARCHITECTURE.md"},
+        {"name": "配置架构约束", "check": "在AGENTS.md或文档中声明了分层架构"},
+        {"name": "创建ExecPlan", "check": "创建了最小可运行版本的执行计划"},
+        {"name": "不假设用户知识", "check": "解释了新手可能不懂的概念"}
+      ],
       "files": []
     },
     {
       "id": 3,
+      "eval_name": "AI聊天机器人Python",
       "prompt": "帮我写个AI聊天机器人，我懂一点Python",
       "expected_output": "推荐Python+Claude/OpenAI API，生成包含Interface→Agent→Service→Config→Types分层架构的项目结构，在AGENTS.md中声明架构不变量，创建ExecPlan从最小可运行版本开始",
+      "assertions": [
+        {"name": "识别用户背景", "check": "识别了用户懂一点Python"},
+        {"name": "推荐AI技术栈", "check": "推荐了Python+AI API（Claude/OpenAI等）"},
+        {"name": "定义分层架构", "check": "定义了Interface→Agent→Service→Config→Types分层"},
+        {"name": "声明架构不变量", "check": "在AGENTS.md中声明了架构不变量"},
+        {"name": "从最小版本开始", "check": "ExecPlan从最小可运行版本开始"}
+      ],
       "files": []
     },
     {
       "id": 4,
+      "eval_name": "项目恢复模式",
       "prompt": "继续开发上次的项目，上次做到添加登录功能那一步",
       "expected_output": "应进入恢复模式：先读取AGENTS.md和tasks.md恢复上下文，确认当前进度，找到上次断点，从断点继续而非从第一阶段开始",
+      "assertions": [
+        {"name": "进入恢复模式", "check": "识别这是恢复场景，进入恢复模式而非7阶段流程"},
+        {"name": "读取AGENTS.md", "check": "读取或引用AGENTS.md恢复架构上下文"},
+        {"name": "读取tasks.md", "check": "读取或引用tasks.md确认进度"},
+        {"name": "定位断点", "check": "识别上次做到'添加登录功能'这一断点"},
+        {"name": "从断点继续", "check": "从断点继续而非从第一阶段重新开始"}
+      ],
       "files": []
     },
     {
       "id": 5,
+      "eval_name": "单文件脚本批量重命名",
       "prompt": "帮我写个Python脚本，把一个文件夹里的图片批量重命名",
       "expected_output": "识别为单文件脚本项目，推荐Python，只生成核心集（AGENTS.md + tasks.md + README.md），不生成docs/目录，架构约束声明'保持单文件直到超过200行'，创建轻量ExecPlan",
+      "assertions": [
+        {"name": "识别单文件场景", "check": "识别这是单文件脚本项目而非完整项目"},
+        {"name": "生成核心集", "check": "只生成AGENTS.md + tasks.md + README.md核心集"},
+        {"name": "不生成docs目录", "check": "不生成docs/目录（单文件项目不需要）"},
+        {"name": "声明单文件约束", "check": "声明'保持单文件'约束"},
+        {"name": "轻量ExecPlan", "check": "创建轻量级ExecPlan而非完整7阶段"}
+      ],
       "files": []
     },
     {
       "id": 6,
+      "eval_name": "尊重用户偏好拒绝React",
       "prompt": "我想做一个网站，但我只会一点HTML，不想学React那些复杂的",
       "expected_output": "尊重用户偏好，推荐Vue.js或纯HTML+CSS+JS而非Next.js/React，如果用户仍拒绝则提供备选，不强行推荐用户明确拒绝的技术",
+      "assertions": [
+        {"name": "尊重用户偏好", "check": "尊重用户不想学React的偏好"},
+        {"name": "推荐替代方案", "check": "推荐Vue.js或HTML+CSS+JS等替代方案"},
+        {"name": "不强行推荐React", "check": "不推荐用户明确拒绝的React/Next.js"},
+        {"name": "提供备选", "check": "提供多个选项让用户选择"}
+      ],
       "files": []
     },
     {
       "id": 7,
+      "eval_name": "不触发单函数请求",
       "prompt": "帮我写个函数，算斐波那契数列",
       "expected_output": "不应触发此skill——这是单函数级别的请求，不是项目开发。应直接帮助写函数，而非启动7阶段流程",
+      "assertions": [
+        {"name": "不应触发skill", "check": "不应触发vibe-coding-launcher的7阶段流程"},
+        {"name": "直接完成任务", "check": "直接帮助写斐波那契函数"},
+        {"name": "不生成项目结构", "check": "不生成AGENTS.md、docs/等项目文档"}
+      ],
       "files": []
     },
     {
       "id": 8,
+      "eval_name": "不触发bug修复场景",
       "prompt": "我的项目跑不起来了，帮我修个bug",
       "expected_output": "不应触发此skill的7阶段流程——这是bug修复场景，不是项目启动。如果有AGENTS.md可以参考架构信息辅助定位，但不应从第一阶段开始",
+      "assertions": [
+        {"name": "不应触发7阶段", "check": "不应触发vibe-coding-launcher的7阶段流程"},
+        {"name": "直接修复bug", "check": "直接帮助定位和修复bug"},
+        {"name": "不生成新文档", "check": "不生成新的AGENTS.md或项目结构"}
+      ],
       "files": []
     }
   ]

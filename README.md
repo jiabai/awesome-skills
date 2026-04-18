@@ -1,15 +1,17 @@
 <div align="center">
 
-# Awesome Skills
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=42&duration=3000&pause=1000&color=9B6DFF&center=true&vCenter=true&multiline=false&repeat=true&width=600&height=70&lines=%E2%9A%A1+Awesome+Skills" alt="Awesome Skills" />
 
-**AI 助手技能集合 + Vibe Coding 开发方法论**
+<h3>AI 助手技能集合 &middot; Vibe Coding 开发方法论</h3>
 
-一套可直接使用的技能（项目启动、架构可视化、写作、搜索等），以及 AI 代理驱动开发的完整规范体系。
+<p>一套可直接使用的技能（项目启动、架构可视化、写作、搜索等），<br/>以及 AI 代理驱动开发的完整规范体系。</p>
 
-[![Skills](https://img.shields.io/badge/Skills-10-blueviolet?style=flat-square)]()
-[![Conventions](https://img.shields.io/badge/Conventions-3-orange?style=flat-square)]()
-[![Vibe Coding](https://img.shields.io/badge/Vibe_Coding-2026-brightgreen?style=flat-square)]()
-[![License](https://img.shields.io/badge/License-Open_Source-success?style=flat-square)]()
+<p>
+  <img src="https://img.shields.io/badge/Skills-10-blueviolet?style=for-the-badge" alt="Skills" />
+  <img src="https://img.shields.io/badge/Conventions-3-orange?style=for-the-badge" alt="Conventions" />
+  <img src="https://img.shields.io/badge/Vibe_Coding-2026-brightgreen?style=for-the-badge" alt="Vibe Coding" />
+  <img src="https://img.shields.io/badge/License-Open_Source-success?style=for-the-badge" alt="License" />
+</p>
 
 </div>
 
