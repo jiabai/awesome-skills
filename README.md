@@ -1,10 +1,12 @@
 <div align="center">
 
+**English** | [**中文**](README_zh.md)
+
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=42&duration=3000&pause=1000&color=9B6DFF&center=true&vCenter=true&multiline=false&repeat=true&width=600&height=70&lines=%E2%9A%A1+Awesome+Skills" alt="Awesome Skills" />
 
-<h3>AI 助手技能集合 &middot; Vibe Coding 开发方法论</h3>
+<h3>AI Assistant Skill Collection &middot; Vibe Coding Methodology</h3>
 
-<p>一套可直接使用的技能（项目启动、架构可视化、写作、搜索等），<br/>以及 AI 代理驱动开发的完整规范体系。</p>
+<p>Ready-to-use skills (project bootstrapping, architecture visualization, writing, search, etc.),<br/>plus a complete specification system for AI agent-driven development.</p>
 
 <p>
   <img src="https://img.shields.io/badge/Skills-10-blueviolet?style=for-the-badge" alt="Skills" />
@@ -17,294 +19,369 @@
 
 ---
 
-## 目录
+## Table of Contents
 
-- [项目简介](#项目简介)
-- [核心技能](#核心技能)
-- [规范与资源](#规范与资源)
-- [快速开始](#快速开始)
-- [项目结构](#项目结构)
-- [最佳实践](#最佳实践)
-- [贡献](#贡献)
+- [Overview](#overview)
+- [Core Skills](#core-skills)
+- [Conventions & Resources](#conventions--resources)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Best Practices](#best-practices)
+- [Contributing](#contributing)
 
-## 项目简介
+## Overview
 
-本项目包含两部分核心内容：
+This project contains two core components:
 
-**技能集合**：覆盖项目启动、架构可视化、交互序列图、文章插图、公众号写作、搜索、投资分析等领域的即用型 AI 助手技能。
+**Skill Collection**: Ready-to-use AI assistant skills covering project bootstrapping, architecture visualization, interaction sequence diagrams, article illustrations, WeChat writing, search, investment analysis, and more.
 
-**Vibe Coding 方法论**：AI 代理驱动开发的完整规范体系（知识管理 + 架构约束 + 执行计划 + 熵管理），让 AI 代理高效运转。
+**Vibe Coding Methodology**: A complete specification system for AI agent-driven development (knowledge management + architecture constraints + execution plans + entropy management), enabling AI agents to operate efficiently.
 
-**特点**：
-- 即用型技能，覆盖多种开发场景
-- Vibe Coding 全流程规范（从项目启动到持续交付）
-- 架构可视化双引擎（静态架构 + 动态序列图）
-- 支持技能评估和迭代优化
+**Highlights**:
+- Ready-to-use skills covering diverse development scenarios
+- Full Vibe Coding workflow specifications (from project initiation to continuous delivery)
+- Architecture visualization dual engines (static architecture + dynamic sequence diagrams)
+- Skill evaluation and iterative optimization support
 
-## 核心技能
+## Core Skills
 
-### skill-creator
+### SOUL — Core Personality Framework
 
-用于创建新技能的核心工具。它提供：
+The behavioral operating system for AI assistants, defining how AI should collaborate with humans. It's not a tool but the foundational layer for all skills — evolving AI from "passive answering" to "active collaboration."
 
-- **技能创建**：从零开始创建新技能
-- **技能优化**：改进现有技能的性能
-- **评估运行**：测试技能在不同场景下的表现
-- **基准分析**：通过方差分析衡量技能性能
-- **描述优化**：优化技能触发描述的准确性
+- **Skip pleasantries, solve directly**: No "Great question!" — just answers, code, and solutions
+- **Have independent judgment**: Will call out bad code, acknowledge elegant design; not a personality-free search engine
+- **Try to figure it out first**: Read files, check context, search — only ask humans when truly stuck; the goal is to come back with answers, not more questions
+- **Earn trust through competence**: No hedging with "maybe" or "probably" — either be certain or clearly state uncertainty
 
-### SOUL
-
-AI 助手的核心人格和行为框架：
-
-- **提供真正的帮助**：跳过客套话，直接解决问题
-- **有主见**：独立思考，提出专业建议
-- **主动解决问题**：先尝试自己解决，再寻求帮助
-- **通过能力赢得信任**：用专业能力建立可靠关系
-
-### vibe-coding-launcher
-
-Vibe Coding 全流程项目启动器，融合 AI 代理驱动开发方法论：
-
-- **七阶段引导**：了解用户 → 推荐技术栈 → 生成项目结构 → 建立知识体系 → 配置架构约束 → 创建 ExecPlan → 步步指导
-- **知识体系建立**：生成 AGENTS.md + docs/ 完整目录（ARCHITECTURE.md、DESIGN.md、QUALITY_SCORE.md 等）
-- **架构约束配置**：分层架构 + 不变量 + 黄金原则
-- **ExecPlan 工作流**：自包含、活文档、新手友好、可演示验证
-- **熵管理**：技术债追踪 + 质量评分 + 知识新鲜度维护
-
-### canvas-architect
-
-AI 驱动的项目架构可视化引擎：
-
-- **架构模式识别**：自动识别项目架构（分层单体、微服务、模块化等），输出置信度评分
-- **潜在风险分析**：系统性识别架构风险（循环依赖、技术债务、外部依赖等）
-- **Obsidian Canvas 输出**：生成 `.canvas` 格式的可视化架构图
-- **执行摘要**：标准化输出格式（架构模式、置信度、风险数量）
-
-### canvas-sequence
-
-AI 驱动的交互序列图生成引擎：
-
-- **动态流程分析**：分析代码的动态执行流程，而非静态架构
-- **序列图生成**：生成 Obsidian Canvas 格式的时序图
-- **调用链可视化**：可视化请求从入口到数据库的完整流程
-- **适用场景**：API 调用链、请求生命周期、模块间调用顺序
-
-### article-diagram
-
-为 Markdown 文章自动生成专业 SVG 插图：
-
-- **流程图**：3 步骤以上的顺序操作
-- **架构图**：3 组件以上的系统关系
-- **时序图**：有时间先后顺序的交互
-- **对比图**：两方或多方案对比
-- **核心功能**：提取 know-how 列表 → 设计插图清单 → 生成 SVG → 验证语法 → 覆盖检查 → 合并到 Markdown
-- **附加功能**：支持 SVG 转 JPEG 格式
-
-### wechat-article-writer
-
-微信公众号文章自动化写作助手：
-
-- **爆款标题生成**：4 类标题模板（痛点型、反差型、悬念型、价值型）
-- **风格学习**：根据作者配置文件学习写作风格
-- **热点分析**：结合 baidu-search 获取热点话题
-- **去 AI 化处理**：去除 AI 写作痕迹，保持自然表达
-- **完整工作流**：资料搜索 → 文章撰写 → 标题优化 → 排版建议
-
-### baidu-search
-
-百度 AI 搜索集成：
-
-- **多模式搜索**：网页搜索、百度百科、秒懂百科、AI 智能生成
-- **热点获取**：实时获取热门话题和资讯
-- **资料检索**：支持内容研究和信息查询
-- **API 集成**：基于百度千帆平台，支持 100 次/天免费额度
-
-### cycle-investment-analysis
-
-使用周期研究框架分析投资机会：
-
-- **三角验证模型**：需求侧 → 供给侧 → 供需错配
-- **需求侧分析**：判断需求增长类型（稳定增长/快速增长/突发需求/需求萎缩）
-- **供给侧分析**：识别供给约束类型（政策限制/资源约束/技术壁垒/周期约束/政策预期）
-- **供需错配验证**：通过错配强度判断矩阵评估机会
-- **周期类型分类**：供给收缩型/需求激增型/双轮驱动型/政策预期型
-
-## 规范与资源
-
-### Conventions — 开发规范
-
-Vibe Coding 方法论的核心规范文件，定义 AI 代理驱动开发的标准流程：
-
-| 规范 | 说明 |
-|------|------|
-| `VIBE-CODING-STANDARD.md` | 全局操作系统：知识管理 + 架构约束 + 开发流程 + 可观测性 |
-| `ARCHITECTURE-TEMPLATE.md` | 架构文档模板：如何编写简短、稳定、定位功能的 ARCHITECTURE.md |
-| `PLANS-UNIVERSAL.md` | 执行规范模板：如何编写自包含、活文档、可验证的 ExecPlan |
-
-### Resource — 参考资源
-
-| 目录 | 内容 |
-|------|------|
-| `canvas-visualization-resource/` | Canvas 可视化参考（ASCII 可视化 prompt、Canvas 模板 JSON、白板驱动开发方法论） |
-| `docs-resource/` | 工程文档参考（架构文档模板、Codex ExecPlans、Agent-first 工程实践） |
-| `glue-engineering-resource/` | Glue 工程参考（代码完整性审计 prompt、需求 prompt、问题描述 prompt） |
+> Use when: All AI conversations, as a baseline behavioral guideline that's always active
 
 ---
 
-## 快速开始
+### skill-creator — Skill Creation & Iteration Tool
 
-### 使用现有技能
+A full-lifecycle tool for creating, testing, and optimizing AI skills. From capturing intent to quantitative evaluation, it covers every stage of a skill's lifecycle.
 
-1. 选择需要的技能目录（如 `vibe-coding-launcher/`、`canvas-architect/`）
-2. 将技能目录复制到你的 AI 助手技能路径下
-3. 在对话中提及触发词即可激活技能
+**Core Workflow**: Capture Intent → Write Draft → Run Tests → Evaluate Results → Iterate → Scale Tests
 
-各 AI 工具的技能路径：
-- **Claude Code**：`.claude/skills/<skill-name>/`
-- **Codex / Trae**：`.trae/skills/<skill-name>/`
-- **Cursor**：`.cursor/skills/<skill-name>/`
+- **Skill Creation**: Structured interview to clarify goals, trigger conditions, and output formats; generates complete SKILL.md from scratch
+- **Evaluation Runs**: Run skills across multiple test prompts, collecting qualitative and quantitative results
+- **Benchmark Analysis**: Variance analysis to measure skill stability across different scenarios
+- **Description Optimization**: Standalone script to optimize description triggering accuracy, ensuring skills activate at the right time
+- **Flexible Adaptation**: Can follow the full evaluation pipeline or rapid-iterate with the user
 
-### 使用 Vibe Coding 规范
+> Use when: Creating new skills, improving existing ones, or quantitatively evaluating skill performance
 
-1. 阅读 `Conventions/VIBE-CODING-STANDARD.md` 了解全局方法论
-2. 使用 `vibe-coding-launcher` 技能启动新项目，自动生成规范体系
-3. 参考 `Conventions/ARCHITECTURE-TEMPLATE.md` 和 `Conventions/PLANS-UNIVERSAL.md` 编写架构文档和执行计划
+---
 
-### 创建新技能
+### vibe-coding-launcher — Vibe Coding Project Launcher
 
-1. 使用 `skill-creator` 技能创建新技能
-2. 定义技能的目标和触发条件
-3. 编写测试用例验证技能功能
-4. 运行评估并迭代优化
+Helps users build AI agent-friendly project systems from scratch, or resume development from a previous session. Core philosophy: **Humans steer. Agents execute.**
 
-### 技能结构
+**7-Stage Guided Process**:
 
-每个技能是一个独立目录，至少包含 `SKILL.md`：
+| Stage | Content |
+|-------|---------|
+| 1. Understand User | 3 key questions: what to build, skill level, preferences |
+| 2. Recommend Tech Stack | 16 project type recommendation table, matching optimal tech combinations |
+| 3. Generate Project Structure | Core/extended directory trees, intelligently adjusted by project type |
+| 4. Build Knowledge System | AGENTS.md + docs/ complete directory (ARCHITECTURE.md, DESIGN.md, QUALITY_SCORE.md, etc.) |
+| 5. Configure Architecture Constraints | Layered architecture + invariants + golden rules, preventing code degradation |
+| 6. Create ExecPlan | Self-contained, living document, beginner-friendly, demo-verifiable execution plan |
+| 7. Execution Guidance | Step-by-step verification, incremental delivery, one atomic commit at a time |
+
+**Resume Mechanism**: When a project already exists (AGENTS.md in the directory), automatically reads context and continues from the breakpoint instead of starting from scratch.
+
+**Entropy Management**: Tech debt tracking + quality scoring + knowledge freshness maintenance, ensuring long-term project health.
+
+> Use when: Wanting to build a project but unsure about tech stack, needing step-by-step guidance, building AI-friendly project structures, or saying "help me build something." Saying "continue developing / pick up where I left off" enters resume mode.
+
+---
+
+### canvas-architect — Project Architecture Visualization Engine
+
+An AI-driven architecture analysis tool that transforms project code into insightful Obsidian Canvas architecture diagrams. Not just listing files — revealing design philosophy, key data flows, and potential risks.
+
+**Three Required Outputs**:
+
+- **Architecture Pattern Recognition**: Automatically identifies project architecture (layered monolith, microservices, modular, etc.), outputting a confidence score and one-line analogy. Example: "Skill modular architecture, confidence 92%, like a LEGO-style plugin system"
+- **Potential Risk Analysis**: Systematically identifies at least 3 architecture risks (circular dependencies, tech debt, fragile external dependencies, coupling hotspots, etc.)
+- **Obsidian Canvas Architecture Diagram**: Generates `.canvas` format visualization with balanced layout, harmonious colors, and clear information hierarchy
+
+**Core Philosophy**: Insight over information — minimal cognitive load to understand complex structures.
+
+> Use when: Visualizing project structure, understanding module dependencies, identifying architecture patterns, or generating architecture insight diagrams
+
+---
+
+### canvas-sequence — Interaction Sequence Diagram Engine
+
+An AI-driven dynamic flow analysis tool focused on analyzing **runtime interaction flows**, generating Obsidian Canvas format sequence diagrams. Complements canvas-architect — the latter examines static architecture, this one examines dynamic flows.
+
+**Comparison with canvas-architect**:
+
+| | canvas-architect | canvas-sequence |
+|---|---|---|
+| Focus | Static architecture (modules, dependencies) | Dynamic flow (call chains, timing) |
+| Output | Architecture diagram | Sequence diagram |
+| Question | "What does the project look like?" | "How does a request flow?" |
+
+**Sequence Diagram Elements**: Lifelines (participating roles), activation bars (execution periods), messages (call/return/data transfer), combined fragments (loop/conditional/parallel)
+
+**Execution Flow**: Scene identification (find core business scenarios) → Flow tracing (track complete call chains) → Canvas generation (sequence diagram output)
+
+> Use when: Visualizing business process execution paths, examining inter-module call sequences, or understanding the complete flow from entry point to database
+
+---
+
+### article-diagram — Article Illustration Generator
+
+Automatically generates professional SVG illustrations for Markdown articles, reducing readers' cognitive load. Not just "draw a picture" — first extracts core know-how from the article, then decides where visualization is needed and what type of diagram to use.
+
+**Complete Workflow**: Analyze article → Extract know-how list → Design illustration plan → Generate SVG → Validate syntax → Coverage check → Merge into Markdown
+
+**Supported Diagram Types**:
+
+- **Flowcharts**: Sequential operations with 3+ steps
+- **Architecture diagrams**: System relationships with 3+ components
+- **Sequence diagrams**: Time-ordered interactions
+- **Comparison diagrams**: Comparing two or more approaches
+
+**Additional Features**: SVG to JPEG export, S-tier content can generate standalone bilingual illustration pages
+
+> Use when: Articles need visualization of flows/architecture/concepts, or complex concepts need conversion into easy-to-understand diagrams. English version available at [article-diagram-en](article-diagram-en/SKILL.md).
+
+---
+
+### wechat-article-writer — WeChat Article Writing Assistant
+
+An AI-driven full-lifecycle writing assistant for WeChat public account articles. From trending topic selection to final publication, it learns author style, generates viral titles, removes AI traces, and outputs articles that read like a human wrote them.
+
+**5-Stage Workflow**:
+
+1. **Resource Loading**: Reads author config file to learn writing persona, loads reference files by article type
+2. **Title Generation**: 4 title types × 3-5 options each (contrast, question, number+effect, negation+reversal), recommends the best match for the persona
+3. **Structure Creation**: Selects template by article type, including section word counts, image placement suggestions, key points checklist
+4. **Content Creation**: Writes in the author's voice, shares failures and frustrations (authenticity), moderate self-deprecation, empowers readers
+5. **De-AI Optimization**: Eliminates AI patterns like "firstly/secondly/finally," replaces bullet-point output with flowing paragraphs
+
+> Use when: Writing WeChat/articles, generating viral titles, creating article outlines, analyzing trending topics, or removing AI writing traces
+
+---
+
+### baidu-search — Baidu AI Search
+
+An AI search service based on the Baidu Qianfan platform, serving as a supplementary tool for Chinese information retrieval, filling gaps in English search engines' coverage of Chinese content.
+
+**4 Search Modes**:
+
+| Mode | Description | Example |
+|------|-------------|---------|
+| Web Search | General search with site and time filtering | `--api-type web` |
+| Baidu Baike | Structured encyclopedia knowledge | `--api-type baike` |
+| Miaodong Baike | Video-format encyclopedia content | `--api-type miaodong_baike` |
+| AI Chat | AI-summarized answers | `--api-type ai_chat` |
+
+**Features**: JSON format output (AI-friendly), result count limiting, site filtering, time range filtering (week/month/half-year/year), 100 free calls/day
+
+> Use when: Searching Chinese information, querying encyclopedia knowledge, getting latest Chinese news, or looking up Chinese-language resources
+
+---
+
+### cycle-investment-analysis — Cyclical Investment Analysis Framework
+
+Analyzes cyclical investment opportunities using a "triangular verification" model, cross-validating from three dimensions — demand side, supply side, and supply-demand mismatch — to determine investment opportunity certainty.
+
+**Triangular Verification Model**:
+
+```
+Demand Side (growth momentum) → Supply Side (contraction/constraints) → Supply-Demand Mismatch (price increase → earnings elasticity)
+```
+
+**Demand Side Analysis**: Identifies demand growth types (steady growth / rapid growth / sudden demand / demand decline), evaluates demand persistence and structural changes
+
+**Supply Side Analysis**: Identifies supply constraint types (policy restrictions / resource constraints / technology barriers / cyclical constraints / policy expectations), evaluates certainty of supply contraction
+
+**Supply-Demand Mismatch Verification**: Evaluates opportunities through a mismatch intensity judgment matrix, classifying cyclical opportunities into supply contraction, demand surge, dual-drive, and policy expectation types
+
+> Use when: Analyzing an industry/target's cyclical attributes, determining if it's a cyclical investment opportunity, or evaluating price increase potential from supply-demand mismatches
+
+## Conventions & Resources
+
+### Conventions — Development Standards
+
+Core specification files for the Vibe Coding methodology, defining standard processes for AI agent-driven development:
+
+| Convention | Description |
+|------------|-------------|
+| `VIBE-CODING-STANDARD.md` | Global operating system: knowledge management + architecture constraints + development process + observability |
+| `ARCHITECTURE-TEMPLATE.md` | Architecture document template: how to write concise, stable, function-oriented ARCHITECTURE.md |
+| `PLANS-UNIVERSAL.md` | Execution specification template: how to write self-contained, living, verifiable ExecPlans |
+
+### Resource — Reference Resources
+
+| Directory | Content |
+|-----------|---------|
+| `canvas-visualization-resource/` | Canvas visualization reference (ASCII visualization prompts, Canvas template JSON, whiteboard-driven development methodology) |
+| `docs-resource/` | Engineering documentation reference (architecture doc templates, Codex ExecPlans, Agent-first engineering practices) |
+| `glue-engineering-resource/` | Glue engineering reference (code completeness audit prompts, requirements prompts, problem description prompts) |
+
+---
+
+## Quick Start
+
+### Using Existing Skills
+
+1. Choose the skill directory you need (e.g., `vibe-coding-launcher/`, `canvas-architect/`)
+2. Copy the skill directory to your AI assistant's skills path
+3. Mention trigger words in conversation to activate the skill
+
+Skill paths for different AI tools:
+- **Claude Code**: `.claude/skills/<skill-name>/`
+- **Codex / Trae**: `.trae/skills/<skill-name>/`
+- **Cursor**: `.cursor/skills/<skill-name>/`
+
+### Using Vibe Coding Conventions
+
+1. Read `Conventions/VIBE-CODING-STANDARD.md` for the overall methodology
+2. Use the `vibe-coding-launcher` skill to bootstrap a new project, automatically generating the specification system
+3. Reference `Conventions/ARCHITECTURE-TEMPLATE.md` and `Conventions/PLANS-UNIVERSAL.md` for writing architecture documents and execution plans
+
+### Creating New Skills
+
+1. Use the `skill-creator` skill to create a new skill
+2. Define the skill's goal and trigger conditions
+3. Write test cases to verify skill functionality
+4. Run evaluations and iterate
+
+### Skill Structure
+
+Each skill is an independent directory containing at least `SKILL.md`:
 
 ```
 <skill-name>/
-├── SKILL.md          # 必须：技能定义和指令（YAML frontmatter + Markdown）
-├── scripts/          # 可选：可执行脚本
-├── references/       # 可选：按需加载的参考文档
-├── assets/           # 可选：模板、图标等资源文件
-└── evals/            # 可选：评估配置和测试用例
+├── SKILL.md          # Required: skill definition and instructions (YAML frontmatter + Markdown)
+├── scripts/          # Optional: executable scripts
+├── references/       # Optional: on-demand reference documents
+├── assets/           # Optional: templates, icons, and other resource files
+└── evals/            # Optional: evaluation configs and test cases
 ```
 
-**SKILL.md 文件格式**：
+**SKILL.md File Format**:
 
 ```markdown
 ---
 name: "skill-name"
-description: "技能描述，包含功能和触发场景（这是主要的触发机制）"
+description: "Skill description including functionality and trigger scenarios (this is the primary triggering mechanism)"
 ---
 
-# 技能标题
+# Skill Title
 
-详细的技能说明和使用指南...
+Detailed skill instructions and usage guide...
 ```
 
-## 项目结构
+## Project Structure
 
 ```
 awesome-skills/
-├── README.md                     # 项目说明文档
-├── Conventions/                  # 开发规范
-│   ├── VIBE-CODING-STANDARD.md  # Vibe Coding 全局规范
-│   ├── ARCHITECTURE-TEMPLATE.md # 架构文档模板
-│   └── PLANS-UNIVERSAL.md       # 执行规范模板
-├── Resource/                     # 参考资源
-│   ├── canvas-visualization-resource/  # Canvas 可视化参考
-│   ├── docs-resource/                  # 工程文档参考
-│   └── glue-engineering-resource/      # Glue 工程参考
-├── SOUL/                         # 核心人格框架
+├── README.md                     # Project documentation (English)
+├── README_zh.md                  # Project documentation (Chinese)
+├── Conventions/                  # Development standards
+│   ├── VIBE-CODING-STANDARD.md  # Vibe Coding global specification
+│   ├── ARCHITECTURE-TEMPLATE.md # Architecture document template
+│   └── PLANS-UNIVERSAL.md       # Execution specification template
+├── Resource/                     # Reference resources
+│   ├── canvas-visualization-resource/  # Canvas visualization reference
+│   ├── docs-resource/                  # Engineering documentation reference
+│   └── glue-engineering-resource/      # Glue engineering reference
+├── SOUL/                         # Core personality framework
 │   ├── SKILL.md
 │   └── evals/
-├── skill-creator/                # 技能创建工具
+├── skill-creator/                # Skill creation tool
 │   └── SKILL.md
-├── vibe-coding-launcher/         # Vibe Coding 项目启动器
+├── vibe-coding-launcher/         # Vibe Coding project launcher
 │   ├── SKILL.md
 │   └── evals/
-├── canvas-architect/             # 项目架构可视化引擎
+├── canvas-architect/             # Architecture visualization engine
 │   ├── SKILL.md
 │   └── evals/
-├── canvas-sequence/              # 交互序列图生成引擎
+├── canvas-sequence/              # Interaction sequence diagram engine
 │   ├── SKILL.md
 │   └── evals/
-├── article-diagram/              # 文章插图生成器（中文）
+├── article-diagram/              # Article illustration generator (Chinese)
 │   ├── SKILL.md
 │   ├── scripts/
 │   └── package.json
-├── article-diagram-en/           # 文章插图生成器（英文）
+├── article-diagram-en/           # Article illustration generator (English)
 │   └── SKILL.md
-├── wechat-article-writer/        # 公众号文章写作助手
+├── wechat-article-writer/        # WeChat article writing assistant
 │   ├── SKILL.md
 │   ├── references/
 │   └── assets/
-├── baidu-search/                 # 百度 AI 搜索
+├── baidu-search/                 # Baidu AI Search
 │   ├── SKILL.md
 │   └── scripts/
-└── cycle-investment-analysis/    # 周期投资分析框架
+└── cycle-investment-analysis/    # Cyclical investment analysis framework
     └── SKILL.md
 ```
 
-## 最佳实践
+## Best Practices
 
-### 技能描述编写
+### Writing Skill Descriptions
 
-- 明确说明技能的功能和适用场景
-- 详细描述触发场景，使用"pushy"风格提高触发率
-- description 是主要的触发机制——把"何时使用"写在这里，而非正文
-- 包含常见触发词和近义词，覆盖不同表达方式
+- Clearly state skill functionality and applicable scenarios
+- Describe trigger scenarios in detail, using a "pushy" style to improve trigger rates
+- The description is the primary triggering mechanism — write "when to use" here, not in the body
+- Include common trigger words and synonyms to cover different expressions
 
-### 技能开发流程
+### Skill Development Process
 
-1. **定义需求**：明确技能目标和预期输出
-2. **编写草稿**：创建初始技能文件（SKILL.md）
-3. **测试验证**：编写测试用例并运行评估
-4. **迭代优化**：根据评估结果改进技能
-5. **扩展测试**：在更大规模的测试集上验证
+1. **Define Requirements**: Clarify skill goals and expected output
+2. **Write Draft**: Create initial skill file (SKILL.md)
+3. **Test & Verify**: Write test cases and run evaluations
+4. **Iterate**: Improve skills based on evaluation results
+5. **Scale Tests**: Verify on larger test sets
 
-### Vibe Coding 项目实践
+### Vibe Coding Project Practices
 
-- **AGENTS.md 控制在 150 行以内**：做目录地图，不做百科全书
-- **文档只写稳定内容**：频繁变化的放别处，避免文档与代码脱节
-- **架构约束优先声明**：无约束的代码必然退化，在 AGENTS.md 中声明不变量
-- **ExecPlan 保持自包含**：所有知识都在文档内，不依赖外部资源或记忆
-- **技术债小额持续偿还**：每次迭代后更新 tech-debt-tracker 和 QUALITY_SCORE
+- **Keep AGENTS.md under 150 lines**: Be a directory map, not an encyclopedia
+- **Only write stable content in docs**: Put frequently changing content elsewhere to avoid doc-code drift
+- **Declare architecture constraints first**: Unconstrained code inevitably degrades; declare invariants in AGENTS.md
+- **Keep ExecPlans self-contained**: All knowledge within the document, no dependency on external resources or memory
+- **Pay off tech debt in small increments**: Update tech-debt-tracker and QUALITY_SCORE after each iteration
 
-## 相关资源
+## Related Resources
 
-### 技能文档
+### Skill Documentation
 
-- [SOUL](SOUL/SKILL.md) - 核心人格框架
-- [Skill Creator](skill-creator/SKILL.md) - 技能创建工具
-- [Vibe Coding Launcher](vibe-coding-launcher/SKILL.md) - Vibe Coding 项目启动器
-- [Canvas Architect](canvas-architect/SKILL.md) - 项目架构可视化引擎
-- [Canvas Sequence](canvas-sequence/SKILL.md) - 交互序列图生成引擎
-- [Article Diagram](article-diagram/SKILL.md) - 文章插图生成器（中文）
-- [Article Diagram EN](article-diagram-en/SKILL.md) - 文章插图生成器（英文）
-- [WeChat Article Writer](wechat-article-writer/SKILL.md) - 公众号文章写作助手
-- [Baidu Search](baidu-search/SKILL.md) - 百度 AI 搜索
-- [Cycle Investment Analysis](cycle-investment-analysis/SKILL.md) - 周期投资分析框架
+- [SOUL](SOUL/SKILL.md) - Core personality framework
+- [Skill Creator](skill-creator/SKILL.md) - Skill creation tool
+- [Vibe Coding Launcher](vibe-coding-launcher/SKILL.md) - Vibe Coding project launcher
+- [Canvas Architect](canvas-architect/SKILL.md) - Architecture visualization engine
+- [Canvas Sequence](canvas-sequence/SKILL.md) - Interaction sequence diagram engine
+- [Article Diagram](article-diagram/SKILL.md) - Article illustration generator (Chinese)
+- [Article Diagram EN](article-diagram-en/SKILL.md) - Article illustration generator (English)
+- [WeChat Article Writer](wechat-article-writer/SKILL.md) - WeChat article writing assistant
+- [Baidu Search](baidu-search/SKILL.md) - Baidu AI Search
+- [Cycle Investment Analysis](cycle-investment-analysis/SKILL.md) - Cyclical investment analysis framework
 
-### 开发规范
+### Development Standards
 
-- [Vibe Coding Standard](Conventions/VIBE-CODING-STANDARD.md) - AI 代理驱动开发全局规范
-- [Architecture Template](Conventions/ARCHITECTURE-TEMPLATE.md) - 架构文档生成模板
-- [Plans Universal](Conventions/PLANS-UNIVERSAL.md) - 执行规范模板
+- [Vibe Coding Standard](Conventions/VIBE-CODING-STANDARD.md) - AI agent-driven development global specification
+- [Architecture Template](Conventions/ARCHITECTURE-TEMPLATE.md) - Architecture document generation template
+- [Plans Universal](Conventions/PLANS-UNIVERSAL.md) - Execution specification template
 
-## 贡献
+## Contributing
 
-欢迎提交 Issue 和 Pull Request 来改进这些技能！
+Issues and Pull Requests are welcome to improve these skills!
 
-**贡献方式**：
-1. Fork 本项目
-2. 创建你的特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交你的修改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启一个 Pull Request
+**How to Contribute**:
+1. Fork this project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 许可证
+## License
 
-本项目采用开源许可证。
+This project is licensed under an open source license.
