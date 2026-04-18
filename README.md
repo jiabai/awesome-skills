@@ -58,7 +58,7 @@ The behavioral operating system for AI assistants, defining how AI should collab
 
 ---
 
-### skill-creator — Skill Creation & Iteration Tool
+### claude-code-skill-creator — Claude Code Skill Creation & Iteration Tool
 
 A full-lifecycle tool for creating, testing, and optimizing AI skills. From capturing intent to quantitative evaluation, it covers every stage of a skill's lifecycle.
 
