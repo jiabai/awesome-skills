@@ -33,33 +33,33 @@
 
 ```mermaid
 flowchart TD
-    A{项目复杂度?} -->|简单：≤3模块、单人| B[在 AGENTS.md 中声明 模式=agents-only]
-    A -->|复杂：>3模块或多层架构| C[在 AGENTS.md 中声明 模式=linter+agents]
+    A{项目复杂度?} -->|简单：≤3模块、单人| B[在根级 AGENTS.md 中声明 模式=agents-only]
+    A -->|复杂：>3模块或多层架构| C[在根级 AGENTS.md 中声明 模式=linter+agents]
     B --> D[配置=N/A]
     C --> E{查映射表确定语言生态}
     E --> F[选择真实配置文件路径]
     F --> G{约束可被 linter 强制?}
     G -->|是| H[写入 linter 配置文件]
-    G -->|否| I[写入 AGENTS.md 核心信念]
-    H --> J[在 AGENTS.md 中写入 配置=真实路径]
+    G -->|否| I[写入根级 AGENTS.md 核心信念]
+    H --> J[在根级 AGENTS.md 中写入 配置=真实路径]
     J --> K{约束是新增或变更?}
     I --> K
     D --> K
-    K -->|是| L[同步摘要到 AGENTS.md 核心信念]
+    K -->|是| L[同步摘要到根级 AGENTS.md 核心信念]
     K -->|否| M[无需回写]
 ```
 
 **关键原则**：错误信息本身就是代理可读的指导。linter 报错比 AGENTS.md 声明更有效，因为它是机械强制而非建议。
 
-**回写原则**：AGENTS.md 是唯一指令源。所有约束源（linter 配置、子文档）的核心摘要必须回写 AGENTS.md，确保代理仅读 AGENTS.md 即可知晓项目关键约束。具体触发条件见 `references/ai-coding-workflow.md` 的"回写触发条件"。
+**回写原则**：AGENTS.md 是唯一指令源。所有项目级约束源（linter 配置、子文档）的核心摘要必须回写根级 AGENTS.md，确保代理仅读根级 AGENTS.md 即可知晓项目关键约束。具体触发条件见 `references/ai-coding-workflow.md` 的"回写触发条件"。
 
-**模式优先原则**：先在 AGENTS.md 的 `约束机制` 章节中声明 `模式`，再决定是否需要真实配置文件。脚本不再根据目录结构推断“复杂项目”，而是以显式声明为准。
+**模式优先原则**：先在根级 AGENTS.md 的 `约束机制` 章节中声明 `模式`，再决定是否需要真实配置文件。脚本不再根据目录结构推断“复杂项目”，而是以显式声明为准。
 
 ### 硬约束配置文件映射表
 
 按语言生态（而非框架）分组，与 `tech-stack-recommendations.md` 对齐：
 
-| 语言生态 | 默认配置文件 | 进阶配置文件 | 可强制约束 | 声明式约束（写 AGENTS.md） |
+| 语言生态 | 默认配置文件 | 进阶配置文件 | 可强制约束 | 声明式约束（写根级 AGENTS.md） |
 |---------|------------|------------|-----------|----------------------|
 | **Python** | `ruff.toml`（或 `pyproject.toml` `[tool.ruff]`） | `pyproject.toml` `[tool.importlinter]`（层间依赖方向） | 代码风格、import 排序、未使用导入、行长度、简单模式禁止 | 层间依赖方向（未配 import-linter 时）、架构不变量、技术选型约束 |
 | **JS / TS** | `eslint.config.js`（ESLint 9+ flat config） | 同文件 + `eslint-plugin-import`（层间依赖方向） | 代码风格、import 限制、禁止特定 API、no-restricted-imports、层间依赖方向 | 设计原则、技术选型约束 |
@@ -69,24 +69,24 @@ flowchart TD
 
 **使用方法**：
 
-1. 先决定 `约束机制.模式`
-2. `agents-only`：配置写 `N/A`，所有约束直接写 AGENTS.md
-3. `linter+agents`：在映射表中找到对应语言生态，选择真实配置文件路径
+1. 先决定根级 `约束机制.模式`
+2. `agents-only`：配置写 `N/A`，所有约束直接写根级 AGENTS.md
+3. `linter+agents`：在映射表中找到对应语言生态，选择真实配置文件路径，并写回根级 AGENTS.md
 4. 需要层间依赖方向强制时，启用"进阶配置文件"
-5. 不可被 linter 强制的约束，始终写入 AGENTS.md 核心信念
+5. 不可被 linter 强制的约束，始终写入根级 AGENTS.md 核心信念
 
 ### 可强制 vs 声明式约束
 
 | 约束类型 | 判断标准 | 写入位置 | 示例 |
 |---------|---------|---------|------|
 | **可强制约束** | linter 规则能直接检测并报错 | linter 配置文件 | `no-console`、`unused-imports`、`import/no-restricted-paths` |
-| **声明式约束** | 需要人类判断，linter 无法机械检测 | AGENTS.md 核心信念 | "数据层不依赖展示层"、"优先使用共享工具包" |
+| **声明式约束** | 需要人类判断，linter 无法机械检测 | 根级 AGENTS.md 核心信念 | "数据层不依赖展示层"、"优先使用共享工具包" |
 
-Python 特殊说明：Ruff 不支持 import 路径限制（如"service 层不能导入 ui 层"）。如需强制层间依赖方向，需额外配置 `import-linter`（在 `pyproject.toml` `[tool.importlinter]` 中声明契约）。未配 import-linter 时，层间依赖方向只能作为声明式约束写入 AGENTS.md。
+Python 特殊说明：Ruff 不支持 import 路径限制（如"service 层不能导入 ui 层"）。如需强制层间依赖方向，需额外配置 `import-linter`（在 `pyproject.toml` `[tool.importlinter]` 中声明契约）。未配 import-linter 时，层间依赖方向只能作为声明式约束写入根级 AGENTS.md。
 
 ### 约束机制声明
 
-在 AGENTS.md 中固定保留以下机器可读章节：
+在根级 AGENTS.md 中固定保留以下机器可读章节：
 
 ```markdown
 ## 约束机制
@@ -105,7 +105,7 @@ Python 特殊说明：Ruff 不支持 import 路径限制（如"service 层不能
 
 这一章节的作用：
 1. 代理执行时无需猜测约束如何落地
-2. 验证脚本可直接读取模式并决定是否要求真实配置文件
+2. 验证脚本可直接读取根级模式并决定是否要求真实配置文件
 3. CLI 判断仅用于架构文档替代，不再用于推断复杂度
 
 ## 黄金原则

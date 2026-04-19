@@ -165,7 +165,7 @@ flowchart TD
 | docs/SECURITY.md | 条件 | 项目涉及网络/数据存储/API Key |
 | docs/design-docs/core-beliefs.md | 条件 | 3 条以上核心信念需展开 |
 
-> `AGENTS.md` 在第四阶段生成时，必须同时写入 `约束机制` 章节：
+> 根级 `AGENTS.md` 在第四阶段生成时，必须同时写入 `约束机制` 章节：
 > - CLI/单文件项目 + 简单多文件项目：`模式=agents-only`，`配置=N/A`
 > - 复杂项目：`模式=linter+agents`，`配置=目标约束文件路径`
 >
@@ -203,8 +203,9 @@ python scripts/validate_agents_docs.py --level ERROR
 | `AGENTS.md` | 存在、章节完整 | ERROR |
 | `AGENTS.md` | 根级文件的 `约束机制` 章节存在，`模式/配置` 合法 | ERROR |
 | `scripts/validate_agents_docs.py` | 存在（所有项目） | ERROR |
-| `tasks.md` | checkbox 格式（存在时） | ERROR |
+| `tasks.md` | 标准三区段 + 每条任务含 `✅` 验证条件（存在时） | ERROR |
 | `docs/ARCHITECTURE.md` | 存在（CLI/单文件项目：AGENTS.md 包含"架构"章节） | ERROR |
+| `docs/ARCHITECTURE.md` | 内容完整性（概述/模块或代码地图/关键文件/架构约束信息） | WARN |
 
 > `docs/exec-plans/` 为按需生成目录，不在第四阶段检查。仅在第六阶段创建 ExecPlan 时自动创建并验证。
 
@@ -227,11 +228,11 @@ python scripts/validate_agents_docs.py --level ERROR
 - 约束写入方式（含硬约束配置文件映射表和决策流程）
 - 黄金原则（4 条架构准则）
 
-**约束写入决策**：先在 AGENTS.md 的 `约束机制` 章节显式声明模式，再决定写入位置。
+**约束写入决策**：先在根级 `AGENTS.md` 的 `约束机制` 章节显式声明模式，再决定写入位置。
 - CLI/单文件项目 + 简单多文件项目：`模式=agents-only`，`配置=N/A`，全部约束写入 AGENTS.md 核心信念
-- 复杂项目：`模式=linter+agents`，按映射表选择具体 linter 配置文件（如 `ruff.toml`、`eslint.config.js`、`analysis_options.yaml`），并在 `配置` 字段写入真实路径
+- 复杂项目：`模式=linter+agents`，按映射表选择具体 linter 配置文件（如 `ruff.toml`、`eslint.config.js`、`analysis_options.yaml`），并在根级 `AGENTS.md` 的 `配置` 字段写入真实路径
 
-**进入下一阶段的条件**：架构约束已按 `约束机制` 落地。`agents-only` 模式项目已将约束写入 AGENTS.md；`linter+agents` 模式项目已写入真实配置文件并回写摘要到 AGENTS.md。单文件项目已声明"保持单文件"约束。
+**进入下一阶段的条件**：架构约束已按 `约束机制` 落地。`agents-only` 模式项目已将约束写入根级 AGENTS.md；`linter+agents` 模式项目已写入真实配置文件并回写摘要到根级 AGENTS.md。单文件项目已声明"保持单文件"约束。
 
 **确认格式**：
 ```

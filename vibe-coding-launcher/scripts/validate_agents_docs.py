@@ -5,7 +5,7 @@ Checks:
 - Core documents exist (AGENTS.md, validate_agents_docs.py, ARCHITECTURE.md; tasks.md optional)
 - AGENTS.md sections complete (simplified or full version)
 - Root AGENTS.md must declare explicit constraint mechanism
-- tasks.md uses checkbox format (if exists)
+- tasks.md uses standard sections and per-task validation conditions (if exists)
 - Quick-entry links in AGENTS.md are valid
 - Line count within limits
 
@@ -63,8 +63,12 @@ GEN_COMMENT_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# tasks.md checkbox 模式
-CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]", re.MULTILINE)
+# tasks.md 任务模式
+TASK_REQUIRED_SECTIONS = ["进行中", "待办", "已完成"]
+CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]\s+")
+PENDING_TASK_PATTERN = re.compile(r"^- \[ \]\s+")
+COMPLETED_TASK_PATTERN = re.compile(r"^- \[x\]\s+")
+TASK_VALIDATION_MARKER = "✅"
 
 # 快速入口链接模式
 QUICK_ENTRY_PATTERN = re.compile(r"`([^`]+\.md)`")
@@ -73,6 +77,13 @@ CONSTRAINT_SECTION = "约束机制"
 CONSTRAINT_MODE_PATTERN = re.compile(r"模式[：:]\s*`([^`]+)`")
 CONSTRAINT_CONFIG_PATTERN = re.compile(r"配置[：:]\s*`([^`]+)`")
 VALID_CONSTRAINT_MODES = {"agents-only", "linter+agents"}
+
+ARCHITECTURE_CONCEPT_GROUPS = {
+    "概述": ["概述", "Overview"],
+    "模块或代码地图": ["代码地图", "模块", "Module", "Modules"],
+    "关键文件": ["关键文件", "Key Files"],
+    "架构约束信息": ["不变量", "边界", "Invariant", "Boundary"],
+}
 
 
 def is_cli_project(root: Path) -> bool:
@@ -271,14 +282,42 @@ def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]
     content = path.read_text(encoding="utf-8")
     lines = content.splitlines()
 
-    # 检查 checkbox 格式
-    checkbox_count = len(CHECKBOX_PATTERN.findall(content))
-    if checkbox_count == 0:
+    headings = [
+        line.strip()[3:].strip()
+        for line in lines
+        if line.strip().startswith("## ") and not line.strip().startswith("## #")
+    ]
+    missing_sections = [section for section in TASK_REQUIRED_SECTIONS if section not in headings]
+    if missing_sections:
+        results.append(ValidationResult(
+            path,
+            Severity.ERROR,
+            f"缺少标准区段: {', '.join(missing_sections)}",
+        ))
+
+    task_lines = [
+        (idx + 1, line.rstrip())
+        for idx, line in enumerate(lines)
+        if CHECKBOX_PATTERN.match(line)
+    ]
+    if not task_lines:
         results.append(ValidationResult(path, Severity.ERROR, "没有使用 checkbox 格式"))
 
+    missing_validation = [
+        f"第{line_no}行"
+        for line_no, line in task_lines
+        if TASK_VALIDATION_MARKER not in line
+    ]
+    if missing_validation:
+        results.append(ValidationResult(
+            path,
+            Severity.ERROR,
+            f"任务缺少验证条件（缺少 `✅`）: {', '.join(missing_validation)}",
+        ))
+
     # 统计待办和已完成
-    pending = len(re.findall(r"^- \[ \]", content, re.MULTILINE))
-    completed = len(re.findall(r"^- \[x\]", content, re.MULTILINE))
+    pending = sum(1 for _, line in task_lines if PENDING_TASK_PATTERN.match(line))
+    completed = sum(1 for _, line in task_lines if COMPLETED_TASK_PATTERN.match(line))
 
     results.append(ValidationResult(path, Severity.INFO, f"{pending} 项待办, {completed} 项已完成"))
 
@@ -299,19 +338,13 @@ def validate_architecture_md(path: Path, min_level: Severity, *, cli_project: bo
 
     content = path.read_text(encoding="utf-8")
 
-    # 检查必需章节
-    required_sections = ["概述", "架构", "模块", "关键文件"]
-    # 英文版本
-    en_sections = ["Overview", "Architecture", "Module", "Key Files"]
-
-    has_required = False
-    for section in required_sections + en_sections:
-        if section in content:
-            has_required = True
-            break
-
-    if not has_required:
-        results.append(ValidationResult(path, Severity.WARN, "缺少模块划分章节"))
+    for concept_group, keywords in ARCHITECTURE_CONCEPT_GROUPS.items():
+        if not any(keyword in content for keyword in keywords):
+            results.append(ValidationResult(
+                path,
+                Severity.WARN,
+                f"架构文档缺少必含内容: {concept_group}",
+            ))
 
     line_count = len(content.splitlines())
     results.append(ValidationResult(path, Severity.INFO, f"{line_count} 行"))
@@ -402,6 +435,11 @@ def filter_by_severity(results: list[ValidationResult], min_level: Severity) -> 
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="backslashreplace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(errors="backslashreplace")
+
     parser = argparse.ArgumentParser(description="Validate vibe-coding-launcher documentation")
     parser.add_argument(
         "--level",

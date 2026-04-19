@@ -32,9 +32,9 @@
 | `AGENTS.md` | 行数范围 | 简化版≤150，完整版≤140 |
 | `AGENTS.md` | 快速入口无死链 | 引用的文档都存在 |
 | `scripts/validate_agents_docs.py` | 存在 | 所有项目的核心验证脚本 |
-| `tasks.md` | 存在时检查 checkbox 格式（格式不对为 ERROR） | 不存在不算错误，全部完成后可删除 |
+| `tasks.md` | 存在时检查标准三区段和每条任务的 `✅` 验证条件 | 不存在不算错误，全部完成后可删除 |
 | `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
-| `docs/ARCHITECTURE.md` | 模块划分（如存在） | 包含模块划分表或描述 |
+| `docs/ARCHITECTURE.md` | 内容完整性（概述/模块或代码地图/关键文件/架构约束信息） | 缺项记 WARN，不阻断下一阶段 |
 | 根 `AGENTS.md` | `约束机制` 章节存在 | 项目级元数据只在根级声明 |
 | 根 `AGENTS.md` | `约束机制.模式` 合法 | 只能是 `agents-only` 或 `linter+agents` |
 | 根 `AGENTS.md` | `约束机制.配置` 合法 | `agents-only` 时必须为 `N/A`；`linter+agents` 时必须为真实配置文件路径 |
@@ -78,12 +78,14 @@
 - 根 AGENTS.md 的 `模式=agents-only` 但 `配置` 不是 `N/A`
 - 根 AGENTS.md 的 `模式=linter+agents` 但缺少真实配置文件路径，或路径不存在
 - tasks.md 存在但无法识别任务状态
+- tasks.md 缺少标准区段（`进行中` / `待办` / `已完成`）
+- tasks.md 中存在缺少 `✅` 验证条件的任务
 
 ### WARN 类问题
 
 - 行数超限（可读性下降）
 - 快速入口有死链
-- ARCHITECTURE.md 缺少模块划分
+- ARCHITECTURE.md 缺少概述 / 模块或代码地图 / 关键文件 / 架构约束信息中的任一概念组
 
 ### INFO 类信息
 
