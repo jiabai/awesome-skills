@@ -77,10 +77,24 @@ CONSTRAINT_CONFIG_PATTERN = re.compile(
 def is_cli_project(root: Path) -> bool:
     """Detect CLI/single-file project by directory structure.
 
-    A project is considered CLI/single-file if it has no docs/ directory
-    and no src/ directory (source files live in the root).
+    A project is considered CLI/single-file if it has no src/ directory
+    and either has no docs/ directory, or docs/ only contains exec-plans/
+    (which is auto-generated for ExecPlan tracking and does not indicate
+    a non-CLI project structure).
     """
-    return not (root / "docs").exists() and not (root / "src").exists()
+    if (root / "src").exists():
+        return False
+
+    docs_dir = root / "docs"
+    if not docs_dir.exists():
+        return True
+
+    # docs/ exists — check if it only contains exec-plans/ (按需生成的目录)
+    entries = [p for p in docs_dir.iterdir()]
+    if len(entries) == 1 and entries[0].name == "exec-plans":
+        return True
+
+    return False
 
 
 def detect_version(headings: list[str]) -> str:
