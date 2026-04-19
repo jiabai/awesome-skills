@@ -4,7 +4,7 @@
 Checks:
 - Core documents exist (AGENTS.md, ARCHITECTURE.md; tasks.md optional)
 - AGENTS.md sections complete (simplified or full version)
-- Non-CLI projects must declare constraint config path in AGENTS.md
+- Root AGENTS.md must declare explicit constraint mechanism
 - tasks.md uses checkbox format (if exists)
 - Quick-entry links in AGENTS.md are valid
 - Line count within limits
@@ -69,10 +69,10 @@ CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]")
 # 快速入口链接模式
 QUICK_ENTRY_PATTERN = re.compile(r"`([^`]+\.md)`")
 
-# 约束配置路径声明模式（匹配 "约束配置：`xxx`" 或 "约束配置: `xxx`"）
-CONSTRAINT_CONFIG_PATTERN = re.compile(
-    r"约束配置[：:]\s*`([^`]+)`",
-)
+CONSTRAINT_SECTION = "约束机制"
+CONSTRAINT_MODE_PATTERN = re.compile(r"模式[：:]\s*`([^`]+)`")
+CONSTRAINT_CONFIG_PATTERN = re.compile(r"配置[：:]\s*`([^`]+)`")
+VALID_CONSTRAINT_MODES = {"agents-only", "linter+agents"}
 
 
 def is_cli_project(root: Path) -> bool:
@@ -105,7 +105,52 @@ def detect_version(headings: list[str]) -> str:
     return "simple"
 
 
-def validate_agents_md(path: Path, min_level: Severity, *, cli_project: bool = False) -> list[ValidationResult]:
+def extract_section_lines(lines: list[str], heading: str) -> list[str]:
+    """Extract lines belonging to a markdown H2 section."""
+    section_lines: list[str] = []
+    in_section = False
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped == f"## {heading}":
+            in_section = True
+            continue
+        if in_section and stripped.startswith("## "):
+            break
+        if in_section:
+            section_lines.append(line)
+
+    return section_lines
+
+
+def parse_constraint_mechanism(lines: list[str]) -> tuple[str | None, str | None]:
+    """Parse mode/config from the fixed '约束机制' section."""
+    section_lines = extract_section_lines(lines, CONSTRAINT_SECTION)
+    if not section_lines:
+        return None, None
+
+    mode: str | None = None
+    config: str | None = None
+    for line in section_lines:
+        if mode is None:
+            match = CONSTRAINT_MODE_PATTERN.search(line)
+            if match:
+                mode = match.group(1)
+        if config is None:
+            match = CONSTRAINT_CONFIG_PATTERN.search(line)
+            if match:
+                config = match.group(1)
+
+    return mode, config
+
+
+def validate_agents_md(
+    path: Path,
+    min_level: Severity,
+    *,
+    cli_project: bool = False,
+    require_constraint_mechanism: bool = False,
+) -> list[ValidationResult]:
     """Validate one AGENTS.md file."""
     results: list[ValidationResult] = []
 
@@ -173,28 +218,44 @@ def validate_agents_md(path: Path, min_level: Severity, *, cli_project: bool = F
                 if not resolved.exists():
                     results.append(ValidationResult(path, Severity.WARN, f"快速入口死链: {linked_path}"))
 
-    # 非 CLI（复杂）项目：AGENTS.md 必须声明约束配置路径
-    if not cli_project:
-        has_constraint_declaration = any(
-            CONSTRAINT_CONFIG_PATTERN.search(line) for line in lines
-        )
-        if not has_constraint_declaration:
+    if require_constraint_mechanism:
+        section_lines = extract_section_lines(lines, CONSTRAINT_SECTION)
+        if not section_lines:
             results.append(ValidationResult(
                 path, Severity.ERROR,
-                "复杂项目必须在'常用命令'中声明约束配置路径（如：约束配置：`ruff.toml`）",
+                "缺少'约束机制'章节",
             ))
-
-    # 检查约束配置文件路径声明（AGENTS.md 常用命令中声明了 "约束配置：`xxx`"）
-    for line in lines:
-        match = CONSTRAINT_CONFIG_PATTERN.search(line)
-        if match:
-            config_path = match.group(1)
-            resolved = (path.parent / config_path).resolve()
-            if not resolved.exists():
+        else:
+            mode, config = parse_constraint_mechanism(lines)
+            if mode is None:
+                results.append(ValidationResult(path, Severity.ERROR, "缺少'约束机制.模式'声明"))
+            elif mode not in VALID_CONSTRAINT_MODES:
                 results.append(ValidationResult(
-                    resolved, Severity.WARN,
-                    f"约束配置文件不存在（在 AGENTS.md 中声明）: {config_path}",
+                    path, Severity.ERROR,
+                    f"'约束机制.模式' 非法: {mode}（必须是 agents-only 或 linter+agents）",
                 ))
+
+            if config is None:
+                results.append(ValidationResult(path, Severity.ERROR, "缺少'约束机制.配置'声明"))
+            elif mode == "agents-only":
+                if config != "N/A":
+                    results.append(ValidationResult(
+                        path, Severity.ERROR,
+                        "'约束机制.配置' 在 agents-only 模式下必须为 `N/A`",
+                    ))
+            elif mode == "linter+agents":
+                if config == "N/A":
+                    results.append(ValidationResult(
+                        path, Severity.ERROR,
+                        "'约束机制.配置' 在 linter+agents 模式下必须为真实配置文件路径",
+                    ))
+                else:
+                    resolved = (path.parent / config).resolve()
+                    if not resolved.exists():
+                        results.append(ValidationResult(
+                            resolved, Severity.ERROR,
+                            f"约束配置文件不存在（在 '约束机制.配置' 中声明）: {config}",
+                        ))
 
     return results
 
@@ -269,8 +330,8 @@ def validate_docs_structure(docs_dir: Path, min_level: Severity, *, cli_project:
             results.append(ValidationResult(docs_dir, Severity.ERROR, "docs/ 目录不存在"))
         return results
 
-    # 必需文件
-    required = [
+    # 必需文件：CLI/单文件项目不要求 docs/ARCHITECTURE.md
+    required = [] if cli_project else [
         docs_dir / "ARCHITECTURE.md",
     ]
 
@@ -308,7 +369,14 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
     architecture_md = root / "docs" / "ARCHITECTURE.md"
     docs_dir = root / "docs"
 
-    results.extend(validate_agents_md(agents_md, min_level, cli_project=cli))
+    results.extend(
+        validate_agents_md(
+            agents_md,
+            min_level,
+            cli_project=cli,
+            require_constraint_mechanism=True,
+        )
+    )
     results.extend(validate_tasks_md(tasks_md, min_level))
     results.extend(validate_architecture_md(architecture_md, min_level, cli_project=cli))
     results.extend(validate_docs_structure(docs_dir, min_level, cli_project=cli))

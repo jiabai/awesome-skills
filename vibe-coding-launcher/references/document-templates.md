@@ -54,10 +54,17 @@
 - {不变量 1}
 - {不变量 2}
 
+## 约束机制
+
+<!-- 所有项目都必须保留此章节，供验证脚本机器读取 -->
+<!-- CLI/单文件项目 + 简单多文件项目：模式=agents-only，配置=N/A -->
+<!-- 复杂项目：模式=linter+agents，配置=真实约束文件路径 -->
+
+- 模式：`{agents-only 或 linter+agents}`
+- 配置：`{N/A 或 ruff.toml / eslint.config.js / analysis_options.yaml / pyproject.toml}`
+
 ## 常用命令
 
-<!-- 复杂项目（>3模块）必须保留下面这行，简单项目（≤3模块）删除 -->
-- 约束配置：`{ruff.toml 或 eslint.config.js 等，按映射表选择}`
 - `{命令}` — 说明
 - `{命令}` — 说明
 ```
@@ -67,6 +74,8 @@
 快速入口中只列出已生成的文档路径。未生成的文档不要列出，避免死链。
 
 "架构"章节仅 CLI/单文件项目需要（替代 `docs/ARCHITECTURE.md`）。多文件项目不需要此章节，架构信息放 `docs/ARCHITECTURE.md`。CLI 项目的"架构"章节控制在 20 行以内，只写概述 + 关键文件 + 2-3 条不变量。
+
+"约束机制"章节是所有项目的固定机器可读入口。`agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填写真实约束文件路径。
 
 ## tasks.md
 
@@ -238,6 +247,7 @@ python scripts/validate_agents_docs.py --project /path/to/project
 | **Scope** | 适用范围和边界 | 2-4 条 |
 | **Do** | 应遵循的实践 | 3-5 条 |
 | **Avoid** | 应避免的反模式 | 3-5 条 |
+| **约束机制** | 显式声明约束模式和配置 | 2 条 |
 | **Commands** | 常用命令清单 | 4-8 条 |
 | **Tests** | 验证策略 | 2-4 条 |
 | **Related Skills** | 相关参考链接 | 2-4 条 |
@@ -266,9 +276,13 @@ python scripts/validate_agents_docs.py --project /path/to/project
 - [应避免反模式 2]
 - [应避免反模式 3]
 
+## 约束机制
+
+- 模式：`linter+agents`
+- 配置：`{ruff.toml 或 eslint.config.js / analysis_options.yaml / pyproject.toml，按映射表选择}`
+
 ## Commands
 
-- 约束配置：`{ruff.toml 或 eslint.config.js 等，按映射表选择}`
 - `{命令}` [说明]
 - `{命令}` [说明]
 

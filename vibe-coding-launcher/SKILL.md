@@ -165,12 +165,17 @@ flowchart TD
 | docs/SECURITY.md | 条件 | 项目涉及网络/数据存储/API Key |
 | docs/design-docs/core-beliefs.md | 条件 | 3 条以上核心信念需展开 |
 
-**进入下一阶段的条件**：核心文档（AGENTS.md + tasks.md + 架构信息）已生成，条件文档按判定结果生成或跳过。CLI/单文件项目的架构信息在 AGENTS.md "架构"章节中。
+> `AGENTS.md` 在第四阶段生成时，必须同时写入 `约束机制` 章节：
+> - CLI/单文件项目 + 简单多文件项目：`模式=agents-only`，`配置=N/A`
+> - 复杂项目：`模式=linter+agents`，`配置=目标约束文件路径`
+
+**进入下一阶段的条件**：核心文档（AGENTS.md + tasks.md + 架构信息 + 约束机制）已生成，条件文档按判定结果生成或跳过。CLI/单文件项目的架构信息在 AGENTS.md "架构"章节中。
 
 **确认格式**：
 ```
 第四阶段已完成：
 - 核心文档：AGENTS.md, tasks.md, scripts/validate_agents_docs.py, docs/ARCHITECTURE.md（或 AGENTS.md 架构章节）
+- 约束机制：{agents-only / linter+agents}，配置={N/A 或 真实路径}
 - 条件文档（如生成）：{列出}
 - 验证结果：{ERROR/WARN数量}
 
@@ -194,6 +199,7 @@ python scripts/validate_agents_docs.py --level ERROR
 | 文件 | 检查内容 | 严重程度 |
 |------|---------|---------|
 | `AGENTS.md` | 存在、章节完整 | ERROR |
+| `AGENTS.md` | `约束机制` 章节存在，`模式/配置` 合法 | ERROR |
 | `tasks.md` | checkbox 格式（存在时） | ERROR |
 | `docs/ARCHITECTURE.md` | 存在（CLI/单文件项目：AGENTS.md 包含"架构"章节） | ERROR |
 
@@ -218,16 +224,19 @@ python scripts/validate_agents_docs.py --level ERROR
 - 约束写入方式（含硬约束配置文件映射表和决策流程）
 - 黄金原则（4 条架构准则）
 
-**约束写入决策**：简单项目（≤3模块）全部写入 AGENTS.md 核心信念；复杂项目按映射表选择具体 linter 配置文件（如 `ruff.toml`、`eslint.config.js`、`analysis_options.yaml`），并在 AGENTS.md 常用命令中声明约束配置路径。
+**约束写入决策**：先在 AGENTS.md 的 `约束机制` 章节显式声明模式，再决定写入位置。
+- CLI/单文件项目 + 简单多文件项目：`模式=agents-only`，`配置=N/A`，全部约束写入 AGENTS.md 核心信念
+- 复杂项目：`模式=linter+agents`，按映射表选择具体 linter 配置文件（如 `ruff.toml`、`eslint.config.js`、`analysis_options.yaml`），并在 `配置` 字段写入真实路径
 
-**进入下一阶段的条件**：架构约束已写入 AGENTS.md（简单项目）或 linter 配置文件（复杂项目，具体文件名见映射表）。单文件项目已声明"保持单文件"约束。复杂项目已在 AGENTS.md 中声明约束配置路径。
+**进入下一阶段的条件**：架构约束已按 `约束机制` 落地。`agents-only` 模式项目已将约束写入 AGENTS.md；`linter+agents` 模式项目已写入真实配置文件并回写摘要到 AGENTS.md。单文件项目已声明"保持单文件"约束。
 
 **确认格式**：
 ```
 第五阶段已完成：
 - 架构层级：{列出层级}
 - 约束写入位置：{AGENTS.md 或具体配置文件名，如 ruff.toml / eslint.config.js}
-- 约束配置路径声明：{已添加到 AGENTS.md 常用命令 / 不适用}
+- 约束模式：{agents-only / linter+agents}
+- 约束配置：{N/A 或 真实配置文件路径}
 
 回复"继续"进入 ExecPlan 创建阶段。
 ```
@@ -347,6 +356,7 @@ python scripts/validate_agents_docs.py --level WARN
 1. **检查 AGENTS.md**：是否需要更新规则？
 2. **检查文档同步**：新规则写入、过时规则删除
 3. **检查约束同步**：子文档（DESIGN.md / SECURITY.md / core-beliefs.md）新增或变更约束时，AGENTS.md 核心信念是否已同步摘要？冲突时以 AGENTS.md 为准。详见 `references/ai-coding-workflow.md` 的"约束优先级链"和"回写触发条件"
+4. **检查约束机制一致性**：AGENTS.md 的 `约束机制` 是否仍与实际项目复杂度和配置文件一致？`agents-only` 模式不得指向真实配置文件；`linter+agents` 模式必须指向存在的真实文件
 
 #### 设计判断
 

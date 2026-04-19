@@ -34,7 +34,9 @@
 | `tasks.md` | 存在时检查 checkbox 格式（格式不对为 ERROR） | 不存在不算错误，全部完成后可删除 |
 | `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 模块划分（如存在） | 包含模块划分表或描述 |
-| `AGENTS.md` | 约束配置路径声明（复杂项目必须） | 非 CLI/单文件项目必须在"常用命令"中声明约束配置路径，如 `约束配置：\`ruff.toml\``。缺少则报 ERROR |
+| `AGENTS.md` | `约束机制` 章节存在 | 所有项目都必须声明 |
+| `AGENTS.md` | `约束机制.模式` 合法 | 只能是 `agents-only` 或 `linter+agents` |
+| `AGENTS.md` | `约束机制.配置` 合法 | `agents-only` 时必须为 `N/A`；`linter+agents` 时必须为真实配置文件路径 |
 
 ### 条件文档验证（存在时检查）
 
@@ -44,7 +46,7 @@
 | `docs/DESIGN.md` | 章节结构 | 设计规范存在时检查 |
 | `docs/QUALITY_SCORE.md` | 评分表格式 | 质量追踪存在时检查 |
 | `docs/SECURITY.md` | 安全约束 | 安全文档存在时检查 |
-| AGENTS.md 中声明的约束配置文件 | 文件存在性 | AGENTS.md 常用命令中声明了"约束配置：`xxx`"时，检查该文件是否存在 |
+| AGENTS.md 中声明的约束配置文件 | 文件存在性 | `模式=linter+agents` 时，`配置` 指向的文件必须存在 |
 
 ### 知识新鲜度验证
 
@@ -68,7 +70,9 @@
 
 - 核心文档不存在（AGENTS.md；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节；CLI/单文件项目 AGENTS.md 缺少"架构"章节）
 - 必需章节缺失
-- 复杂项目 AGENTS.md 未声明约束配置路径（缺少"约束配置：`xxx`"）
+- AGENTS.md 缺少 `约束机制` 章节或 `模式`
+- `模式=agents-only` 但 `配置` 不是 `N/A`
+- `模式=linter+agents` 但缺少真实配置文件路径，或路径不存在
 - tasks.md 存在但无法识别任务状态
 
 ### WARN 类问题
@@ -104,6 +108,7 @@
 - 开发流程
 - 常用命令
 - 架构（仅 CLI/单文件项目必需，替代 docs/ARCHITECTURE.md）
+- 约束机制（所有项目必需）
 
 **行数限制**：≤150 行
 
@@ -115,6 +120,7 @@
 - Scope
 - Do
 - Avoid
+- 约束机制
 - Commands
 - Tests
 - Related Skills
