@@ -195,7 +195,8 @@ python scripts/validate_agents_docs.py --level ERROR
 | `AGENTS.md` | 存在、章节完整 | ERROR |
 | `tasks.md` | checkbox 格式（存在时） | ERROR |
 | `docs/ARCHITECTURE.md` | 存在 | ERROR |
-| `docs/exec-plans/` | 目录存在 | ERROR |
+
+> `docs/exec-plans/` 为按需生成目录，不在第四阶段检查。仅在第六阶段创建 ExecPlan 时自动创建并验证。
 
 ### 处理方式
 
@@ -236,6 +237,11 @@ python scripts/validate_agents_docs.py --level ERROR
 查阅 `references/execplan-format.md` 获取 ExecPlan 的必需章节和详细规范。
 
 查阅 `references/task-management.md` 了解 tasks.md 与 ExecPlan 的分工关系。
+
+创建 ExecPlan 时，自动创建 `docs/exec-plans/active/` 目录结构（含 `completed/` 子目录）。创建后验证目录结构完整：
+- `docs/exec-plans/` 目录存在
+- `docs/exec-plans/active/` 子目录存在
+- `docs/exec-plans/completed/` 子目录存在
 
 **进入下一阶段的条件**：ExecPlan 文档已创建并保存，用户已阅读并确认计划内容。
 

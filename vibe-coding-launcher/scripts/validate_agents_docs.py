@@ -206,15 +206,29 @@ def validate_docs_structure(docs_dir: Path, min_level: Severity) -> list[Validat
         results.append(ValidationResult(docs_dir, Severity.ERROR, "docs/ 目录不存在"))
         return results
 
-    # 检查必需目录/文件
+    # 必需文件
     required = [
         docs_dir / "ARCHITECTURE.md",
-        docs_dir / "exec-plans",
     ]
 
     for path in required:
         if not path.exists():
             results.append(ValidationResult(path, Severity.ERROR, "必需路径不存在"))
+
+    # 条件目录：exec-plans/ 按需生成，存在时检查子目录结构
+    exec_plans_dir = docs_dir / "exec-plans"
+    if exec_plans_dir.exists():
+        for subdir in ["active", "completed"]:
+            if not (exec_plans_dir / subdir).exists():
+                results.append(ValidationResult(
+                    exec_plans_dir / subdir, Severity.WARN,
+                    f"exec-plans 子目录缺失: {subdir}"
+                ))
+    else:
+        results.append(ValidationResult(
+            exec_plans_dir, Severity.INFO,
+            "目录不存在（按需生成，无需修复）"
+        ))
 
     return results
 

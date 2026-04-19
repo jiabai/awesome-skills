@@ -34,12 +34,12 @@
 | `tasks.md` | 存在时检查 checkbox 格式（格式不对为 ERROR） | 不存在不算错误，全部完成后可删除 |
 | `docs/ARCHITECTURE.md` | 存在 | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 模块划分 | 包含模块划分表或描述 |
-| `docs/exec-plans/` | 存在 | 执行计划目录 |
 
 ### 条件文档验证（存在时检查）
 
 | 文件 | 检查项 | 说明 |
 |------|--------|------|
+| `docs/exec-plans/` | 子目录结构 | 按需生成，存在时检查 active/completed 子目录 |
 | `docs/DESIGN.md` | 章节结构 | 设计规范存在时检查 |
 | `docs/QUALITY_SCORE.md` | 评分表格式 | 质量追踪存在时检查 |
 | `docs/SECURITY.md` | 安全约束 | 安全文档存在时检查 |
@@ -153,10 +153,10 @@ python scripts/validate_agents_docs.py --project /path/to/project
 [INFO] AGENTS.md: 简化版, 45 行
 [INFO] tasks.md: 5 项待办, 3 项已完成
 [INFO] docs/ARCHITECTURE.md: 32 行
+[INFO] docs/exec-plans/: 目录不存在（按需生成，无需修复）
 [WARN] AGENTS.md: 快速入口死链: docs/DESIGN.md
-[ERROR] docs/exec-plans/: 必需路径不存在
 
-验证完成: 1 个错误, 1 个警告
+验证完成: 0 个错误, 1 个警告
 ```
 
 ---
