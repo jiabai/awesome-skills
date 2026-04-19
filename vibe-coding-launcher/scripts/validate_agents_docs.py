@@ -68,6 +68,11 @@ CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]")
 # 快速入口链接模式
 QUICK_ENTRY_PATTERN = re.compile(r"`([^`]+\.md)`")
 
+# 约束配置路径声明模式（匹配 "约束配置：`xxx`" 或 "约束配置: `xxx`"）
+CONSTRAINT_CONFIG_PATTERN = re.compile(
+    r"约束配置[：:]\s*`([^`]+)`",
+)
+
 
 def is_cli_project(root: Path) -> bool:
     """Detect CLI/single-file project by directory structure.
@@ -152,6 +157,18 @@ def validate_agents_md(path: Path, min_level: Severity, *, cli_project: bool = F
                 resolved = (path.parent / linked_path).resolve()
                 if not resolved.exists():
                     results.append(ValidationResult(path, Severity.WARN, f"快速入口死链: {linked_path}"))
+
+    # 检查约束配置文件路径声明（AGENTS.md 常用命令中声明了 "约束配置：`xxx`"）
+    for line in lines:
+        match = CONSTRAINT_CONFIG_PATTERN.search(line)
+        if match:
+            config_path = match.group(1)
+            resolved = (path.parent / config_path).resolve()
+            if not resolved.exists():
+                results.append(ValidationResult(
+                    resolved, Severity.WARN,
+                    f"约束配置文件不存在（在 AGENTS.md 中声明）: {config_path}",
+                ))
 
     return results
 

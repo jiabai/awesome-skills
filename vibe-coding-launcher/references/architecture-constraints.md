@@ -4,7 +4,12 @@
 
 - [分层架构](#分层架构)
 - [约束写入方式](#约束写入方式)
+  - [决策流程](#决策流程)
+  - [硬约束配置文件映射表](#硬约束配置文件映射表)
+  - [可强制 vs 声明式约束](#可强制-vs-声明式约束)
+  - [约束配置路径声明](#约束配置路径声明)
 - [黄金原则](#黄金原则)
+- [验证能力](#验证能力)
 
 ---
 
@@ -24,9 +29,65 @@
 
 ## 约束写入方式
 
-将约束写入 AGENTS.md 或项目 linter 配置。关键：错误信息本身就是代理可读的指导。
+### 决策流程
 
-对于简单项目，在 AGENTS.md 中声明架构不变量即可。对于复杂项目，配置 linter 规则。
+```mermaid
+flowchart TD
+    A{项目复杂度?} -->|简单：≤3模块、单人| B[约束全部写入 AGENTS.md 核心信念]
+    A -->|复杂：>3模块或多层架构| C{查映射表确定语言生态}
+    C --> D[逐条约束判断]
+    D --> E{可被 linter 强制?}
+    E -->|是| F[写入 linter 配置文件]
+    E -->|否| G[写入 AGENTS.md 核心信念]
+    F --> H[在 AGENTS.md 常用命令中声明约束配置路径]
+```
+
+**关键原则**：错误信息本身就是代理可读的指导。linter 报错比 AGENTS.md 声明更有效，因为它是机械强制而非建议。
+
+### 硬约束配置文件映射表
+
+按语言生态（而非框架）分组，与 `tech-stack-recommendations.md` 对齐：
+
+| 语言生态 | 默认配置文件 | 进阶配置文件 | 可强制约束 | 声明式约束（写 AGENTS.md） |
+|---------|------------|------------|-----------|----------------------|
+| **Python** | `ruff.toml`（或 `pyproject.toml` `[tool.ruff]`） | `pyproject.toml` `[tool.importlinter]`（层间依赖方向） | 代码风格、import 排序、未使用导入、行长度、简单模式禁止 | 层间依赖方向（未配 import-linter 时）、架构不变量、技术选型约束 |
+| **JS / TS** | `eslint.config.js`（ESLint 9+ flat config） | 同文件 + `eslint-plugin-import`（层间依赖方向） | 代码风格、import 限制、禁止特定 API、no-restricted-imports、层间依赖方向 | 设计原则、技术选型约束 |
+| **Vue** | `eslint.config.js`（含 `eslint-plugin-vue`） | 同 JS/TS 进阶 | 同 JS/TS + Vue 特定规则（组件命名、props 类型等） | 同 JS/TS |
+| **Svelte** | `eslint.config.js`（含 `eslint-plugin-svelte`） | 同 JS/TS 进阶 | 同 JS/TS + Svelte 特定规则 | 同 JS/TS |
+| **Dart** | `analysis_options.yaml` | — | lint 规则、类型检查严格度 | 架构不变量、层间依赖方向 |
+
+**使用方法**：
+
+1. 根据第二阶段确认的技术栈，在映射表中找到对应语言生态
+2. 优先使用"默认配置文件"——覆盖 80% 场景，无需额外依赖
+3. 需要层间依赖方向强制时，启用"进阶配置文件"
+4. 不可被 linter 强制的约束，始终写入 AGENTS.md 核心信念
+
+### 可强制 vs 声明式约束
+
+| 约束类型 | 判断标准 | 写入位置 | 示例 |
+|---------|---------|---------|------|
+| **可强制约束** | linter 规则能直接检测并报错 | linter 配置文件 | `no-console`、`unused-imports`、`import/no-restricted-paths` |
+| **声明式约束** | 需要人类判断，linter 无法机械检测 | AGENTS.md 核心信念 | "数据层不依赖展示层"、"优先使用共享工具包" |
+
+Python 特殊说明：Ruff 不支持 import 路径限制（如"service 层不能导入 ui 层"）。如需强制层间依赖方向，需额外配置 `import-linter`（在 `pyproject.toml` `[tool.importlinter]` 中声明契约）。未配 import-linter 时，层间依赖方向只能作为声明式约束写入 AGENTS.md。
+
+### 约束配置路径声明
+
+在 AGENTS.md 的"常用命令"章节中，添加约束配置文件路径，供代理和验证脚本定位：
+
+```markdown
+## 常用命令
+
+- 约束配置：`ruff.toml`（或 `eslint.config.js` 等，按映射表选择）
+- `ruff check .` — 检查代码风格
+- ...
+```
+
+这一行声明的作用：
+1. 代理执行时无需猜测约束写在哪里
+2. 验证脚本可检测声明的配置文件是否实际存在
+3. 新代理加入项目时，一行即可定位约束机制
 
 ## 黄金原则
 

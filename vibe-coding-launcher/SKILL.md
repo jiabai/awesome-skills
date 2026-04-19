@@ -19,7 +19,7 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 | `references/project-structure.md` | 第三阶段：生成项目结构 | 核心集/扩展集目录树、生成判定表、按类型调整 |
 | `references/document-templates.md` | 第四阶段：生成各文档 | AGENTS.md 简化版/完整版模板、生成条件 |
 | `references/validation-standards.md` | 第四阶段后：验证文档 | 验证时机、验证清单、严重程度分级 |
-| `references/architecture-constraints.md` | 第五阶段：配置架构约束 | 分层架构表、约束写入方式、黄金原则 |
+| `references/architecture-constraints.md` | 第五阶段：配置架构约束 | 分层架构表、约束写入方式（含硬约束配置文件映射表）、黄金原则 |
 | `references/execplan-format.md` | 第六阶段：创建 ExecPlan | 必需章节、各章节规范、首个建议 |
 | `references/task-management.md` | 第六/七阶段：管理任务 | tasks.md 格式、✅验证标准、原子提交、渐进验证 |
 | `references/ai-coding-workflow.md` | 第七阶段：执行详细流程 | 设计原则、执行流程、验证策略 |
@@ -214,16 +214,19 @@ python scripts/validate_agents_docs.py --level ERROR
 
 查阅 `references/architecture-constraints.md` 获取：
 - 分层架构表（5 种项目类型 + 单文件项目处理）
-- 约束写入方式（AGENTS.md vs linter）
+- 约束写入方式（含硬约束配置文件映射表和决策流程）
 - 黄金原则（4 条架构准则）
 
-**进入下一阶段的条件**：架构约束已写入 AGENTS.md（简单项目）或 linter 配置（复杂项目）。单文件项目已声明"保持单文件"约束。
+**约束写入决策**：简单项目（≤3模块）全部写入 AGENTS.md 核心信念；复杂项目按映射表选择具体 linter 配置文件（如 `ruff.toml`、`eslint.config.js`、`analysis_options.yaml`），并在 AGENTS.md 常用命令中声明约束配置路径。
+
+**进入下一阶段的条件**：架构约束已写入 AGENTS.md（简单项目）或 linter 配置文件（复杂项目，具体文件名见映射表）。单文件项目已声明"保持单文件"约束。复杂项目已在 AGENTS.md 中声明约束配置路径。
 
 **确认格式**：
 ```
 第五阶段已完成：
 - 架构层级：{列出层级}
-- 约束写入位置：{AGENTS.md 或 linter配置}
+- 约束写入位置：{AGENTS.md 或具体配置文件名，如 ruff.toml / eslint.config.js}
+- 约束配置路径声明：{已添加到 AGENTS.md 常用命令 / 不适用}
 
 回复"继续"进入 ExecPlan 创建阶段。
 ```

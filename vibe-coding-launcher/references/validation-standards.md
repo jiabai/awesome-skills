@@ -44,6 +44,7 @@
 | `docs/QUALITY_SCORE.md` | 评分表格式 | 质量追踪存在时检查 |
 | `docs/SECURITY.md` | 安全约束 | 安全文档存在时检查 |
 | `docs/README.md` | 关键引用 | 包含 tasks.md、AGENTS.md 引用 |
+| AGENTS.md 中声明的约束配置文件 | 文件存在性 | AGENTS.md 常用命令中声明了"约束配置：`xxx`"时，检查该文件是否存在 |
 
 ### 知识新鲜度验证
 
