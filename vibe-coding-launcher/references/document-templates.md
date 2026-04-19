@@ -4,6 +4,7 @@
 
 - [AGENTS.md（简化版）](#agentsmd简化版)
 - [tasks.md](#tasksmd)
+- [scripts/validate_agents_docs.py](#scriptsvalidate_agents_docspy)
 - [docs/ARCHITECTURE.md](#docsarchitecturemd)
 - [docs/DESIGN.md](#docsdesignmd)
 - [docs/QUALITY_SCORE.md](#docsquality_scoremd)
@@ -91,6 +92,39 @@
 ## 已完成
 - [x] {任务描述}（{YYYY-MM-DD}）✅ {验证命令或验证标准}
 ```
+
+## scripts/validate_agents_docs.py
+
+文档验证脚本，检查项目文档的结构完整性和格式合规性。
+
+**生成条件**：所有项目都必须生成（核心集）。
+
+**生成方式**：从 skill 包的 `scripts/validate_agents_docs.py` 原样复制到用户项目的 `scripts/` 目录。不需要模板化或定制，直接复制即可。
+
+**用途**：
+
+- 第四阶段完成后验证核心文档完整性（`--level ERROR`）
+- 每次对话结束前检查知识新鲜度（`--level WARN`）
+- 项目恢复时确认文档状态（`--level ERROR`）
+
+**使用方式**：
+
+```bash
+# 只显示 ERROR
+python scripts/validate_agents_docs.py --level ERROR
+
+# 显示 ERROR + WARN
+python scripts/validate_agents_docs.py --level WARN
+
+# 指定项目目录
+python scripts/validate_agents_docs.py --project /path/to/project
+```
+
+### 注意事项
+
+- 脚本仅使用 Python 标准库，无外部依赖
+- 脚本默认以自身所在目录的上一级作为项目根目录（`Path(__file__).resolve().parents[1]`），在用户项目中可正确解析
+- 不要修改脚本内容，如需调整验证规则，应更新 skill 包中的源文件后重新复制
 
 ## docs/ARCHITECTURE.md
 

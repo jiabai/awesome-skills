@@ -129,7 +129,7 @@ flowchart TD
 根据项目复杂度，将结构分为**核心集**（必须）和**扩展集**（按需）。
 
 查阅 `references/project-structure.md` 获取：
-- 核心集目录树（AGENTS.md + tasks.md + README.md + docs/ARCHITECTURE.md；CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
+- 核心集目录树（AGENTS.md + tasks.md + README.md + scripts/validate_agents_docs.py + docs/ARCHITECTURE.md；CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
 - 扩展集目录树和 9 项生成判定表
 - 按项目类型调整规则
 
@@ -158,6 +158,7 @@ flowchart TD
 |------|---------|---------|
 | AGENTS.md | 必须 | 所有项目 |
 | tasks.md | 必须 | 所有项目 |
+| scripts/validate_agents_docs.py | 必须 | 所有项目（从 skill 包原样复制） |
 | docs/ARCHITECTURE.md | 必须（CLI/单文件项目替代方案：写入 AGENTS.md "架构"章节） | 所有项目 |
 | docs/DESIGN.md | 条件 | 项目有 UI 或 API |
 | docs/QUALITY_SCORE.md | 条件 | 项目超过 3 个模块 |
@@ -169,7 +170,7 @@ flowchart TD
 **确认格式**：
 ```
 第四阶段已完成：
-- 核心文档：AGENTS.md, tasks.md, docs/ARCHITECTURE.md（或 AGENTS.md 架构章节）
+- 核心文档：AGENTS.md, tasks.md, scripts/validate_agents_docs.py, docs/ARCHITECTURE.md（或 AGENTS.md 架构章节）
 - 条件文档（如生成）：{列出}
 - 验证结果：{ERROR/WARN数量}
 
