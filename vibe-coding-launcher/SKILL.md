@@ -286,7 +286,7 @@ python scripts/validate_agents_docs.py --level ERROR
 7. **迭代完善** — 根据用户需求添加功能
 8. **知识维护** — 更新 docs/ 文档，保持与代码同步
 
-每完成一步，同步更新 ExecPlan 的 Progress 章节和 tasks.md（勾选已完成 + 标注时间）。
+每完成一步，在 tasks.md 中勾选已完成的执行级任务；当一批任务对应同一个 ExecPlan 里程碑全部完成时，在 ExecPlan Progress 中标记该里程碑。
 
 ### 熵管理
 

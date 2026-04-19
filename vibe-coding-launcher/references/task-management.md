@@ -14,14 +14,15 @@
 
 ## tasks.md 与 ExecPlan 的分工
 
-| 维度 | tasks.md | ExecPlan |
+| 维度 | tasks.md | ExecPlan Progress |
 |------|----------|----------|
 | 定位 | 轻量执行清单 | 功能级计划文档 |
-| 粒度 | 单条任务（1-30 分钟） | 完整功能（数小时到数天） |
+| 粒度 | 执行级任务（1-30 分钟，如"安装 flask"） | 计划级里程碑（30 分钟到数小时，如"API 框架就绪"） |
 | 格式 | checkbox 列表 | 完整文档（Purpose/Progress/Steps/Validation） |
 | 适合 | 修 bug、小改动、配置调整、依赖安装 | 新功能、架构调整、多步骤开发 |
 | 存放位置 | 项目根目录 `tasks.md` | `docs/exec-plans/active/` |
 | 生命周期 | 全部完成后删除，历史由 ExecPlan 归档 | 完成后移入 `docs/exec-plans/completed/` |
+| 更新时机 | 每完成一项任务立即勾选 | 当一批 tasks.md 任务对应同一里程碑全部完成时，标记该里程碑 |
 
 ## tasks.md 格式
 
@@ -70,9 +71,9 @@
 ## 使用规则
 
 - **小任务 → tasks.md**：能在 30 分钟内完成的事，直接写入 tasks.md，无需创建 ExecPlan
-- **大功能 → ExecPlan + tasks.md**：创建 ExecPlan 规划整体方案，同时将 ExecPlan 中的拆解步骤同步到 tasks.md 作为执行追踪
+- **大功能 → ExecPlan + tasks.md**：创建 ExecPlan 规划整体方案，将每个里程碑拆解为 tasks.md 中的执行级任务（如"安装依赖"、"添加端点"），里程碑本身留在 ExecPlan Progress 中追踪
 - **日常维护**：每次对话开始时，先读取 tasks.md 了解当前进度；对话结束时，更新 tasks.md 记录新增和完成的任务
-- **不要重复记录**：同一个任务不要同时在 tasks.md 和 ExecPlan Progress 中维护。tasks.md 是执行入口，ExecPlan Progress 是计划文档中的进度快照
+- **不要重复记录**：tasks.md 和 ExecPlan Progress 追踪不同粒度——tasks.md 记录执行级任务（"安装 flask"），ExecPlan Progress 记录计划级里程碑（"API 框架就绪"）。一个里程碑对应多条 tasks.md 任务，两者不在同一粒度上重复
 - **全部完成后删除**：tasks.md 中所有任务都已勾选时，删除 tasks.md。历史记录由 `docs/exec-plans/completed/` 承载，删除后执行最终提交
 
 ### 执行流程
