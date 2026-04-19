@@ -65,7 +65,7 @@
 
 ### ERROR 类问题
 
-- 核心文档不存在（AGENTS.md；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节）
+- 核心文档不存在（AGENTS.md；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节；CLI/单文件项目 AGENTS.md 缺少"架构"章节）
 - 必需章节缺失
 - tasks.md 存在但无法识别任务状态
 
@@ -101,6 +101,7 @@
 - 核心信念
 - 开发流程
 - 常用命令
+- 架构（仅 CLI/单文件项目必需，替代 docs/ARCHITECTURE.md）
 
 **行数限制**：≤150 行
 

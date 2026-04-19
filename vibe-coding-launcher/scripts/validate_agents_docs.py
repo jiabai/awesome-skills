@@ -45,7 +45,7 @@ class ValidationResult:
         return f"[{level}] {rel_path}: {self.message}"
 
 
-# 简化版必需章节
+# 简化版必需章节（"架构"章节仅 CLI/单文件项目需要，在下方 cli_project 条件检查中单独校验）
 SIMPLE_REQUIRED = ["快速入口", "核心信念", "开发流程", "常用命令"]
 
 # 完整版必需章节
