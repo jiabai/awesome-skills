@@ -49,7 +49,7 @@ flowchart TD
 当项目已存在（目录中有 `AGENTS.md`）时，执行恢复流程而非从零开始：
 
 1. 读取 `AGENTS.md`，了解项目架构和核心信念
-2. 读取 `tasks.md`，确认当前进度和待办事项
+2. 检查 `tasks.md` 是否存在：存在则读取确认当前进度，不存在则从 `docs/exec-plans/completed/` 获取历史
 3. 检查 `docs/exec-plans/active/` 是否有正在执行的 ExecPlan
 4. **Inspect 现有实现**：读取相关代码和测试，理解当前状态
 5. 向用户简述当前状态，询问从哪里继续
@@ -60,7 +60,7 @@ flowchart TD
 > ```
 > 确保核心文档存在且格式正确后再继续开发。
 
-恢复原则：**不要重新生成已有文档，不要重复已完成的工作，先 inspect 再动手**。如果 tasks.md 显示项目处于某个阶段中间，直接从该阶段继续。
+恢复原则：**不要重新生成已有文档，不要重复已完成的工作，先 inspect 再动手**。如果 tasks.md 存在且显示项目处于某个阶段中间，直接从该阶段继续。如果 tasks.md 不存在，说明上一轮任务已全部完成，从 ExecPlan 历史或用户新需求开始。
 
 阶段衔接原则：每个阶段完成后，必须满足进入条件才能推进到下一阶段。不要跳过用户确认环节。
 
@@ -287,7 +287,7 @@ python scripts/validate_agents_docs.py --level ERROR
 - 发现偏差时，更新 `docs/exec-plans/tech-debt-tracker.md`（如已生成）
 - 定期更新 `docs/QUALITY_SCORE.md` 评分（如已生成）
 - 完成的 ExecPlan 移入 `docs/exec-plans/completed/`
-- 每次对话结束时，更新 `tasks.md`：新增的任务加入"待办"，完成的移入"已完成"并标注日期
+- 每次对话结束时，更新 `tasks.md`：新增的任务加入"待办"，完成的移入"已完成"并标注日期。全部任务完成后删除 `tasks.md`
 
 ### 知识新鲜度验证
 
@@ -397,6 +397,6 @@ python scripts/validate_agents_docs.py --level WARN
 - **不要跳过阶段衔接确认**：每个阶段完成后需满足进入条件才能推进，不要自作主张跳到下一阶段
 - **不要跳过第四阶段验证**：生成核心文档后必须运行验证，有 ERROR 不能进入第五阶段
 - **不要混淆计划与执行**：第六阶段生成计划文档，第七阶段执行计划，两者不可合并
-- **不要忽略 tasks.md 维护**：对话开始时读取 tasks.md 了解进度，对话结束时更新 tasks.md 记录变更。tasks.md 是代理恢复上下文的第一入口
+- **不要忽略 tasks.md 维护**：对话开始时读取 tasks.md（如存在）了解进度，对话结束时更新 tasks.md 记录变更。tasks.md 是代理恢复上下文的第一入口。全部任务完成后删除 tasks.md，历史记录由 `docs/exec-plans/completed/` 承载
 - **不要写入无验证条件的任务**：每条任务必须带 `✅` 验证条件，禁止模糊任务。勾选前必须确认验证条件实际通过
 - **不要忽略对话结束验证**：每次对话结束前运行 `python scripts/validate_agents_docs.py --level WARN`，发现问题立即修复

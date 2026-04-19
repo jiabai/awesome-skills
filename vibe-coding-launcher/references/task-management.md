@@ -6,6 +6,9 @@
 - [tasks.md 格式](#tasksmd-格式)
 - [任务写入标准](#任务写入标准)
 - [使用规则](#使用规则)
+- [知识新鲜度维护](#知识新鲜度维护)
+- [原子提交原则](#原子提交原则)
+- [渐进验证策略](#渐进验证策略)
 
 ---
 
@@ -18,7 +21,7 @@
 | 格式 | checkbox 列表 | 完整文档（Purpose/Progress/Steps/Validation） |
 | 适合 | 修 bug、小改动、配置调整、依赖安装 | 新功能、架构调整、多步骤开发 |
 | 存放位置 | 项目根目录 `tasks.md` | `docs/exec-plans/active/` |
-| 生命周期 | 持续维护，完成的任务勾选即可 | 完成后移入 `docs/exec-plans/completed/` |
+| 生命周期 | 全部完成后删除，历史由 ExecPlan 归档 | 完成后移入 `docs/exec-plans/completed/` |
 
 ## tasks.md 格式
 
@@ -70,6 +73,15 @@
 - **大功能 → ExecPlan + tasks.md**：创建 ExecPlan 规划整体方案，同时将 ExecPlan 中的拆解步骤同步到 tasks.md 作为执行追踪
 - **日常维护**：每次对话开始时，先读取 tasks.md 了解当前进度；对话结束时，更新 tasks.md 记录新增和完成的任务
 - **不要重复记录**：同一个任务不要同时在 tasks.md 和 ExecPlan Progress 中维护。tasks.md 是执行入口，ExecPlan Progress 是计划文档中的进度快照
+- **全部完成后删除**：tasks.md 中所有任务都已勾选时，删除 tasks.md。历史记录由 `docs/exec-plans/completed/` 承载，删除后执行最终提交
+
+### 执行流程
+
+1. 按 tasks.md 清单逐项执行
+2. 完成一项 → 勾选该项 → 立即原子提交
+3. 原子提交：`git add -A && git commit -m "完成：{任务描述}"`
+4. 重复直到所有任务完成
+5. 全部完成 → 删除 tasks.md → 最终提交
 
 ## 知识新鲜度维护
 
@@ -79,7 +91,7 @@
 
 | 触发时机 | 检查内容 |
 |---------|---------|
-| 每次对话结束 | tasks.md 是否与实际进度一致 |
+| 每次对话结束 | tasks.md 是否与实际进度一致（如存在） |
 | 完成一个 ExecPlan | ARCHITECTURE.md 的模块划分是否仍准确 |
 | 添加新模块后 | AGENTS.md 快速入口和核心信念是否需要更新 |
 | 修改接口/API 后 | docs/references/ 中的文档是否同步 |
@@ -88,7 +100,7 @@
 
 对话结束前快速自检：
 
-1. `tasks.md` — 已完成的是否已勾选？新增任务是否已记录？
+1. `tasks.md`（如存在）— 已完成的是否已勾选？新增任务是否已记录？全部完成则删除
 2. `AGENTS.md` — 快速入口中的文档路径是否都存在？（无死链）
 3. `docs/ARCHITECTURE.md` — 模块划分表是否反映当前代码结构？
 
