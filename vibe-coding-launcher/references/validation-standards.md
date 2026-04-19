@@ -14,7 +14,7 @@
 
 | 时机 | 检查范围 | 严重程度 |
 |------|---------|---------|
-| 第四阶段完成后 | 核心文档（AGENTS.md + tasks.md + ARCHITECTURE.md） | ERROR |
+| 第四阶段完成后 | 核心文档（AGENTS.md + ARCHITECTURE.md；tasks.md 可选） | ERROR |
 | 每次对话结束前 | tasks.md 进度一致性 | WARN |
 | 项目恢复时 | 文档完整性 + 知识新鲜度 | ERROR + WARN |
 | 提交前 | 全量检查 | INFO |
@@ -31,8 +31,7 @@
 | `AGENTS.md` | 章节完整 | 简化版或完整版章节 |
 | `AGENTS.md` | 行数范围 | 简化版≤150，完整版≤140 |
 | `AGENTS.md` | 快速入口无死链 | 引用的文档都存在 |
-| `tasks.md` | 存在 | 项目根目录必须有 |
-| `tasks.md` | checkbox 格式 | 使用 `- [ ]` 和 `- [x]` |
+| `tasks.md` | 存在时检查 checkbox 格式（格式不对为 ERROR） | 不存在不算错误，全部完成后可删除 |
 | `docs/ARCHITECTURE.md` | 存在 | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 模块划分 | 包含模块划分表或描述 |
 | `docs/exec-plans/` | 存在 | 执行计划目录 |
@@ -66,9 +65,9 @@
 
 ### ERROR 类问题
 
-- 核心文档不存在
+- 核心文档不存在（AGENTS.md、ARCHITECTURE.md）
 - 必需章节缺失
-- tasks.md 无法识别任务状态
+- tasks.md 存在但无法识别任务状态
 
 ### WARN 类问题
 

@@ -193,7 +193,7 @@ python scripts/validate_agents_docs.py --level ERROR
 | 文件 | 检查内容 | 严重程度 |
 |------|---------|---------|
 | `AGENTS.md` | 存在、章节完整 | ERROR |
-| `tasks.md` | 存在、checkbox 格式 | ERROR |
+| `tasks.md` | checkbox 格式（存在时） | ERROR |
 | `docs/ARCHITECTURE.md` | 存在 | ERROR |
 | `docs/exec-plans/` | 目录存在 | ERROR |
 

@@ -2,9 +2,9 @@
 """Validate vibe-coding-launcher project documentation.
 
 Checks:
-- Core documents exist (AGENTS.md, tasks.md, ARCHITECTURE.md)
+- Core documents exist (AGENTS.md, ARCHITECTURE.md; tasks.md optional)
 - AGENTS.md sections complete (simplified or full version)
-- tasks.md uses checkbox format
+- tasks.md uses checkbox format (if exists)
 - Quick-entry links in AGENTS.md are valid
 - Line count within limits
 
@@ -144,11 +144,11 @@ def validate_agents_md(path: Path, min_level: Severity) -> list[ValidationResult
 
 
 def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]:
-    """Validate tasks.md file."""
+    """Validate tasks.md file (optional - may be deleted when all tasks complete)."""
     results: list[ValidationResult] = []
 
     if not path.exists():
-        results.append(ValidationResult(path, Severity.ERROR, "文件不存在"))
+        results.append(ValidationResult(path, Severity.INFO, "文件不存在（项目可能已全部完成）"))
         return results
 
     content = path.read_text(encoding="utf-8")
@@ -157,7 +157,7 @@ def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]
     # 检查 checkbox 格式
     checkbox_count = len(CHECKBOX_PATTERN.findall(content))
     if checkbox_count == 0:
-        results.append(ValidationResult(path, Severity.WARN, "没有使用 checkbox 格式"))
+        results.append(ValidationResult(path, Severity.ERROR, "没有使用 checkbox 格式"))
 
     # 统计待办和已完成
     pending = len(re.findall(r"^- \[ \]", content))
