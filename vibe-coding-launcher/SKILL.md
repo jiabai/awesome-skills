@@ -345,6 +345,7 @@ python scripts/validate_agents_docs.py --level WARN
 
 1. **检查 AGENTS.md**：是否需要更新规则？
 2. **检查文档同步**：新规则写入、过时规则删除
+3. **检查约束同步**：子文档（DESIGN.md / SECURITY.md / core-beliefs.md）新增或变更约束时，AGENTS.md 核心信念是否已同步摘要？冲突时以 AGENTS.md 为准。详见 `references/ai-coding-workflow.md` 的"约束优先级链"和"回写触发条件"
 
 #### 设计判断
 

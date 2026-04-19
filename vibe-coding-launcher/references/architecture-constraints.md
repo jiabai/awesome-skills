@@ -40,9 +40,15 @@ flowchart TD
     E -->|是| F[写入 linter 配置文件]
     E -->|否| G[写入 AGENTS.md 核心信念]
     F --> H[在 AGENTS.md 常用命令中声明约束配置路径]
+    H --> I{约束是新增或变更?}
+    G --> I
+    I -->|是| J[同步摘要到 AGENTS.md 核心信念]
+    I -->|否| K[无需回写]
 ```
 
 **关键原则**：错误信息本身就是代理可读的指导。linter 报错比 AGENTS.md 声明更有效，因为它是机械强制而非建议。
+
+**回写原则**：AGENTS.md 是唯一指令源。所有约束源（linter 配置、子文档）的核心摘要必须回写 AGENTS.md，确保代理仅读 AGENTS.md 即可知晓项目关键约束。具体触发条件见 `references/ai-coding-workflow.md` 的"回写触发条件"。
 
 ### 硬约束配置文件映射表
 

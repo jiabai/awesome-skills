@@ -15,6 +15,26 @@
 
 `AGENTS.md` 是唯一指令源。其他文件（CLAUDE.md、Cursor规则、Copilot指令）只是引用或镜像。
 
+**约束优先级链**：
+
+当多个约束源之间存在冲突时，按以下优先级解决：
+
+```
+AGENTS.md 核心信念 > linter 硬约束配置 > 子文档详细规范
+```
+
+- AGENTS.md 核心信念是最高优先级，子文档（DESIGN.md / SECURITY.md / core-beliefs.md）约束不得与之矛盾
+- linter 硬约束是机械强制的，优先级仅次于 AGENTS.md（因为 linter 规则本身需先在 AGENTS.md 中声明路径）
+- 子文档是 AGENTS.md 的详细展开，可以更具体，但不能更宽松或相反
+
+**回写触发条件**：
+
+以下情况必须检查并回写 AGENTS.md：
+
+1. **新增子文档时** — 将核心约束摘要写入 AGENTS.md 核心信念（如新增 SECURITY.md 时，将"API Key 不得硬编码"写入 AGENTS.md）
+2. **子文档约束变更时** — 同步更新 AGENTS.md 中的对应摘要
+3. **发现子文档与 AGENTS.md 矛盾时** — 以 AGENTS.md 为准修正子文档；如确需放宽，先改 AGENTS.md 再改子文档
+
 **应用**：
 - 新建项目时，AGENTS.md 放核心规则
 - 不要在多个文件重复相同规则
@@ -23,6 +43,7 @@
 **禁止**：
 - 在 CLAUDE.md 中定义与 AGENTS.md 冲突的规则
 - 在多处重复维护同一规则
+- 子文档中出现与 AGENTS.md 核心信念矛盾的约束
 
 ### 层次继承
 
