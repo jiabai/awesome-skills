@@ -34,6 +34,7 @@
 | `tasks.md` | 存在时检查 checkbox 格式（格式不对为 ERROR） | 不存在不算错误，全部完成后可删除 |
 | `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 模块划分（如存在） | 包含模块划分表或描述 |
+| `AGENTS.md` | 约束配置路径声明（复杂项目必须） | 非 CLI/单文件项目必须在"常用命令"中声明约束配置路径，如 `约束配置：\`ruff.toml\``。缺少则报 ERROR |
 
 ### 条件文档验证（存在时检查）
 
@@ -67,6 +68,7 @@
 
 - 核心文档不存在（AGENTS.md；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节；CLI/单文件项目 AGENTS.md 缺少"架构"章节）
 - 必需章节缺失
+- 复杂项目 AGENTS.md 未声明约束配置路径（缺少"约束配置：`xxx`"）
 - tasks.md 存在但无法识别任务状态
 
 ### WARN 类问题

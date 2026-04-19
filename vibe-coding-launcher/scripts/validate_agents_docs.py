@@ -4,6 +4,7 @@
 Checks:
 - Core documents exist (AGENTS.md, ARCHITECTURE.md; tasks.md optional)
 - AGENTS.md sections complete (simplified or full version)
+- Non-CLI projects must declare constraint config path in AGENTS.md
 - tasks.md uses checkbox format (if exists)
 - Quick-entry links in AGENTS.md are valid
 - Line count within limits
@@ -171,6 +172,17 @@ def validate_agents_md(path: Path, min_level: Severity, *, cli_project: bool = F
                 resolved = (path.parent / linked_path).resolve()
                 if not resolved.exists():
                     results.append(ValidationResult(path, Severity.WARN, f"快速入口死链: {linked_path}"))
+
+    # 非 CLI（复杂）项目：AGENTS.md 必须声明约束配置路径
+    if not cli_project:
+        has_constraint_declaration = any(
+            CONSTRAINT_CONFIG_PATTERN.search(line) for line in lines
+        )
+        if not has_constraint_declaration:
+            results.append(ValidationResult(
+                path, Severity.ERROR,
+                "复杂项目必须在'常用命令'中声明约束配置路径（如：约束配置：`ruff.toml`）",
+            ))
 
     # 检查约束配置文件路径声明（AGENTS.md 常用命令中声明了 "约束配置：`xxx`"）
     for line in lines:
