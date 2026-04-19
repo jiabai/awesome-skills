@@ -129,7 +129,7 @@ flowchart TD
 根据项目复杂度，将结构分为**核心集**（必须）和**扩展集**（按需）。
 
 查阅 `references/project-structure.md` 获取：
-- 核心集目录树（AGENTS.md + tasks.md + README.md + docs/ARCHITECTURE.md）
+- 核心集目录树（AGENTS.md + tasks.md + README.md + docs/ARCHITECTURE.md；CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
 - 扩展集目录树和 9 项生成判定表
 - 按项目类型调整规则
 
@@ -158,18 +158,18 @@ flowchart TD
 |------|---------|---------|
 | AGENTS.md | 必须 | 所有项目 |
 | tasks.md | 必须 | 所有项目 |
-| docs/ARCHITECTURE.md | 必须 | 所有项目 |
+| docs/ARCHITECTURE.md | 必须（CLI/单文件项目替代方案：写入 AGENTS.md "架构"章节） | 所有项目 |
 | docs/DESIGN.md | 条件 | 项目有 UI 或 API |
 | docs/QUALITY_SCORE.md | 条件 | 项目超过 3 个模块 |
 | docs/SECURITY.md | 条件 | 项目涉及网络/数据存储/API Key |
 | docs/design-docs/core-beliefs.md | 条件 | 3 条以上核心信念需展开 |
 
-**进入下一阶段的条件**：核心文档（AGENTS.md + tasks.md + ARCHITECTURE.md）已生成，条件文档按判定结果生成或跳过。
+**进入下一阶段的条件**：核心文档（AGENTS.md + tasks.md + 架构信息）已生成，条件文档按判定结果生成或跳过。CLI/单文件项目的架构信息在 AGENTS.md "架构"章节中。
 
 **确认格式**：
 ```
 第四阶段已完成：
-- 核心文档：AGENTS.md, tasks.md, docs/ARCHITECTURE.md
+- 核心文档：AGENTS.md, tasks.md, docs/ARCHITECTURE.md（或 AGENTS.md 架构章节）
 - 条件文档（如生成）：{列出}
 - 验证结果：{ERROR/WARN数量}
 
@@ -194,7 +194,7 @@ python scripts/validate_agents_docs.py --level ERROR
 |------|---------|---------|
 | `AGENTS.md` | 存在、章节完整 | ERROR |
 | `tasks.md` | checkbox 格式（存在时） | ERROR |
-| `docs/ARCHITECTURE.md` | 存在 | ERROR |
+| `docs/ARCHITECTURE.md` | 存在（CLI/单文件项目：AGENTS.md 包含"架构"章节） | ERROR |
 
 > `docs/exec-plans/` 为按需生成目录，不在第四阶段检查。仅在第六阶段创建 ExecPlan 时自动创建并验证。
 

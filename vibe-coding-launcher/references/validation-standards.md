@@ -14,7 +14,7 @@
 
 | 时机 | 检查范围 | 严重程度 |
 |------|---------|---------|
-| 第四阶段完成后 | 核心文档（AGENTS.md + ARCHITECTURE.md；tasks.md 可选） | ERROR |
+| 第四阶段完成后 | 核心文档（AGENTS.md + 架构信息；tasks.md 可选） | ERROR |
 | 每次对话结束前 | tasks.md 进度一致性 | WARN |
 | 项目恢复时 | 文档完整性 + 知识新鲜度 | ERROR + WARN |
 | 提交前 | 全量检查 | INFO |
@@ -32,8 +32,8 @@
 | `AGENTS.md` | 行数范围 | 简化版≤150，完整版≤140 |
 | `AGENTS.md` | 快速入口无死链 | 引用的文档都存在 |
 | `tasks.md` | 存在时检查 checkbox 格式（格式不对为 ERROR） | 不存在不算错误，全部完成后可删除 |
-| `docs/ARCHITECTURE.md` | 存在 | 描述项目架构 |
-| `docs/ARCHITECTURE.md` | 模块划分 | 包含模块划分表或描述 |
+| `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
+| `docs/ARCHITECTURE.md` | 模块划分（如存在） | 包含模块划分表或描述 |
 
 ### 条件文档验证（存在时检查）
 
@@ -65,7 +65,7 @@
 
 ### ERROR 类问题
 
-- 核心文档不存在（AGENTS.md、ARCHITECTURE.md）
+- 核心文档不存在（AGENTS.md；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节）
 - 必需章节缺失
 - tasks.md 存在但无法识别任务状态
 

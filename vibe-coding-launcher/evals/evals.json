@@ -20,11 +20,12 @@
       "id": 2,
       "eval_name": "新手邮件工具Mac",
       "prompt": "我是个新手，想做一个能自动发邮件的工具，用的是Mac",
-      "expected_output": "推荐Python技术栈，生成包含AGENTS.md、docs/ARCHITECTURE.md、docs/exec-plans/的项目结构，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
+      "expected_output": "推荐Python技术栈，识别为CLI/单文件项目，生成包含AGENTS.md（含架构章节）、tasks.md的项目结构，不生成docs/目录，架构信息写入AGENTS.md的'架构'章节，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
       "assertions": [
         {"name": "识别用户信息", "check": "识别了用户是新手、使用Mac"},
         {"name": "推荐Python", "check": "推荐了Python技术栈"},
-        {"name": "生成了核心文档", "check": "生成了AGENTS.md和docs/ARCHITECTURE.md"},
+        {"name": "生成了核心文档", "check": "生成了AGENTS.md（含架构章节）和tasks.md"},
+        {"name": "架构信息在AGENTS.md中", "check": "CLI/单文件项目将架构信息写入AGENTS.md的'架构'章节，而非生成docs/ARCHITECTURE.md"},
         {"name": "配置架构约束", "check": "在AGENTS.md或文档中声明了分层架构"},
         {"name": "创建ExecPlan", "check": "创建了最小可运行版本的执行计划"},
         {"name": "不假设用户知识", "check": "解释了新手可能不懂的概念"}

@@ -17,8 +17,10 @@ project-name/
 ├── tasks.md                   # 执行清单（轻量任务追踪）
 ├── README.md                  # 项目说明
 └── docs/
-    └── ARCHITECTURE.md        # 架构地图
+    └── ARCHITECTURE.md        # 架构地图（CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
 ```
+
+> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + tasks.md + README.md，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）写入 AGENTS.md 的"架构"章节。
 
 ## 扩展集（按需生成）
 

@@ -69,6 +69,15 @@ CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]")
 QUICK_ENTRY_PATTERN = re.compile(r"`([^`]+\.md)`")
 
 
+def is_cli_project(root: Path) -> bool:
+    """Detect CLI/single-file project by directory structure.
+
+    A project is considered CLI/single-file if it has no docs/ directory
+    and no src/ directory (source files live in the root).
+    """
+    return not (root / "docs").exists() and not (root / "src").exists()
+
+
 def detect_version(headings: list[str]) -> str:
     """Detect AGENTS.md version (simplified or full)."""
     if "Scope" in headings:
@@ -76,7 +85,7 @@ def detect_version(headings: list[str]) -> str:
     return "simple"
 
 
-def validate_agents_md(path: Path, min_level: Severity) -> list[ValidationResult]:
+def validate_agents_md(path: Path, min_level: Severity, *, cli_project: bool = False) -> list[ValidationResult]:
     """Validate one AGENTS.md file."""
     results: list[ValidationResult] = []
 
@@ -124,6 +133,10 @@ def validate_agents_md(path: Path, min_level: Severity) -> list[ValidationResult
 
         results.append(ValidationResult(path, Severity.INFO, f"简化版, {line_count} 行"))
 
+    # CLI/单文件项目：AGENTS.md 必须包含"架构"章节
+    if cli_project and "架构" not in headings:
+        results.append(ValidationResult(path, Severity.ERROR, "CLI/单文件项目缺少'架构'章节（替代 docs/ARCHITECTURE.md）"))
+
     # 检查快速入口链接有效性
     quick_entry_section = False
     for line in lines:
@@ -168,12 +181,16 @@ def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]
     return results
 
 
-def validate_architecture_md(path: Path, min_level: Severity) -> list[ValidationResult]:
+def validate_architecture_md(path: Path, min_level: Severity, *, cli_project: bool = False) -> list[ValidationResult]:
     """Validate docs/ARCHITECTURE.md file."""
     results: list[ValidationResult] = []
 
     if not path.exists():
-        results.append(ValidationResult(path, Severity.ERROR, "文件不存在"))
+        if cli_project:
+            # CLI/单文件项目不需要 docs/ARCHITECTURE.md，架构信息在 AGENTS.md 中
+            results.append(ValidationResult(path, Severity.INFO, "文件不存在（CLI/单文件项目，架构信息在 AGENTS.md 中）"))
+        else:
+            results.append(ValidationResult(path, Severity.ERROR, "文件不存在"))
         return results
 
     content = path.read_text(encoding="utf-8")
@@ -198,12 +215,15 @@ def validate_architecture_md(path: Path, min_level: Severity) -> list[Validation
     return results
 
 
-def validate_docs_structure(docs_dir: Path, min_level: Severity) -> list[ValidationResult]:
+def validate_docs_structure(docs_dir: Path, min_level: Severity, *, cli_project: bool = False) -> list[ValidationResult]:
     """Validate docs/ directory structure."""
     results: list[ValidationResult] = []
 
     if not docs_dir.exists():
-        results.append(ValidationResult(docs_dir, Severity.ERROR, "docs/ 目录不存在"))
+        if cli_project:
+            results.append(ValidationResult(docs_dir, Severity.INFO, "docs/ 目录不存在（CLI/单文件项目，无需生成）"))
+        else:
+            results.append(ValidationResult(docs_dir, Severity.ERROR, "docs/ 目录不存在"))
         return results
 
     # 必需文件
@@ -237,16 +257,18 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
     """Validate entire project documentation."""
     results: list[ValidationResult] = []
 
+    cli = is_cli_project(root)
+
     # 核心文档
     agents_md = root / "AGENTS.md"
     tasks_md = root / "tasks.md"
     architecture_md = root / "docs" / "ARCHITECTURE.md"
     docs_dir = root / "docs"
 
-    results.extend(validate_agents_md(agents_md, min_level))
+    results.extend(validate_agents_md(agents_md, min_level, cli_project=cli))
     results.extend(validate_tasks_md(tasks_md, min_level))
-    results.extend(validate_architecture_md(architecture_md, min_level))
-    results.extend(validate_docs_structure(docs_dir, min_level))
+    results.extend(validate_architecture_md(architecture_md, min_level, cli_project=cli))
+    results.extend(validate_docs_structure(docs_dir, min_level, cli_project=cli))
 
     # 检查所有子目录 AGENTS.md
     for agents_path in root.rglob("AGENTS.md"):
