@@ -72,5 +72,5 @@ project-name/
 
 - **Web应用**：添加 `templates/`、`static/`，src 下按 `ui/` `service/` `repo/` 分层
 - **API服务**：src 下按 `routes/` `models/` `services/` 分层
-- **命令行**：单文件即可，核心集只生成 AGENTS.md + tasks.md + README.md，不生成 docs/ 目录
+- **命令行**：单文件即可，核心集只生成 AGENTS.md + tasks.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录
 - **AI应用**：添加 `config.py`（API Key），docs/references/ 放 API 文档

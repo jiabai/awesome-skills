@@ -168,6 +168,8 @@ flowchart TD
 > `AGENTS.md` 在第四阶段生成时，必须同时写入 `约束机制` 章节：
 > - CLI/单文件项目 + 简单多文件项目：`模式=agents-only`，`配置=N/A`
 > - 复杂项目：`模式=linter+agents`，`配置=目标约束文件路径`
+>
+> 子级/模块级 `AGENTS.md` 继承根级 `AGENTS.md` 的 `约束机制`，不要求重复维护。
 
 **进入下一阶段的条件**：核心文档（AGENTS.md + tasks.md + 架构信息 + 约束机制）已生成，条件文档按判定结果生成或跳过。CLI/单文件项目的架构信息在 AGENTS.md "架构"章节中。
 
@@ -199,7 +201,8 @@ python scripts/validate_agents_docs.py --level ERROR
 | 文件 | 检查内容 | 严重程度 |
 |------|---------|---------|
 | `AGENTS.md` | 存在、章节完整 | ERROR |
-| `AGENTS.md` | `约束机制` 章节存在，`模式/配置` 合法 | ERROR |
+| `AGENTS.md` | 根级文件的 `约束机制` 章节存在，`模式/配置` 合法 | ERROR |
+| `scripts/validate_agents_docs.py` | 存在（所有项目） | ERROR |
 | `tasks.md` | checkbox 格式（存在时） | ERROR |
 | `docs/ARCHITECTURE.md` | 存在（CLI/单文件项目：AGENTS.md 包含"架构"章节） | ERROR |
 
@@ -356,7 +359,7 @@ python scripts/validate_agents_docs.py --level WARN
 1. **检查 AGENTS.md**：是否需要更新规则？
 2. **检查文档同步**：新规则写入、过时规则删除
 3. **检查约束同步**：子文档（DESIGN.md / SECURITY.md / core-beliefs.md）新增或变更约束时，AGENTS.md 核心信念是否已同步摘要？冲突时以 AGENTS.md 为准。详见 `references/ai-coding-workflow.md` 的"约束优先级链"和"回写触发条件"
-4. **检查约束机制一致性**：AGENTS.md 的 `约束机制` 是否仍与实际项目复杂度和配置文件一致？`agents-only` 模式不得指向真实配置文件；`linter+agents` 模式必须指向存在的真实文件
+4. **检查约束机制一致性**：根 `AGENTS.md` 的 `约束机制` 是否仍与实际项目复杂度和配置文件一致？`agents-only` 模式不得指向真实配置文件；`linter+agents` 模式必须指向存在的真实文件
 
 #### 设计判断
 

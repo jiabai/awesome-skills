@@ -21,6 +21,8 @@
 
 **生成条件**：所有项目都必须生成。
 
+**作用域**：此模板默认用于**根级 `AGENTS.md`**。如果项目后续拆分出子级/模块级 `AGENTS.md`，子级文件继承根级的项目级元数据（尤其是 `约束机制`），不要求重复维护。
+
 ### 模板
 
 ```markdown
@@ -75,7 +77,9 @@
 
 "架构"章节仅 CLI/单文件项目需要（替代 `docs/ARCHITECTURE.md`）。多文件项目不需要此章节，架构信息放 `docs/ARCHITECTURE.md`。CLI 项目的"架构"章节控制在 20 行以内，只写概述 + 关键文件 + 2-3 条不变量。
 
-"约束机制"章节是所有项目的固定机器可读入口。`agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填写真实约束文件路径。
+"约束机制"章节是**根级 `AGENTS.md`** 的固定机器可读入口。`agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填写真实约束文件路径。
+
+子级/模块级 `AGENTS.md` 继承根级的 `约束机制`，不要求重复声明；如出于可读性保留也允许，但不是必需项。
 
 ## tasks.md
 
@@ -240,7 +244,9 @@ python scripts/validate_agents_docs.py --project /path/to/project
 - 有多人协作
 - 使用多个 AI 工具（Claude、Cursor、Copilot）
 
-### 必需章节
+**默认用途**：此模板默认用于**根级 `AGENTS.md`** 的完整版。模块级/子级 `AGENTS.md` 可复用其余章节结构，但项目级 `约束机制` 继承根级，不要求重复维护。
+
+### 必需章节（根级 AGENTS.md）
 
 | 章节 | 内容 | 条数 |
 |------|------|------|
@@ -329,4 +335,5 @@ python scripts/validate_agents_docs.py --project /path/to/project
 **原则**：
 - 模块级规则只写该模块特有内容
 - 共享规则放上层，避免重复
+- 项目级 `约束机制` 只维护在根级 `AGENTS.md`，子级默认继承，不要求重复
 - 本地文件覆盖上层，不冲突时继承

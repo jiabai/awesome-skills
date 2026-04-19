@@ -5,13 +5,14 @@
       "id": 1,
       "eval_name": "新手记账网页",
       "prompt": "我想用 vibe coding 开发一个项目，帮我做一个记账的小网页",
-      "expected_output": "应先询问3个问题了解用户情况，然后推荐HTML+CSS+JS技术栈，生成包含AGENTS.md和docs/目录的项目结构，建立知识体系，并在AGENTS.md的'约束机制'章节中声明模式=agents-only、配置=N/A，创建首个ExecPlan（如Hello World页面），并逐步指导",
+      "expected_output": "应先询问3个问题了解用户情况，然后推荐HTML+CSS+JS技术栈，生成包含AGENTS.md、scripts/validate_agents_docs.py和docs/目录的项目结构，建立知识体系，并在根AGENTS.md的'约束机制'章节中声明模式=agents-only、配置=N/A，创建首个ExecPlan（如Hello World页面），并逐步指导",
       "assertions": [
         {"name": "问了3个基础问题", "check": "询问了项目描述、编程语言熟悉度、操作系统这3个问题"},
         {"name": "推荐了技术栈", "check": "推荐了具体的技术栈（如HTML+CSS+JS或类似）"},
         {"name": "生成了AGENTS.md", "check": "生成了AGENTS.md文件"},
+        {"name": "生成了验证脚本", "check": "生成了scripts/validate_agents_docs.py"},
         {"name": "创建了docs目录", "check": "创建了docs/目录结构"},
-        {"name": "简单项目声明agents-only", "check": "在AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
+        {"name": "简单项目声明agents-only", "check": "在根AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
         {"name": "创建了ExecPlan", "check": "在docs/exec-plans/active/创建了执行计划文档"},
         {"name": "进入阶段执行", "check": "按7阶段流程执行，而非直接写代码"}
       ],
@@ -21,14 +22,14 @@
       "id": 2,
       "eval_name": "新手邮件工具Mac",
       "prompt": "我是个新手，想做一个能自动发邮件的工具，用的是Mac",
-      "expected_output": "推荐Python技术栈，识别为CLI/单文件项目，生成包含AGENTS.md（含架构章节和'约束机制'章节）、tasks.md的项目结构，不生成docs/目录，架构信息写入AGENTS.md的'架构'章节，'约束机制'声明模式=agents-only、配置=N/A，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
+      "expected_output": "推荐Python技术栈，识别为CLI/单文件项目，生成包含AGENTS.md（含架构章节和'约束机制'章节）、tasks.md、README.md、scripts/validate_agents_docs.py的核心集，不生成docs/目录，架构信息写入AGENTS.md的'架构'章节，根AGENTS.md的'约束机制'声明模式=agents-only、配置=N/A，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
       "assertions": [
         {"name": "识别用户信息", "check": "识别了用户是新手、使用Mac"},
         {"name": "推荐Python", "check": "推荐了Python技术栈"},
-        {"name": "生成了核心文档", "check": "生成了AGENTS.md（含架构章节）和tasks.md"},
+        {"name": "生成了核心文档", "check": "生成了AGENTS.md（含架构章节）、tasks.md、README.md和scripts/validate_agents_docs.py"},
         {"name": "架构信息在AGENTS.md中", "check": "CLI/单文件项目将架构信息写入AGENTS.md的'架构'章节，而非生成docs/ARCHITECTURE.md"},
         {"name": "配置架构约束", "check": "在AGENTS.md或文档中声明了分层架构"},
-        {"name": "CLI保持agents-only", "check": "在AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
+        {"name": "CLI保持agents-only", "check": "在根AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
         {"name": "创建ExecPlan", "check": "创建了最小可运行版本的执行计划"},
         {"name": "不假设用户知识", "check": "解释了新手可能不懂的概念"}
       ],
@@ -38,13 +39,14 @@
       "id": 3,
       "eval_name": "AI聊天机器人Python",
       "prompt": "帮我写个AI聊天机器人，我懂一点Python",
-      "expected_output": "推荐Python+Claude/OpenAI API，生成包含Interface→Agent→Service→Config→Types分层架构的项目结构，在AGENTS.md中声明架构不变量，并在'约束机制'章节中声明模式=linter+agents且配置为真实约束文件路径，创建ExecPlan从最小可运行版本开始",
+      "expected_output": "推荐Python+Claude/OpenAI API，生成包含Interface→Agent→Service→Config→Types分层架构的项目结构，并生成scripts/validate_agents_docs.py；在根AGENTS.md中声明架构不变量，并在'约束机制'章节中声明模式=linter+agents且配置为真实约束文件路径，创建ExecPlan从最小可运行版本开始",
       "assertions": [
         {"name": "识别用户背景", "check": "识别了用户懂一点Python"},
         {"name": "推荐AI技术栈", "check": "推荐了Python+AI API（Claude/OpenAI等）"},
+        {"name": "复杂项目生成验证脚本", "check": "生成了scripts/validate_agents_docs.py"},
         {"name": "定义分层架构", "check": "定义了Interface→Agent→Service→Config→Types分层"},
         {"name": "声明架构不变量", "check": "在AGENTS.md中声明了架构不变量"},
-        {"name": "复杂项目声明linter模式", "check": "在AGENTS.md的'约束机制'章节中声明模式=linter+agents，且配置为真实约束文件路径"},
+        {"name": "复杂项目声明linter模式", "check": "在根AGENTS.md的'约束机制'章节中声明模式=linter+agents，且配置为真实约束文件路径"},
         {"name": "从最小版本开始", "check": "ExecPlan从最小可运行版本开始"}
       ],
       "files": []
@@ -67,14 +69,27 @@
       "id": 5,
       "eval_name": "单文件脚本批量重命名",
       "prompt": "帮我写个Python脚本，把一个文件夹里的图片批量重命名",
-      "expected_output": "识别为单文件脚本项目，推荐Python，只生成核心集（AGENTS.md + tasks.md + README.md），不生成docs/目录，架构约束声明'保持单文件直到超过200行'，并在AGENTS.md的'约束机制'章节中声明模式=agents-only、配置=N/A，创建轻量ExecPlan",
+      "expected_output": "识别为单文件脚本项目，推荐Python，只生成核心集（AGENTS.md + tasks.md + README.md + scripts/validate_agents_docs.py），不生成docs/目录，架构约束声明'保持单文件直到超过200行'，并在根AGENTS.md的'约束机制'章节中声明模式=agents-only、配置=N/A，创建轻量ExecPlan",
       "assertions": [
         {"name": "识别单文件场景", "check": "识别这是单文件脚本项目而非完整项目"},
-        {"name": "生成核心集", "check": "只生成AGENTS.md + tasks.md + README.md核心集"},
+        {"name": "生成核心集", "check": "只生成AGENTS.md + tasks.md + README.md + scripts/validate_agents_docs.py核心集"},
         {"name": "不生成docs目录", "check": "不生成docs/目录（单文件项目不需要）"},
         {"name": "声明单文件约束", "check": "声明'保持单文件'约束"},
-        {"name": "单文件项目agents-only", "check": "在AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
+        {"name": "单文件项目agents-only", "check": "在根AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
         {"name": "轻量ExecPlan", "check": "创建轻量级ExecPlan而非完整7阶段"}
+      ],
+      "files": []
+    },
+    {
+      "id": 9,
+      "eval_name": "层次继承约束机制",
+      "prompt": "我的项目根目录已经有 AGENTS.md 了，我还想在 src/payments/ 放一个模块级 AGENTS.md，但不想在子级重复写'约束机制'，这样可以吗？",
+      "expected_output": "应说明这是合法的层次继承：根级AGENTS.md负责声明项目级'约束机制'，模块级AGENTS.md继承该模式与配置，不要求重复声明；模块级文件只需写该模块特有规则，并保持与根级不冲突。",
+      "assertions": [
+        {"name": "识别根级负责约束机制", "check": "明确说明项目级'约束机制'只在根AGENTS.md维护"},
+        {"name": "允许子级继承不重复", "check": "明确说明模块级AGENTS.md可以继承根级约束机制而不重复声明"},
+        {"name": "强调模块级只写局部规则", "check": "建议模块级AGENTS.md只写该模块特有规则，避免重复共享规则"},
+        {"name": "不把缺少子级约束机制当错误", "check": "不把子级AGENTS.md缺少'约束机制'描述为不合规"}
       ],
       "files": []
     },

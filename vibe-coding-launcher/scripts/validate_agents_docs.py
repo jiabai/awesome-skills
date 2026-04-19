@@ -2,7 +2,7 @@
 """Validate vibe-coding-launcher project documentation.
 
 Checks:
-- Core documents exist (AGENTS.md, ARCHITECTURE.md; tasks.md optional)
+- Core documents exist (AGENTS.md, validate_agents_docs.py, ARCHITECTURE.md; tasks.md optional)
 - AGENTS.md sections complete (simplified or full version)
 - Root AGENTS.md must declare explicit constraint mechanism
 - tasks.md uses checkbox format (if exists)
@@ -46,10 +46,10 @@ class ValidationResult:
         return f"[{level}] {rel_path}: {self.message}"
 
 
-# 简化版必需章节（"架构"章节仅 CLI/单文件项目需要，在下方 cli_project 条件检查中单独校验）
+# 简化版通用必需章节（根级 `约束机制` 在下方单独校验，避免误伤子级继承场景）
 SIMPLE_REQUIRED = ["快速入口", "核心信念", "开发流程", "常用命令"]
 
-# 完整版必需章节
+# 完整版通用必需章节（根级 `约束机制` 在下方单独校验）
 FULL_REQUIRED = ["Scope", "Do", "Avoid", "Commands", "Tests", "Related Skills"]
 
 # 行数范围
@@ -64,7 +64,7 @@ GEN_COMMENT_PATTERN = re.compile(
 )
 
 # tasks.md checkbox 模式
-CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]")
+CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]", re.MULTILINE)
 
 # 快速入口链接模式
 QUICK_ENTRY_PATTERN = re.compile(r"`([^`]+\.md)`")
@@ -277,8 +277,8 @@ def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]
         results.append(ValidationResult(path, Severity.ERROR, "没有使用 checkbox 格式"))
 
     # 统计待办和已完成
-    pending = len(re.findall(r"^- \[ \]", content))
-    completed = len(re.findall(r"^- \[x\]", content))
+    pending = len(re.findall(r"^- \[ \]", content, re.MULTILINE))
+    completed = len(re.findall(r"^- \[x\]", content, re.MULTILINE))
 
     results.append(ValidationResult(path, Severity.INFO, f"{pending} 项待办, {completed} 项已完成"))
 
@@ -365,9 +365,13 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
 
     # 核心文档
     agents_md = root / "AGENTS.md"
+    validator_script = root / "scripts" / "validate_agents_docs.py"
     tasks_md = root / "tasks.md"
     architecture_md = root / "docs" / "ARCHITECTURE.md"
     docs_dir = root / "docs"
+
+    if not validator_script.exists():
+        results.append(ValidationResult(validator_script, Severity.ERROR, "核心验证脚本不存在"))
 
     results.extend(
         validate_agents_md(

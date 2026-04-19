@@ -14,7 +14,7 @@
 
 | 时机 | 检查范围 | 严重程度 |
 |------|---------|---------|
-| 第四阶段完成后 | 核心文档（AGENTS.md + 架构信息；tasks.md 可选） | ERROR |
+| 第四阶段完成后 | 核心文档（AGENTS.md + 架构信息 + scripts/validate_agents_docs.py；tasks.md 可选） | ERROR |
 | 每次对话结束前 | tasks.md 进度一致性 | WARN |
 | 项目恢复时 | 文档完整性 + 知识新鲜度 | ERROR + WARN |
 | 提交前 | 全量检查 | INFO |
@@ -28,15 +28,18 @@
 | 文件 | 检查项 | 说明 |
 |------|--------|------|
 | `AGENTS.md` | 存在 | 项目根目录必须有 |
-| `AGENTS.md` | 章节完整 | 简化版或完整版章节 |
+| `AGENTS.md` | 章节完整 | 根级/子级分别按各自标准检查 |
 | `AGENTS.md` | 行数范围 | 简化版≤150，完整版≤140 |
 | `AGENTS.md` | 快速入口无死链 | 引用的文档都存在 |
+| `scripts/validate_agents_docs.py` | 存在 | 所有项目的核心验证脚本 |
 | `tasks.md` | 存在时检查 checkbox 格式（格式不对为 ERROR） | 不存在不算错误，全部完成后可删除 |
 | `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 模块划分（如存在） | 包含模块划分表或描述 |
-| `AGENTS.md` | `约束机制` 章节存在 | 所有项目都必须声明 |
-| `AGENTS.md` | `约束机制.模式` 合法 | 只能是 `agents-only` 或 `linter+agents` |
-| `AGENTS.md` | `约束机制.配置` 合法 | `agents-only` 时必须为 `N/A`；`linter+agents` 时必须为真实配置文件路径 |
+| 根 `AGENTS.md` | `约束机制` 章节存在 | 项目级元数据只在根级声明 |
+| 根 `AGENTS.md` | `约束机制.模式` 合法 | 只能是 `agents-only` 或 `linter+agents` |
+| 根 `AGENTS.md` | `约束机制.配置` 合法 | `agents-only` 时必须为 `N/A`；`linter+agents` 时必须为真实配置文件路径 |
+
+> 子级/模块级 `AGENTS.md` 继承根级 `约束机制`，不要求重复声明；若为了可读性保留也允许，但不是校验必需项。
 
 ### 条件文档验证（存在时检查）
 
@@ -69,10 +72,11 @@
 ### ERROR 类问题
 
 - 核心文档不存在（AGENTS.md；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节；CLI/单文件项目 AGENTS.md 缺少"架构"章节）
+- 缺少 `scripts/validate_agents_docs.py`
 - 必需章节缺失
-- AGENTS.md 缺少 `约束机制` 章节或 `模式`
-- `模式=agents-only` 但 `配置` 不是 `N/A`
-- `模式=linter+agents` 但缺少真实配置文件路径，或路径不存在
+- 根 AGENTS.md 缺少 `约束机制` 章节或 `模式`
+- 根 AGENTS.md 的 `模式=agents-only` 但 `配置` 不是 `N/A`
+- 根 AGENTS.md 的 `模式=linter+agents` 但缺少真实配置文件路径，或路径不存在
 - tasks.md 存在但无法识别任务状态
 
 ### WARN 类问题
@@ -102,13 +106,13 @@
 
 **适用**：≤3模块、新手项目、单人开发
 
-**必需章节**：
+**根级 AGENTS.md 必需章节**：
 - 快速入口
 - 核心信念
 - 开发流程
 - 常用命令
 - 架构（仅 CLI/单文件项目必需，替代 docs/ARCHITECTURE.md）
-- 约束机制（所有项目必需）
+- 约束机制（仅根级 AGENTS.md 必需）
 
 **行数限制**：≤150 行
 
@@ -116,7 +120,7 @@
 
 **适用**：>3模块、多人协作、多AI工具
 
-**必需章节**：
+**根级 AGENTS.md 必需章节**：
 - Scope
 - Do
 - Avoid
@@ -126,6 +130,12 @@
 - Related Skills
 
 **行数限制**：≤140 行
+
+### 根级与子级 AGENTS.md 规则
+
+- 根级 `AGENTS.md` 必须声明项目级 `约束机制`
+- 子级/模块级 `AGENTS.md` 继承根级 `约束机制`，不要求重复声明
+- 子级/模块级 `AGENTS.md` 仍需满足其采用模板的其余章节完整性
 
 ---
 
@@ -155,6 +165,8 @@ python scripts/validate_agents_docs.py --level INFO
 ```bash
 python scripts/validate_agents_docs.py --project /path/to/project
 ```
+
+说明：当脚本在项目本地运行时，如果 `scripts/validate_agents_docs.py` 本身已被删除，命令会先失败；从 skill 包或其他项目使用 `--project` 校验目标项目时，仍应检测并报告这一缺失。
 
 ### 输出示例
 
@@ -203,7 +215,7 @@ python scripts/validate_agents_docs.py --project /path/to/project
 | 维度 | check_ai_collab_docs.py | validate_agents_docs.py |
 |------|------------------------|------------------------|
 | 适用项目 | 特定 Flask/Next.js 项目 | 通用 vibe-coding-launcher 项目 |
-| 检查范围 | 手动+生成文档、Claude规则 | 核心文档体系 |
+| 检查范围 | 手动+生成文档、Claude规则 | 核心文档体系（含验证脚本） |
 | 输出分级 | 无 | ERROR/WARN/INFO |
 | 严格程度 | 更严格（检查内容匹配） | 更灵活（检查结构完整性） |
 
