@@ -1,5 +1,7 @@
 # 文档验证标准
 
+这是文档验证的唯一 canonical 来源；`SKILL.md` 和其他流程文档只引用这里，不重复维护校验细则。
+
 ## 目录
 
 - [验证时机](#验证时机)
@@ -212,13 +214,6 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ---
 
-## 与 check_ai_collab_docs.py 的区别
+## 总结
 
-| 维度 | check_ai_collab_docs.py | validate_agents_docs.py |
-|------|------------------------|------------------------|
-| 适用项目 | 特定 Flask/Next.js 项目 | 通用 vibe-coding-launcher 项目 |
-| 检查范围 | 手动+生成文档、Claude规则 | 核心文档体系（含验证脚本） |
-| 输出分级 | 无 | ERROR/WARN/INFO |
-| 严格程度 | 更严格（检查内容匹配） | 更灵活（检查结构完整性） |
-
-vibe-coding-launcher 项目的验证更注重**结构完整性**而非**内容精确匹配**，因为项目内容随用户需求变化。
+vibe-coding-launcher 的验证更注重**结构完整性**而非**内容逐字匹配**，因为项目内容会随用户需求变化。

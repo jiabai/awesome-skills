@@ -1,5 +1,7 @@
 # 文档生成模板
 
+本文件只定义“要生成什么模板、模板长什么样”；流程、验证口径和执行细则分别见 `task-management.md`、`validation-standards.md`、`ai-coding-workflow.md`。
+
 ## 目录
 
 - [AGENTS.md（简化版）](#agentsmd简化版)
@@ -83,13 +85,13 @@
 
 ## tasks.md
 
-执行期间的临时任务清单，位于项目根目录。代理被异常打断时，通过它恢复上下文。
+执行期间的临时任务清单，位于项目根目录；代理被异常打断时通过它恢复上下文。
 
 **生成条件**：所有项目都必须生成。
 
-**生命周期**：创建（第四阶段）→ 执行期间持续更新 → 全部完成后删除。历史记录由 `docs/exec-plans/completed/` 承载。
+**生命周期**：创建（第四阶段）→ 执行期间持续更新 → 全部完成后删除。
 
-格式、写入标准、执行流程等完整规范见 `references/task-management.md`。
+格式、写入标准、执行流程见 `task-management.md`。
 
 ### 模板
 
@@ -112,13 +114,9 @@
 
 **生成条件**：所有项目都必须生成（核心集）。
 
-**生成方式**：从 skill 包的 `scripts/validate_agents_docs.py` 原样复制到用户项目的 `scripts/` 目录。不需要模板化或定制，直接复制即可。
+**生成方式**：从 skill 包的 `scripts/validate_agents_docs.py` 原样复制到用户项目的 `scripts/` 目录，不要定制。
 
-**用途**：
-
-- 第四阶段完成后验证核心文档完整性（`--level ERROR`）
-- 每次对话结束前检查知识新鲜度（`--level WARN`）
-- 项目恢复时确认文档状态（`--level ERROR`）
+**用途**：第四阶段后校验核心文档、对话结束前检查知识新鲜度、恢复时确认文档状态。
 
 **使用方式**：
 
@@ -137,7 +135,7 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 - 脚本仅使用 Python 标准库，无外部依赖
 - 脚本默认以自身所在目录的上一级作为项目根目录（`Path(__file__).resolve().parents[1]`），在用户项目中可正确解析
-- 不要修改脚本内容，如需调整验证规则，应更新 skill 包中的源文件后重新复制
+- 不要修改脚本内容；验证规则见 `validation-standards.md`
 
 ## docs/ARCHITECTURE.md
 

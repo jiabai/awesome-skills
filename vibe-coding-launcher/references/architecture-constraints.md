@@ -51,7 +51,7 @@ flowchart TD
 
 **关键原则**：错误信息本身就是代理可读的指导。linter 报错比 AGENTS.md 声明更有效，因为它是机械强制而非建议。
 
-**回写原则**：AGENTS.md 是唯一指令源。所有项目级约束源（linter 配置、子文档）的核心摘要必须回写根级 AGENTS.md，确保代理仅读根级 AGENTS.md 即可知晓项目关键约束。具体触发条件见 `references/ai-coding-workflow.md` 的"回写触发条件"。
+**回写原则**：AGENTS.md 是唯一指令源。所有项目级约束源（linter 配置、子文档）的核心摘要必须回写根级 AGENTS.md，确保代理仅读根级 AGENTS.md 即可知晓项目关键约束。回写时机和动作见 `ai-coding-workflow.md` 的“设计原则”和“文档同步”。
 
 **模式优先原则**：先在根级 AGENTS.md 的 `约束机制` 章节中声明 `模式`，再决定是否需要真实配置文件。脚本不再根据目录结构推断“复杂项目”，而是以显式声明为准。
 
