@@ -5,6 +5,8 @@
 ## 目录
 
 - [AGENTS.md（简化版）](#agentsmd简化版)
+- [WORKFLOW.md](#workflowmd)
+- [docs/EXECUTION_GATES.md](#docsexecution_gatesmd)
 - [tasks.md](#tasksmd)
 - [scripts/validate_agents_docs.py](#scriptsvalidate_agents_docspy)
 - [docs/ARCHITECTURE.md](#docsarchitecturemd)
@@ -12,6 +14,8 @@
 - [docs/QUALITY_SCORE.md](#docsquality_scoremd)
 - [docs/SECURITY.md](#docssecuritymd)
 - [docs/design-docs/core-beliefs.md](#docsdesign-docscore-beliefsmd)
+- [docs/product-specs](#docsproduct-specs)
+- [docs/exec-plans 索引与技术债](#docsexec-plans-索引与技术债)
 - [AGENTS.md（成熟项目版）](#agentsmd成熟项目版)
 - [模板选择指南](#模板选择指南)
 
@@ -36,6 +40,8 @@
 - 设计规范：见 `docs/DESIGN.md`（如已生成）
 - 核心信念：见 `docs/design-docs/core-beliefs.md`（如已生成，否则见下方）
 - 执行清单：见 `tasks.md`（如存在，全部完成后删除）
+- 工作流：见 `WORKFLOW.md`（如已生成）
+- 完成门禁：见 `docs/EXECUTION_GATES.md`（如已生成）
 - 执行计划：见 `docs/exec-plans/active/`（如已生成）
 - 技术债：见 `docs/exec-plans/tech-debt-tracker.md`（如已生成）
 
@@ -82,6 +88,102 @@
 "约束机制"章节是**根级 `AGENTS.md`** 的固定机器可读入口。`agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填写真实约束文件路径。
 
 子级/模块级 `AGENTS.md` 继承根级的 `约束机制`，不要求重复声明；如出于可读性保留也允许，但不是必需项。
+
+## WORKFLOW.md
+
+项目的默认做事流程，回答“这个项目里任务应该怎么从想法走到实现”。
+
+**生成条件**：默认生成。极小一次性脚本可以不单独生成，但必须在 AGENTS.md 的开发流程中写明轻量路径。
+
+### 模板
+
+```markdown
+# Project Workflow
+
+## Purpose
+
+本文件定义项目默认工作流。目标是让非平凡改动先形成可审查的意图和计划，再进入实现。
+
+## Mandatory Rule
+
+除非任务是低风险、小范围、无新边界的轻量改动，否则按以下流程推进：
+
+1. Constitution and context
+2. Spec
+3. Technical plan
+4. Task breakdown
+5. Implementation and validation
+
+## Constitution
+
+- `AGENTS.md`
+- `docs/ARCHITECTURE.md`（或根级架构章节）
+- `docs/DESIGN.md`（如存在）
+- `docs/SECURITY.md`（如存在）
+- 相关模块最近的 `AGENTS.md`（如存在）
+
+## Spec
+
+当任务改变用户可见行为、新增边界、影响认证/权限/数据/部署/安全时，在 `docs/product-specs/` 创建或更新 spec。
+
+## Plan
+
+非平凡任务在 `docs/exec-plans/active/` 创建 ExecPlan，并在计划确认后实现。
+
+## Lightweight Path
+
+轻量任务可以直接实现，但仍需 inspect、最小验证、必要文档同步和最终验证说明。
+
+## File Placement
+
+- 用户意图：`docs/product-specs/`
+- 设计决策：`docs/design-docs/`
+- 外部参考：`docs/references/`
+- 进行中计划：`docs/exec-plans/active/`
+- 完成计划：`docs/exec-plans/completed/`
+- 技术债：`docs/exec-plans/tech-debt-tracker.md`
+```
+
+## docs/EXECUTION_GATES.md
+
+完成门禁，回答“什么时候可以说完成”。
+
+**生成条件**：多文件项目、Web/API/桌面项目、或任何需要测试/发布/交付标准的项目。
+
+### 模板
+
+```markdown
+# Execution Gates
+
+## Purpose
+
+本文件定义任务完成前必须满足的检查。验证应与风险成比例，并在最终交付中可见。
+
+## Hard Gates
+
+- 受影响代码路径或文档事实来源已 inspect。
+- 受影响区域的最小有效测试或检查通过。
+- 文档结构验证通过：`python scripts/validate_agents_docs.py --level ERROR`。
+- touched active ExecPlan 的 Progress、Decision Log 和验证记录已更新。
+- 架构、安全、流程、运行时 contract 或运维行为变化已同步到 durable docs。
+
+## Soft Gates
+
+- 更广范围回归。
+- 手动运行时检查。
+- 依赖或安全扫描。
+- 覆盖率报告。
+
+跳过相关软门禁时，在最终说明或 active ExecPlan 中记录原因和残余风险。
+
+## Definition Of Done
+
+1. 请求行为已实现、修复，或明确记录为 out of scope。
+2. 所有受影响区域的硬门禁通过。
+3. 相关 spec、design doc、reference、AGENTS map 或 ExecPlan 已同步。
+4. 新技术债已记录到 active plan 或 `docs/exec-plans/tech-debt-tracker.md`。
+5. 最终交付列出 Passed、Not run 和 Residual risk。
+```
 
 ## tasks.md
 
@@ -233,6 +335,97 @@ python scripts/validate_agents_docs.py --project /path/to/project
 核心信念直接写入 AGENTS.md 的"核心信念"章节（控制在 5 条以内）。
 
 ---
+
+## docs/product-specs
+
+产品规格描述用户可见意图，不记录实施流水账。
+
+**生成条件**：改变用户可见行为、新增边界、影响认证/权限/数据/部署/安全，或功能范围需要人类确认。
+
+### index.md 模板
+
+```markdown
+# Product Specs Index
+
+## Purpose
+
+Product specs describe user-visible intent and boundaries before or alongside implementation work.
+
+## Current Specs
+
+| File | Scope |
+|------|-------|
+```
+
+### 单个 spec 模板
+
+```markdown
+# {功能标题}
+
+## 背景
+
+## 目标
+
+## 非目标
+
+## 使用场景
+
+## 约束
+
+## 验收标准
+```
+
+## docs/exec-plans 索引与技术债
+
+### 索引模板
+
+`docs/exec-plans/index.md`：
+
+```markdown
+# Exec Plans
+
+## Purpose
+
+Exec plans capture task-specific implementation intent, progress, and recovery context.
+
+## Entry Points
+
+- Active plans: `active/index.md`
+- Completed plans: `completed/index.md`
+- Shared debt list: `tech-debt-tracker.md`
+
+## Rules
+
+- Keep active work in `active/`.
+- Move completed work to `completed/`.
+- Capture cross-cutting debt in `tech-debt-tracker.md`.
+```
+
+`active/index.md` 和 `completed/index.md` 使用表格列出 `File` 与 `Focus`。
+
+### 技术债模板
+
+```markdown
+# Tech Debt Tracker
+
+Last updated: {YYYY-MM-DD}
+
+## High Priority
+
+| Topic | Why it matters | Source | Removal Condition |
+|------|----------------|--------|-------------------|
+
+## Medium Priority
+
+| Topic | Why it matters | Source | Removal Condition |
+|------|----------------|--------|-------------------|
+
+## Debt Handling Rules
+
+- Add debt here when it spans more than one file or more than one task.
+- Remove or downgrade debt when a change clearly addresses it.
+- Link back to the plan, design doc, or code path that best explains the issue.
+```
 
 ## AGENTS.md（成熟项目版）
 

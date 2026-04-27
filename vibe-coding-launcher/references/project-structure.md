@@ -14,15 +14,17 @@
 ```
 project-name/
 ├── AGENTS.md                  # 代理入口地图（~150行，目录/地图，不写百科全书）
+├── WORKFLOW.md                # 项目默认工作流（非平凡任务的门禁流程）
 ├── tasks.md                   # 执行清单（轻量任务追踪）
 ├── README.md                  # 项目说明
 ├── scripts/
 │   └── validate_agents_docs.py  # 文档验证脚本（从 skill 包原样复制）
 └── docs/
-    └── ARCHITECTURE.md        # 架构地图（CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
+    ├── ARCHITECTURE.md        # 架构地图（CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
+    └── EXECUTION_GATES.md     # 完成门禁（验证、风险、收尾标准）
 ```
 
-> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + tasks.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）写入 AGENTS.md 的"架构"章节。
+> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + WORKFLOW.md + tasks.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）和完成门禁摘要写入 AGENTS.md。
 
 ## 扩展集（按需生成）
 
@@ -56,6 +58,8 @@ project-name/
 
 | 文件/目录 | 生成条件 | 不生成时的替代方案 |
 |-----------|---------|-----------------|
+| `WORKFLOW.md` | 所有项目默认生成；极小一次性脚本可并入 AGENTS.md | AGENTS.md 写明轻量流程 |
+| `docs/EXECUTION_GATES.md` | 多文件项目或需要测试/发布/交付标准 | AGENTS.md 写明最小验证和收尾格式 |
 | `docs/DESIGN.md` | 项目有 UI 或 API | 设计规范写入 AGENTS.md 核心信念 |
 | `docs/QUALITY_SCORE.md` | 项目超过 3 个模块 | 不生成，待模块增长后再创建 |
 | `docs/SECURITY.md` | 项目涉及网络请求、数据存储或 API Key | 安全约束写入 AGENTS.md 核心信念 |
@@ -67,6 +71,8 @@ project-name/
 | `src/` | 非单文件项目 | 单文件项目直接放根目录 |
 
 判定原则：宁少勿多。项目启动时只生成核心集 + 满足条件的扩展集。不要一次性生成空文档——空文档比没有文档更危险。
+
+Open SkillHub 经验规则：`AGENTS.md` 只做快速入口地图；流程细节放 `WORKFLOW.md`，收尾标准放 `docs/EXECUTION_GATES.md`，功能意图放 `docs/product-specs/`，实施过程放 `docs/exec-plans/`。不要把这些内容混进一个超长 `AGENTS.md`。
 
 ## 按项目类型调整
 

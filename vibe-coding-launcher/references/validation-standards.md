@@ -16,7 +16,7 @@
 
 | 时机 | 检查范围 | 严重程度 |
 |------|---------|---------|
-| 第四阶段完成后 | 核心文档（AGENTS.md + 架构信息 + scripts/validate_agents_docs.py；tasks.md 可选） | ERROR |
+| 第四阶段完成后 | 核心文档（AGENTS.md + WORKFLOW.md + 架构信息 + 完成门禁 + scripts/validate_agents_docs.py；tasks.md 可选） | ERROR |
 | 每次对话结束前 | tasks.md 进度一致性 | WARN |
 | 项目恢复时 | 文档完整性 + 知识新鲜度 | ERROR + WARN |
 | 提交前 | 全量检查 | INFO |
@@ -33,10 +33,12 @@
 | `AGENTS.md` | 章节完整 | 根级/子级分别按各自标准检查 |
 | `AGENTS.md` | 行数范围 | 简化版≤150，完整版≤140 |
 | `AGENTS.md` | 快速入口无死链 | 引用的文档都存在 |
+| `WORKFLOW.md` | 存在或在 AGENTS.md 中有轻量流程替代 | 项目默认工作流 |
 | `scripts/validate_agents_docs.py` | 存在 | 所有项目的核心验证脚本 |
 | `tasks.md` | 存在时检查标准三区段和每条任务的 `✅` 验证条件 | 不存在不算错误，全部完成后可删除 |
 | `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 内容完整性（概述/模块或代码地图/关键文件/架构约束信息） | 缺项记 WARN，不阻断下一阶段 |
+| `docs/EXECUTION_GATES.md` | 多文件项目存在；CLI/单文件项目替代方案：AGENTS.md 包含完成门禁摘要 | 描述验证、风险和收尾标准 |
 | 根 `AGENTS.md` | `约束机制` 章节存在 | 项目级元数据只在根级声明 |
 | 根 `AGENTS.md` | `约束机制.模式` 合法 | 只能是 `agents-only` 或 `linter+agents` |
 | 根 `AGENTS.md` | `约束机制.配置` 合法 | `agents-only` 时必须为 `N/A`；`linter+agents` 时必须为真实配置文件路径 |
@@ -48,6 +50,7 @@
 | 文件 | 检查项 | 说明 |
 |------|--------|------|
 | `docs/exec-plans/` | 子目录结构 | 按需生成，存在时检查 active/completed 子目录 |
+| `docs/product-specs/` | 索引和 spec 结构 | 存在时检查 index.md 和单个 spec 的目标/非目标/验收标准 |
 | `docs/DESIGN.md` | 章节结构 | 设计规范存在时检查 |
 | `docs/QUALITY_SCORE.md` | 评分表格式 | 质量追踪存在时检查 |
 | `docs/SECURITY.md` | 安全约束 | 安全文档存在时检查 |
@@ -73,7 +76,7 @@
 
 ### ERROR 类问题
 
-- 核心文档不存在（AGENTS.md；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节；CLI/单文件项目 AGENTS.md 缺少"架构"章节）
+- 核心文档不存在（AGENTS.md；WORKFLOW.md 且 AGENTS.md 无轻量流程替代；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节；CLI/单文件项目 AGENTS.md 缺少"架构"章节；多文件项目缺少 docs/EXECUTION_GATES.md 且 AGENTS.md 无完成门禁摘要）
 - 缺少 `scripts/validate_agents_docs.py`
 - 必需章节缺失
 - 根 AGENTS.md 缺少 `约束机制` 章节或 `模式`

@@ -18,6 +18,7 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 | 文档模板 | `references/document-templates.md` |
 | 验证标准 | `references/validation-standards.md` |
 | 架构约束 | `references/architecture-constraints.md` |
+| 工作流治理与完成门禁 | `references/workflow-governance.md` |
 | ExecPlan 格式 | `references/execplan-format.md` |
 | 任务管理 | `references/task-management.md` |
 | 执行流程 | `references/ai-coding-workflow.md` |
@@ -28,9 +29,13 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 - 新项目按阶段推进，旧项目先恢复再继续。
 - 每个阶段都要等用户确认后再推进。
 - 不要生成空文档，不要把计划和执行混在一起。
+- `AGENTS.md` 只做快速入口地图；详细、变化快的规则放入 `docs/`。
+- 非平凡任务走 `Constitution → Spec → Plan → Tasks → Implementation` 的门禁流程；轻量任务必须满足低风险、小范围、无新边界。
+- 收尾前应用完成门禁：代码路径已 inspect、最小有效验证通过、文档结构验证通过、计划/文档同步完成。
 - 恢复时先 inspect 现有实现，再动手。
 - `tasks.md` 是恢复上下文入口；全部完成后删除。
 - 需要确认话术、步骤模板、术语解释、常见陷阱和示例时，读 `references/phase-guidance.md`。
+- 需要判断是否要创建 spec、ExecPlan、任务清单、设计文档、技术债记录或收尾门禁时，读 `references/workflow-governance.md`。
 
 ## 恢复模式
 
@@ -59,8 +64,9 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 | 4 | 建立知识体系 | 核心文档生成完毕 | `references/document-templates.md` |
 | 4.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
 | 5 | 配置架构约束 | 约束落地并写回根 AGENTS.md | `references/architecture-constraints.md` |
-| 6 | 创建首个 ExecPlan | 计划文档创建并确认 | `references/execplan-format.md`, `references/task-management.md` |
-| 7 | 按计划执行 | 每步确认一次 | `references/ai-coding-workflow.md`, `references/phase-guidance.md` |
+| 6 | 建立工作流治理 | 用户确认门禁流程或轻量路径 | `references/workflow-governance.md` |
+| 7 | 创建首个 Spec / ExecPlan | 规格和计划文档创建并确认 | `references/workflow-governance.md`, `references/execplan-format.md`, `references/task-management.md` |
+| 8 | 按计划执行 | 每步确认一次并满足完成门禁 | `references/ai-coding-workflow.md`, `references/phase-guidance.md`, `references/workflow-governance.md` |
 
 ## 验证
 
@@ -74,5 +80,7 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 - 不跳过第四阶段验证。
 - 不生成空文档。
 - 不忽略 `tasks.md` 维护。
-- 第六阶段生成计划，第七阶段执行计划，两者不可合并。
+- 第七阶段生成 spec / ExecPlan，第八阶段执行计划，两者不可合并。
 - 新规则写回 `AGENTS.md`，冲突时以 `AGENTS.md` 为准。
+- 对非平凡任务，不要直接从用户需求跳到代码；先形成可审查的 spec、ExecPlan 和任务拆分。
+- 完成声明必须包含验证结果、未运行项和残余风险；未通过硬门禁时不得声称完成。

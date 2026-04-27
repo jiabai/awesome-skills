@@ -75,6 +75,8 @@
 - 小任务直接写入 `tasks.md`；大功能用 `ExecPlan + tasks.md`，里程碑留在 ExecPlan Progress。
 - 每次对话开始读取 `tasks.md`，结束时更新它；全部完成后删除，历史由 ExecPlan 归档。
 - `tasks.md` 记录执行级任务，ExecPlan Progress 记录计划级里程碑，不要重复写同一粒度的内容。
+- 对大型任务，优先使用 `docs/exec-plans/active/<feature-slug>-tasks.md` 作为 ExecPlan 的 sibling checklist；根级 `tasks.md` 只保留恢复当前执行上下文所需的短清单。
+- 任务清单应写明触碰的文件或模块区域、依赖关系和验证期望。
 
 ### 执行流程
 
@@ -111,3 +113,13 @@
 - 单模块代码先跑该模块测试
 - 跨模块接口先跑两模块测试，再扩大到集成测试
 - 共享 DTO/类型先做所有消费者类型检查，再跑全量测试
+
+## 与完成门禁的关系
+
+任务勾选不等于整项工作完成。收尾前还要满足 `workflow-governance.md` 中的完成门禁：
+
+- 受影响路径已 inspect
+- 最小有效验证已通过
+- 文档结构验证已通过
+- active ExecPlan 的 Progress / Decision Log / 验证记录已更新
+- 最终交付说明 Passed / Not run / Residual risk
