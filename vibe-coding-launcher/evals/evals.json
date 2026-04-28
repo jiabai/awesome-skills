@@ -22,11 +22,11 @@
       "id": 2,
       "eval_name": "新手邮件工具Mac",
       "prompt": "我是个新手，想做一个能自动发邮件的工具，用的是Mac",
-      "expected_output": "推荐Python技术栈，识别为CLI/单文件项目，生成包含AGENTS.md（含架构章节、完成门禁摘要和'约束机制'章节）、WORKFLOW.md、tasks.md、README.md、scripts/validate_agents_docs.py的核心集，不生成docs/目录，架构信息写入AGENTS.md的'架构'章节，根AGENTS.md的'约束机制'声明模式=agents-only、配置=N/A，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
+      "expected_output": "推荐Python技术栈，识别为CLI/单文件项目，生成包含AGENTS.md（含架构章节、完成门禁摘要和'约束机制'章节）、WORKFLOW.md、TASKS.md、README.md、scripts/validate_agents_docs.py的核心集，不生成docs/目录，架构信息写入AGENTS.md的'架构'章节，根AGENTS.md的'约束机制'声明模式=agents-only、配置=N/A，建立分层架构约束（CLI→Service→Config→Types），创建ExecPlan引导最小可运行版本",
       "assertions": [
         {"name": "识别用户信息", "check": "识别了用户是新手、使用Mac"},
         {"name": "推荐Python", "check": "推荐了Python技术栈"},
-        {"name": "生成了核心文档", "check": "生成了AGENTS.md（含架构章节）、WORKFLOW.md、tasks.md、README.md和scripts/validate_agents_docs.py"},
+        {"name": "生成了核心文档", "check": "生成了AGENTS.md（含架构章节）、WORKFLOW.md、TASKS.md、README.md和scripts/validate_agents_docs.py"},
         {"name": "架构信息在AGENTS.md中", "check": "CLI/单文件项目将架构信息写入AGENTS.md的'架构'章节，而非生成docs/ARCHITECTURE.md"},
         {"name": "配置架构约束", "check": "在AGENTS.md或文档中声明了分层架构"},
         {"name": "CLI保持agents-only", "check": "在根AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
@@ -55,11 +55,11 @@
       "id": 4,
       "eval_name": "项目恢复模式",
       "prompt": "继续开发上次的项目，上次做到添加登录功能那一步",
-      "expected_output": "应进入恢复模式：先读取AGENTS.md和tasks.md恢复上下文，确认当前进度，找到上次断点，从断点继续而非从第一阶段开始",
+      "expected_output": "应进入恢复模式：先读取AGENTS.md和TASKS.md恢复上下文，确认当前进度，找到上次断点，从断点继续而非从第一阶段开始",
       "assertions": [
         {"name": "进入恢复模式", "check": "识别这是恢复场景，进入恢复模式而非8阶段流程"},
         {"name": "读取AGENTS.md", "check": "读取或引用AGENTS.md恢复架构上下文"},
-        {"name": "读取tasks.md", "check": "读取或引用tasks.md确认进度"},
+        {"name": "读取TASKS.md", "check": "读取或引用TASKS.md确认进度"},
         {"name": "定位断点", "check": "识别上次做到'添加登录功能'这一断点"},
         {"name": "从断点继续", "check": "从断点继续而非从第一阶段重新开始"}
       ],
@@ -69,10 +69,10 @@
       "id": 5,
       "eval_name": "单文件脚本批量重命名",
       "prompt": "帮我写个Python脚本，把一个文件夹里的图片批量重命名",
-      "expected_output": "识别为单文件脚本项目，推荐Python，只生成核心集（AGENTS.md + WORKFLOW.md + tasks.md + README.md + scripts/validate_agents_docs.py），不生成docs/目录，架构约束声明'保持单文件直到超过200行'，并在根AGENTS.md的'约束机制'章节中声明模式=agents-only、配置=N/A，创建轻量ExecPlan",
+      "expected_output": "识别为单文件脚本项目，推荐Python，只生成核心集（AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py），不生成docs/目录，架构约束声明'保持单文件直到超过200行'，并在根AGENTS.md的'约束机制'章节中声明模式=agents-only、配置=N/A，创建轻量ExecPlan",
       "assertions": [
         {"name": "识别单文件场景", "check": "识别这是单文件脚本项目而非完整项目"},
-        {"name": "生成核心集", "check": "只生成AGENTS.md + WORKFLOW.md + tasks.md + README.md + scripts/validate_agents_docs.py核心集"},
+        {"name": "生成核心集", "check": "只生成AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py核心集"},
         {"name": "不生成docs目录", "check": "不生成docs/目录（单文件项目不需要）"},
         {"name": "声明单文件约束", "check": "声明'保持单文件'约束"},
         {"name": "单文件项目agents-only", "check": "在根AGENTS.md的'约束机制'章节中声明模式=agents-only，配置=N/A"},
@@ -146,11 +146,11 @@
     {
       "id": 11,
       "eval_name": "项目恢复时跳过用户确认直接推进",
-      "prompt": "项目已有 AGENTS.md 和 tasks.md，显示'第七阶段：创建首个 Spec / ExecPlan'未完成，用户说'接着做'",
-      "expected_output": "应进入恢复模式：1.读取AGENTS.md了解架构，2.读取tasks.md确认进度，3.向用户简述当前状态并询问从哪里继续，4.而非直接创建ExecPlan并进入第八阶段",
+      "prompt": "项目已有 AGENTS.md 和 TASKS.md，显示'第七阶段：创建首个 Spec / ExecPlan'未完成，用户说'接着做'",
+      "expected_output": "应进入恢复模式：1.读取AGENTS.md了解架构，2.读取TASKS.md确认进度，3.向用户简述当前状态并询问从哪里继续，4.而非直接创建ExecPlan并进入第八阶段",
       "assertions": [
         {"name": "识别恢复场景", "check": "检测到AGENTS.md存在，进入恢复模式而非8阶段流程"},
-        {"name": "读取上下文", "check": "读取或引用AGENTS.md和tasks.md确认进度"},
+        {"name": "读取上下文", "check": "读取或引用AGENTS.md和TASKS.md确认进度"},
         {"name": "暂停并确认", "check": "向用户简述当前状态后等待确认，而非自作主张推进"},
         {"name": "从断点继续", "check": "确认是第七阶段中断，应继续 Spec / ExecPlan 创建而非跳到第八阶段"}
       ],

@@ -15,7 +15,7 @@
 project-name/
 ├── AGENTS.md                  # 代理入口地图（~150行，目录/地图，不写百科全书）
 ├── WORKFLOW.md                # 项目默认工作流（非平凡任务的门禁流程）
-├── tasks.md                   # 执行清单（轻量任务追踪）
+├── TASKS.md                   # 执行清单（轻量任务追踪）
 ├── README.md                  # 项目说明
 ├── scripts/
 │   └── validate_agents_docs.py  # 文档验证脚本（从 skill 包原样复制）
@@ -24,7 +24,7 @@ project-name/
     └── EXECUTION_GATES.md     # 完成门禁（验证、风险、收尾标准）
 ```
 
-> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + WORKFLOW.md + tasks.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）和完成门禁摘要写入 AGENTS.md。
+> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）和完成门禁摘要写入 AGENTS.md。
 
 ## 扩展集（按需生成）
 
@@ -64,7 +64,7 @@ project-name/
 | `docs/QUALITY_SCORE.md` | 项目超过 3 个模块 | 不生成，待模块增长后再创建 |
 | `docs/SECURITY.md` | 项目涉及网络请求、数据存储或 API Key | 安全约束写入 AGENTS.md 核心信念 |
 | `docs/design-docs/` | 项目有 3 条以上核心信念需要展开 | 核心信念直接写入 AGENTS.md |
-| `docs/exec-plans/` | 项目需要多步骤开发计划（见 task-management.md） | 小任务用 tasks.md 追踪，无需建此目录 |
+| `docs/exec-plans/` | 项目需要多步骤开发计划（见 task-management.md） | 小任务用根目录 TASKS.md 追踪，无需建此目录 |
 | `docs/product-specs/` | 项目有多个功能需要规格描述 | 不生成，待功能明确后再创建 |
 | `docs/references/` | 项目依赖外部 API 或复杂技术 | 不生成，待需要时再创建 |
 | `docs/generated/` | 项目使用数据库 | 不生成 |
@@ -78,5 +78,5 @@ Open SkillHub 经验规则：`AGENTS.md` 只做快速入口地图；流程细节
 
 - **Web应用**：添加 `templates/`、`static/`，src 下按 `ui/` `service/` `repo/` 分层
 - **API服务**：src 下按 `routes/` `models/` `services/` 分层
-- **命令行**：单文件即可，核心集只生成 AGENTS.md + tasks.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录
+- **命令行**：单文件即可，核心集只生成 AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录
 - **AI应用**：添加 `config.py`（API Key），docs/references/ 放 API 文档

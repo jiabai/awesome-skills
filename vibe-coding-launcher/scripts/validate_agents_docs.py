@@ -2,10 +2,10 @@
 """Validate vibe-coding-launcher project documentation.
 
 Checks:
-- Core documents exist (AGENTS.md, validate_agents_docs.py, ARCHITECTURE.md; tasks.md optional)
+- Core documents exist (AGENTS.md, validate_agents_docs.py, ARCHITECTURE.md; TASKS.md optional)
 - AGENTS.md sections complete (simplified or full version)
 - Root AGENTS.md must declare explicit constraint mechanism
-- tasks.md uses standard sections and per-task validation conditions (if exists)
+- TASKS.md uses standard sections and per-task validation conditions (if exists)
 - Quick-entry links in AGENTS.md are valid
 - Line count within limits
 
@@ -63,7 +63,7 @@ GEN_COMMENT_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# tasks.md 任务模式
+# TASKS.md 任务模式
 TASK_REQUIRED_SECTIONS = ["进行中", "待办", "已完成"]
 CHECKBOX_PATTERN = re.compile(r"^- \[[ x]\]\s+")
 PENDING_TASK_PATTERN = re.compile(r"^- \[ \]\s+")
@@ -272,7 +272,7 @@ def validate_agents_md(
 
 
 def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]:
-    """Validate tasks.md file (optional - may be deleted when all tasks complete)."""
+    """Validate TASKS.md file (optional - may be deleted when all tasks complete)."""
     results: list[ValidationResult] = []
 
     if not path.exists():
@@ -399,7 +399,8 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
     # 核心文档
     agents_md = root / "AGENTS.md"
     validator_script = root / "scripts" / "validate_agents_docs.py"
-    tasks_md = root / "tasks.md"
+    tasks_md = root / "TASKS.md"
+    legacy_tasks_md = root / "tasks.md"
     architecture_md = root / "docs" / "ARCHITECTURE.md"
     docs_dir = root / "docs"
 
@@ -414,7 +415,21 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
             require_constraint_mechanism=True,
         )
     )
-    results.extend(validate_tasks_md(tasks_md, min_level))
+    if legacy_tasks_md.exists() and not tasks_md.exists():
+        results.append(ValidationResult(
+            legacy_tasks_md,
+            Severity.WARN,
+            "旧命名 tasks.md 已存在；请重命名为根目录 TASKS.md",
+        ))
+        results.extend(validate_tasks_md(legacy_tasks_md, min_level))
+    else:
+        if legacy_tasks_md.exists():
+            results.append(ValidationResult(
+                legacy_tasks_md,
+                Severity.WARN,
+                "旧命名 tasks.md 仍存在；根目录任务清单统一使用 TASKS.md",
+            ))
+        results.extend(validate_tasks_md(tasks_md, min_level))
     results.extend(validate_architecture_md(architecture_md, min_level, cli_project=cli))
     results.extend(validate_docs_structure(docs_dir, min_level, cli_project=cli))
 

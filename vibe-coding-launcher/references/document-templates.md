@@ -7,7 +7,7 @@
 - [AGENTS.md（简化版）](#agentsmd简化版)
 - [WORKFLOW.md](#workflowmd)
 - [docs/EXECUTION_GATES.md](#docsexecution_gatesmd)
-- [tasks.md](#tasksmd)
+- [TASKS.md](#tasksmd)
 - [scripts/validate_agents_docs.py](#scriptsvalidate_agents_docspy)
 - [docs/ARCHITECTURE.md](#docsarchitecturemd)
 - [docs/DESIGN.md](#docsdesignmd)
@@ -39,7 +39,7 @@
 - 架构：见 `docs/ARCHITECTURE.md`（如已生成），CLI/单文件项目见下方"架构"章节
 - 设计规范：见 `docs/DESIGN.md`（如已生成）
 - 核心信念：见 `docs/design-docs/core-beliefs.md`（如已生成，否则见下方）
-- 执行清单：见 `tasks.md`（如存在，全部完成后删除）
+- 执行清单：见 `TASKS.md`（如存在，全部完成后删除）
 - 工作流：见 `WORKFLOW.md`（如已生成）
 - 完成门禁：见 `docs/EXECUTION_GATES.md`（如已生成）
 - 执行计划：见 `docs/exec-plans/active/`（如已生成）
@@ -185,9 +185,9 @@
 5. 最终交付列出 Passed、Not run 和 Residual risk。
 ```
 
-## tasks.md
+## TASKS.md
 
-执行期间的临时任务清单，位于项目根目录；代理被异常打断时通过它恢复上下文。
+执行期间的临时任务清单，位于项目根目录；代理被异常打断时通过它恢复上下文。不要创建 `docs/TASKS.md`；非平凡功能的任务清单放 `docs/exec-plans/active/<feature-slug>-tasks.md`。
 
 **生成条件**：所有项目都必须生成。
 

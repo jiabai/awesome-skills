@@ -16,8 +16,8 @@
 
 | 时机 | 检查范围 | 严重程度 |
 |------|---------|---------|
-| 第四阶段完成后 | 核心文档（AGENTS.md + WORKFLOW.md + 架构信息 + 完成门禁 + scripts/validate_agents_docs.py；tasks.md 可选） | ERROR |
-| 每次对话结束前 | tasks.md 进度一致性 | WARN |
+| 第四阶段完成后 | 核心文档（AGENTS.md + WORKFLOW.md + 架构信息 + 完成门禁 + scripts/validate_agents_docs.py；TASKS.md 可选） | ERROR |
+| 每次对话结束前 | TASKS.md 进度一致性 | WARN |
 | 项目恢复时 | 文档完整性 + 知识新鲜度 | ERROR + WARN |
 | 提交前 | 全量检查 | INFO |
 
@@ -35,7 +35,8 @@
 | `AGENTS.md` | 快速入口无死链 | 引用的文档都存在 |
 | `WORKFLOW.md` | 存在或在 AGENTS.md 中有轻量流程替代 | 项目默认工作流 |
 | `scripts/validate_agents_docs.py` | 存在 | 所有项目的核心验证脚本 |
-| `tasks.md` | 存在时检查标准三区段和每条任务的 `✅` 验证条件 | 不存在不算错误，全部完成后可删除 |
+| `TASKS.md` | 存在时检查标准三区段和每条任务的 `✅` 验证条件 | 不存在不算错误，全部完成后可删除 |
+| `tasks.md` | 旧命名兼容检查 | 存在时提示重命名为根目录 `TASKS.md` |
 | `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 内容完整性（概述/模块或代码地图/关键文件/架构约束信息） | 缺项记 WARN，不阻断下一阶段 |
 | `docs/EXECUTION_GATES.md` | 多文件项目存在；CLI/单文件项目替代方案：AGENTS.md 包含完成门禁摘要 | 描述验证、风险和收尾标准 |
@@ -61,7 +62,7 @@
 | 检查项 | 说明 | 严重程度 |
 |--------|------|---------|
 | 快速入口无死链 | AGENTS.md 中引用的文档都存在 | WARN |
-| tasks.md 进度一致 | 已完成的已勾选，新增的已记录 | WARN |
+| TASKS.md 进度一致 | 已完成的已勾选，新增的已记录 | WARN |
 | ARCHITECTURE.md 模块表准确 | 反映当前代码结构 | WARN |
 
 ---
@@ -82,12 +83,13 @@
 - 根 AGENTS.md 缺少 `约束机制` 章节或 `模式`
 - 根 AGENTS.md 的 `模式=agents-only` 但 `配置` 不是 `N/A`
 - 根 AGENTS.md 的 `模式=linter+agents` 但缺少真实配置文件路径，或路径不存在
-- tasks.md 存在但无法识别任务状态
-- tasks.md 缺少标准区段（`进行中` / `待办` / `已完成`）
-- tasks.md 中存在缺少 `✅` 验证条件的任务
+- TASKS.md 存在但无法识别任务状态
+- TASKS.md 缺少标准区段（`进行中` / `待办` / `已完成`）
+- TASKS.md 中存在缺少 `✅` 验证条件的任务
 
 ### WARN 类问题
 
+- 存在旧命名 `tasks.md`，应重命名为根目录 `TASKS.md`
 - 行数超限（可读性下降）
 - 快速入口有死链
 - ARCHITECTURE.md 缺少概述 / 模块或代码地图 / 关键文件 / 架构约束信息中的任一概念组
@@ -95,7 +97,7 @@
 ### INFO 类信息
 
 - 文件行数统计
-- tasks.md 任务统计
+- TASKS.md 任务统计
 - 版本识别结果
 
 ---
@@ -179,7 +181,7 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ```
 [INFO] AGENTS.md: 简化版, 45 行
-[INFO] tasks.md: 5 项待办, 3 项已完成
+[INFO] TASKS.md: 5 项待办, 3 项已完成
 [INFO] docs/ARCHITECTURE.md: 32 行
 [INFO] docs/exec-plans/: 目录不存在（按需生成，无需修复）
 [WARN] AGENTS.md: 快速入口死链: docs/DESIGN.md
@@ -201,10 +203,10 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ### 每次对话结束验证
 
-更新 tasks.md 后验证：
+更新 TASKS.md 后验证：
 
 ```
-对话结束 → 更新 tasks.md → 运行验证 --level WARN → 发现问题立即修复
+对话结束 → 更新 TASKS.md → 运行验证 --level WARN → 发现问题立即修复
 ```
 
 ### 项目恢复验证

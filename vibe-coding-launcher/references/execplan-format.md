@@ -50,7 +50,7 @@ Decision Log, and Outcomes & Retrospective must be kept up to date as work proce
 
 **Purpose / Big Picture**：用 1-2 句话回答"完成后用户能做什么新事情？"和"怎么看到它工作？"。不要写技术细节，只写用户可感知的结果。
 
-**Progress**：列出所有待完成里程碑，每条前加 `- [ ]`，完成后改为 `- [x]` 并标注时间。里程碑粒度：每个里程碑是子功能可验证的完成节点（如"API 框架就绪"、"数据库 schema 完成"），对应 tasks.md 中的多条执行级任务。里程碑本身的完成条件是该里程碑下所有 tasks.md 任务均已勾选。
+**Progress**：列出所有待完成里程碑，每条前加 `- [ ]`，完成后改为 `- [x]` 并标注时间。里程碑粒度：每个里程碑是子功能可验证的完成节点（如"API 框架就绪"、"数据库 schema 完成"），对应根级 `TASKS.md` 或 `docs/exec-plans/active/<feature-slug>-tasks.md` 中的一批执行级任务。里程碑本身的完成条件是对应任务均已勾选并通过验证。
 
 **Surprises & Discoveries**：记录工作中发现的新事实，包含 Evidence。不要把猜测写成结论。
 

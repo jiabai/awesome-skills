@@ -1,6 +1,6 @@
 # AI Coding 执行流程
 
-本文件只负责执行流程、判断方法和回写规则；`tasks.md` 结构见 `task-management.md`，验证口径见 `validation-standards.md`。
+本文件只负责执行流程、判断方法和回写规则；`TASKS.md` 结构见 `task-management.md`，验证口径见 `validation-standards.md`。
 
 ## 目录
 
@@ -29,10 +29,10 @@
 
 1. 定位最近的 `AGENTS.md`，先读它，再向上继承规则。
 2. Inspect 现有实现、调用点、测试和相关文档。
-3. 判断是否需要创建 `docs/topic.md` 或 `tasks.md` checklist。
+3. 判断是否需要创建 `docs/topic.md`、根级 `TASKS.md` 或 `docs/exec-plans/active/<slug>-tasks.md` checklist。
 4. 判断是否需要 product spec；改变用户可见行为、新边界、安全/数据/部署语义时，先写 `docs/product-specs/`。
 5. 按任务粒度执行；小任务直接实现，大功能交给 ExecPlan。
-6. 每完成一项就更新 `tasks.md`，必要时原子提交。
+6. 每完成一项就更新 `TASKS.md`，必要时原子提交。
 7. 按最小 → 扩大 → 全量做验证。
 8. 提交前检查 `AGENTS.md`、文档同步、约束一致性和完成门禁。
 
@@ -52,7 +52,7 @@
 
 ### 3. 设计判断
 
-- **跨模块变更**：修改多个目录或共享接口/类型时，创建 `docs/topic.md` + `tasks.md` checklist。
+- **跨模块变更**：修改多个目录或共享接口/类型时，创建 `docs/topic.md` + `docs/exec-plans/active/<slug>-tasks.md` checklist；根级 `TASKS.md` 只记录当前断点恢复需要。
 - **新架构决策**：添加新层级、新依赖方向、新抽象层时，创建 `docs/topic.md` 明确理由。
 - **用户可见行为变更**：新增或修改 `docs/product-specs/YYYY-MM-DD-<slug>.md`，先确认目标、非目标和验收标准。
 - **非平凡实施**：创建 `docs/exec-plans/active/<slug>-plan.md`，并在人类确认后执行。
@@ -62,12 +62,12 @@
 
 ### 4. 执行追踪
 
-- `tasks.md` 记录执行级任务；格式和写法见 `task-management.md`。
+- `TASKS.md` 记录执行级任务；格式和写法见 `task-management.md`。
 - 每完成一项就勾选一项，不要攒着一起改。
 
 ### 5. 原子提交
 
-- 每完成一个可独立验证的小任务就更新 `tasks.md` 并提交。
+- 每完成一个可独立验证的小任务就更新 `TASKS.md` 并提交。
 - 多项相关任务可以合并，但不能把未完成的内容一起提交。
 
 ### 6. 渐进验证
@@ -91,7 +91,7 @@
 
 ## 与 ExecPlan 的关系
 
-- 30 分钟内能完成的事，用本流程 + `tasks.md`。
-- 需要数小时到数天的功能，用 ExecPlan + `tasks.md`。
+- 30 分钟内能完成的事，用本流程 + 根级 `TASKS.md`。
+- 需要数小时到数天的功能，用 ExecPlan + `docs/exec-plans/active/<slug>-tasks.md`。
 - ExecPlan 负责里程碑，本文件负责执行动作。
 - ExecPlan 完成后移动到 `docs/exec-plans/completed/`，同步 active/completed 索引；跨任务技术债写入 `docs/exec-plans/tech-debt-tracker.md`。

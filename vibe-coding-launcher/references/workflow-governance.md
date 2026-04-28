@@ -147,7 +147,7 @@ docs/exec-plans/active/<feature-slug>-tasks.md
 - 显式写出依赖关系。
 - 写明会触碰的文件或模块区域。
 - 每个 meaningful batch 都要附验证期望。
-- 执行级小任务可以继续用根级 `tasks.md`，但不要和 ExecPlan 记录同一粒度的内容。
+- 执行级小任务可以继续用根级 `TASKS.md`；非平凡功能的任务清单放 `docs/exec-plans/active/<feature-slug>-tasks.md`，不要把同一粒度的内容重复写两处。
 
 ## 技术债规则
 

@@ -1,11 +1,11 @@
 # 任务管理标准
 
-本文件只管 `tasks.md` 如何记录和推进；提交节奏、验证深度和执行流程分别见 `ai-coding-workflow.md` 与 `validation-standards.md`。
+本文件只管 `TASKS.md` 如何记录和推进；提交节奏、验证深度和执行流程分别见 `ai-coding-workflow.md` 与 `validation-standards.md`。
 
 ## 目录
 
-- [tasks.md 与 ExecPlan 的分工](#tasksmd-与-execplan-的分工)
-- [tasks.md 格式](#tasksmd-格式)
+- [TASKS.md 与 ExecPlan 的分工](#tasksmd-与-execplan-的分工)
+- [TASKS.md 格式](#tasksmd-格式)
 - [任务写入标准](#任务写入标准)
 - [使用规则](#使用规则)
 - [知识新鲜度维护](#知识新鲜度维护)
@@ -14,19 +14,19 @@
 
 ---
 
-## tasks.md 与 ExecPlan 的分工
+## TASKS.md 与 ExecPlan 的分工
 
-| 维度 | tasks.md | ExecPlan Progress |
+| 维度 | TASKS.md | ExecPlan Progress |
 |------|----------|----------|
 | 定位 | 轻量执行清单 | 功能级计划文档 |
 | 粒度 | 执行级任务（1-30 分钟，如"安装 flask"） | 计划级里程碑（30 分钟到数小时，如"API 框架就绪"） |
 | 格式 | checkbox 列表 | 完整文档（Purpose/Progress/Steps/Validation） |
-| 适合 | 修 bug、小改动、配置调整、依赖安装 | 新功能、架构调整、多步骤开发 |
-| 存放位置 | 项目根目录 `tasks.md` | `docs/exec-plans/active/` |
+| 适合 | 修 bug、小改动、配置调整、依赖安装、当前会话断点恢复 | 新功能、架构调整、多步骤开发 |
+| 存放位置 | 项目根目录 `TASKS.md` | `docs/exec-plans/active/` |
 | 生命周期 | 全部完成后删除，历史由 ExecPlan 归档 | 完成后移入 `docs/exec-plans/completed/` |
-| 更新时机 | 每完成一项任务立即勾选 | 当一批 tasks.md 任务对应同一里程碑全部完成时，标记该里程碑 |
+| 更新时机 | 每完成一项任务立即勾选 | 当一批计划任务对应同一里程碑全部完成时，标记该里程碑 |
 
-## tasks.md 格式
+## TASKS.md 格式
 
 ```markdown
 # Tasks
@@ -40,7 +40,7 @@
 - [ ] 添加环境变量支持 ✅ `python -c "from config import SETTINGS; print(SETTINGS)"` 不报错
 
 ## 已完成
-- [x] 初始化项目结构（2026-04-17）✅ `ls AGENTS.md tasks.md docs/` 文件均存在
+- [x] 初始化项目结构（2026-04-17）✅ `ls AGENTS.md TASKS.md docs/` 文件均存在
 - [x] 创建 AGENTS.md（2026-04-17）✅ `wc -l AGENTS.md` 输出 ≤ 150
 ```
 
@@ -72,35 +72,35 @@
 
 ## 使用规则
 
-- 小任务直接写入 `tasks.md`；大功能用 `ExecPlan + tasks.md`，里程碑留在 ExecPlan Progress。
-- 每次对话开始读取 `tasks.md`，结束时更新它；全部完成后删除，历史由 ExecPlan 归档。
-- `tasks.md` 记录执行级任务，ExecPlan Progress 记录计划级里程碑，不要重复写同一粒度的内容。
-- 对大型任务，优先使用 `docs/exec-plans/active/<feature-slug>-tasks.md` 作为 ExecPlan 的 sibling checklist；根级 `tasks.md` 只保留恢复当前执行上下文所需的短清单。
+- 小任务直接写入根目录 `TASKS.md`；大功能用 `ExecPlan + docs/exec-plans/active/<feature-slug>-tasks.md`，里程碑留在 ExecPlan Progress。
+- 每次对话开始读取 `TASKS.md`，结束时更新它；全部完成后删除，历史由 ExecPlan 归档。
+- `TASKS.md` 记录执行级任务，ExecPlan Progress 记录计划级里程碑，不要重复写同一粒度的内容。
+- 对大型任务，使用 `docs/exec-plans/active/<feature-slug>-tasks.md` 作为 ExecPlan 的 sibling checklist；根级 `TASKS.md` 只保留恢复当前执行上下文所需的短清单。
 - 任务清单应写明触碰的文件或模块区域、依赖关系和验证期望。
 
 ### 执行流程
 
-1. 按 tasks.md 清单逐项执行
+1. 按 `TASKS.md` 或 active plan 的 sibling task checklist 逐项执行
 2. 完成一项 → 勾选该项 → 立即原子提交
 3. 原子提交：`git add -A && git commit -m "完成：{任务描述}"`
 4. 重复直到所有任务完成
-5. 全部完成 → 删除 tasks.md → 最终提交
+5. 根级 `TASKS.md` 全部完成 → 删除 `TASKS.md`；计划级 task checklist 随 ExecPlan 归档
 
 ## 知识新鲜度维护
 
 - 过时文档比没有文档更危险。
-- 对话结束前检查 `tasks.md` 进度、`AGENTS.md` 快速入口和 `docs/ARCHITECTURE.md`（或 AGENTS.md 架构章节）。
+- 对话结束前检查 `TASKS.md` 进度、`AGENTS.md` 快速入口和 `docs/ARCHITECTURE.md`（或 AGENTS.md 架构章节）。
 - 新模块或接口变化时，优先回写相关文档；更完整的验证规则见 `validation-standards.md`。
 
 ---
 
 ## 原子提交原则
 
-每完成一项 tasks.md 任务就更新勾选并立即提交；多项相关任务可合并，但不要把未完成的内容一起提交。
+每完成一项 TASKS.md 任务就更新勾选并立即提交；多项相关任务可合并，但不要把未完成的内容一起提交。
 
 提交前确认三件事：
 
-1. `tasks.md` 已更新
+1. `TASKS.md` 已更新
 2. 验证命令已通过
 3. `AGENTS.md` 不需要同步修改
 

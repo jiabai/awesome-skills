@@ -1,6 +1,6 @@
 ---
 name: vibe-coding-launcher
-description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 代理友好的项目体系（AGENTS.md + docs/ + 架构约束 + ExecPlan），或从中断处恢复继续开发。触发词：vibe coding、开发项目、帮我写个项目、从零开始、项目启动、不会编程、想学编程、AI应用、自动化脚本、agent开发、继续开发、接着做、项目恢复。当用户想开发项目但不确定技术栈、需要一步步指导、想建立 AI 友好的项目结构、表示不会编程、或说"帮我做个东西"时，必须使用此skill。当用户说"继续开发/接着做/上次的项目"时，进入恢复模式读取 tasks.md 和 AGENTS.md 从断点继续。
+description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 代理友好的项目体系（AGENTS.md + docs/ + 架构约束 + ExecPlan），或从中断处恢复继续开发。触发词：vibe coding、开发项目、帮我写个项目、从零开始、项目启动、不会编程、想学编程、AI应用、自动化脚本、agent开发、继续开发、接着做、项目恢复。当用户想开发项目但不确定技术栈、需要一步步指导、想建立 AI 友好的项目结构、表示不会编程、或说"帮我做个东西"时，必须使用此skill。当用户说"继续开发/接着做/上次的项目"时，进入恢复模式读取 TASKS.md 和 AGENTS.md 从断点继续。
 ---
 
 # Vibe Coding Launcher
@@ -33,7 +33,7 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 - 非平凡任务走 `Constitution → Spec → Plan → Tasks → Implementation` 的门禁流程；轻量任务必须满足低风险、小范围、无新边界。
 - 收尾前应用完成门禁：代码路径已 inspect、最小有效验证通过、文档结构验证通过、计划/文档同步完成。
 - 恢复时先 inspect 现有实现，再动手。
-- `tasks.md` 是恢复上下文入口；全部完成后删除。
+- `TASKS.md` 是恢复上下文入口；全部完成后删除。
 - 需要确认话术、步骤模板、术语解释、常见陷阱和示例时，读 `references/phase-guidance.md`。
 - 需要判断是否要创建 spec、ExecPlan、任务清单、设计文档、技术债记录或收尾门禁时，读 `references/workflow-governance.md`。
 
@@ -42,7 +42,7 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 当项目目录里已有 `AGENTS.md` 时：
 
 1. 读 `AGENTS.md`，了解项目架构和核心信念。
-2. 读 `tasks.md`；若不存在，查看 `docs/exec-plans/active/` 和 `docs/exec-plans/completed/`。
+2. 读 `TASKS.md`；若不存在，查看 `docs/exec-plans/active/` 和 `docs/exec-plans/completed/`。
 3. 先运行 `python scripts/validate_agents_docs.py --level ERROR`。
 4. inspect 相关代码和测试，确认当前状态。
 5. 向用户简述现状，并询问从哪里继续。
@@ -79,7 +79,7 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 - 不跳过阶段衔接确认。
 - 不跳过第四阶段验证。
 - 不生成空文档。
-- 不忽略 `tasks.md` 维护。
+- 不忽略 `TASKS.md` 维护。
 - 第七阶段生成 spec / ExecPlan，第八阶段执行计划，两者不可合并。
 - 新规则写回 `AGENTS.md`，冲突时以 `AGENTS.md` 为准。
 - 对非平凡任务，不要直接从用户需求跳到代码；先形成可审查的 spec、ExecPlan 和任务拆分。
