@@ -30,7 +30,7 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 - 每个阶段都要等用户确认后再推进。
 - 不要生成空文档，不要把计划和执行混在一起。
 - `AGENTS.md` 只做快速入口地图；详细、变化快的规则放入 `docs/`。
-- 非平凡任务走 `Constitution → Spec → Plan → Tasks → Implementation` 的门禁流程；轻量任务必须满足低风险、小范围、无新边界。
+- 非平凡任务走 `Constitution → Spec → Plan → Tasks → Implementation` 的门禁流程；轻量任务必须同时满足低风险、小范围、无新边界等所有条件（详见 `references/workflow-governance.md` 中的明确定义）。
 - 收尾前应用完成门禁：代码路径已 inspect、最小有效验证通过、文档结构验证通过、计划/文档同步完成。
 - 恢复时先 inspect 现有实现，再动手。
 - `TASKS.md` 是恢复上下文入口；全部完成后删除。

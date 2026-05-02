@@ -70,9 +70,9 @@ project-name/
 | `docs/generated/` | 项目使用数据库 | 不生成 |
 | `src/` | 非单文件项目 | 单文件项目直接放根目录 |
 
-判定原则：宁少勿多。项目启动时只生成核心集 + 满足条件的扩展集。不要一次性生成空文档——空文档比没有文档更危险。
+判断原则：宁少勿多。项目启动时只生成核心集 + 满足条件的扩展集。不要一次性生成空文档——空文档比没有文档更危险。
 
-Open SkillHub 经验规则：`AGENTS.md` 只做快速入口地图；流程细节放 `WORKFLOW.md`，收尾标准放 `docs/EXECUTION_GATES.md`，功能意图放 `docs/product-specs/`，实施过程放 `docs/exec-plans/`。不要把这些内容混进一个超长 `AGENTS.md`。
+经验规则：`AGENTS.md` 只做快速入口地图；流程细节放 `WORKFLOW.md`，收尾标准放 `docs/EXECUTION_GATES.md`，功能意图放 `docs/product-specs/`，实施过程放 `docs/exec-plans/`。不要把这些内容混进一个超长 `AGENTS.md`。
 
 ## 按项目类型调整
 

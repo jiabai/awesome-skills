@@ -55,7 +55,7 @@
 - **跨模块变更**：修改多个目录或共享接口/类型时，创建 `docs/topic.md` + `docs/exec-plans/active/<slug>-tasks.md` checklist；根级 `TASKS.md` 只记录当前断点恢复需要。
 - **新架构决策**：添加新层级、新依赖方向、新抽象层时，创建 `docs/topic.md` 明确理由。
 - **用户可见行为变更**：新增或修改 `docs/product-specs/YYYY-MM-DD-<slug>.md`，先确认目标、非目标和验收标准。
-- **非平凡实施**：创建 `docs/exec-plans/active/<slug>-plan.md`，并在人类确认后执行。
+- **非平凡实施**：符合 `workflow-governance.md` 中定义的非平凡任务，创建 `docs/exec-plans/active/<slug>-plan.md`，并在人类确认后执行。
 - **单模块小改动**：只改单个目录且不触及共享接口/类型时，直接实现。
 
 判断时先列出将修改的文件，再按目录分组，看是否涉及共享类型或共享接口。
