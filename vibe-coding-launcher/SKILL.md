@@ -60,13 +60,15 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 |------|------|---------|------|
 | 1 | 了解用户：项目 / 语言 / OS | 3 个问题答完 | `references/tech-stack-recommendations.md` |
 | 2 | 推荐技术栈 | 用户确认推荐 | `references/tech-stack-recommendations.md` |
-| 3 | 生成项目结构 | 用户确认核心集/扩展集 | `references/project-structure.md` |
-| 4 | 建立知识体系 | 核心文档生成完毕 | `references/document-templates.md` |
+| 3 | 生成核心集（目录 + 文件内容） | 用户确认核心集/扩展集 | `references/project-structure.md` |
+| 4 | 生成扩展集（按需的 docs/ 子文档） | 核心集生成完毕 | `references/document-templates.md` |
 | 4.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
 | 5 | 配置架构约束 | 约束落地并写回根 AGENTS.md | `references/architecture-constraints.md` |
 | 6 | 建立工作流治理 | 用户确认门禁流程或轻量路径 | `references/workflow-governance.md` |
 | 7 | 创建首个 Spec / ExecPlan | 规格和计划文档创建并确认 | `references/workflow-governance.md`, `references/execplan-format.md`, `references/task-management.md` |
 | 8 | 按计划执行 | 每步确认一次并满足完成门禁 | `references/ai-coding-workflow.md`, `references/phase-guidance.md`, `references/workflow-governance.md` |
+
+> 阶段 7 触发条件：改变用户可见行为或新增边界时，先写 Spec 再写 ExecPlan；仅内部重构或架构调整时，只写 ExecPlan。
 
 ## 验证
 

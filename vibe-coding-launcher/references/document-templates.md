@@ -216,7 +216,7 @@
 
 **生成条件**：所有项目都必须生成（核心集）。
 
-**生成方式**：从 skill 包的 `scripts/validate_agents_docs.py` 原样复制到用户项目的 `scripts/` 目录，不要定制。
+**生成方式**：读取本 skill 的 `scripts/validate_agents_docs.py`，将内容原样写入用户项目的 `scripts/validate_agents_docs.py`，不要定制。
 
 **用途**：第四阶段后校验核心文档、对话结束前检查知识新鲜度、恢复时确认文档状态。
 

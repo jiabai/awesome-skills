@@ -9,7 +9,7 @@
 
 ---
 
-## 核心集（所有项目必须生成）
+## 核心集（所有项目必须生成，阶段 3 完成）
 
 ```
 project-name/
@@ -18,7 +18,7 @@ project-name/
 ├── TASKS.md                   # 执行清单（轻量任务追踪）
 ├── README.md                  # 项目说明
 ├── scripts/
-│   └── validate_agents_docs.py  # 文档验证脚本（从 skill 包原样复制）
+│   └── validate_agents_docs.py  # 文档验证脚本（从本 skill 的 scripts/ 原样写入）
 └── docs/
     ├── ARCHITECTURE.md        # 架构地图（CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
     └── EXECUTION_GATES.md     # 完成门禁（验证、风险、收尾标准）
@@ -26,7 +26,7 @@ project-name/
 
 > **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）和完成门禁摘要写入 AGENTS.md。
 
-## 扩展集（按需生成）
+## 扩展集（按需生成，阶段 4 完成）
 
 ```
 project-name/
