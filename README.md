@@ -9,7 +9,7 @@
 <p>Ready-to-use skills (project bootstrapping, architecture visualization, writing, search, etc.),<br/>plus a complete specification system for AI agent-driven development.</p>
 
 <p>
-  <img src="https://img.shields.io/badge/Skills-10-blueviolet?style=for-the-badge" alt="Skills" />
+  <img src="https://img.shields.io/badge/Skills-11-blueviolet?style=for-the-badge" alt="Skills" />
   <img src="https://img.shields.io/badge/Conventions-3-orange?style=for-the-badge" alt="Conventions" />
   <img src="https://img.shields.io/badge/Vibe_Coding-2026-brightgreen?style=for-the-badge" alt="Vibe Coding" />
   <img src="https://img.shields.io/badge/License-Open_Source-success?style=for-the-badge" alt="License" />
@@ -33,7 +33,7 @@
 
 This project contains two core components:
 
-**Skill Collection**: Ready-to-use AI assistant skills covering project bootstrapping, architecture visualization, interaction sequence diagrams, article illustrations, WeChat writing, search, investment analysis, and more.
+**Skill Collection**: Ready-to-use AI assistant skills covering project bootstrapping, architecture visualization, interaction sequence diagrams, article illustrations, WeChat writing, search, Xiaohongshu (XHS) automation, investment analysis, and more.
 
 **Vibe Coding Methodology**: A complete specification system for AI agent-driven development (knowledge management + architecture constraints + execution plans + entropy management), enabling AI agents to operate efficiently.
 
@@ -58,7 +58,7 @@ The behavioral operating system for AI assistants, defining how AI should collab
 
 ---
 
-### claude-code-skill-creator — Claude Code Skill Creation & Iteration Tool
+### skill-creator — Skill Creation & Iteration Tool
 
 A full-lifecycle tool for creating, testing, and optimizing AI skills. From capturing intent to quantitative evaluation, it covers every stage of a skill's lifecycle.
 
@@ -78,7 +78,7 @@ A full-lifecycle tool for creating, testing, and optimizing AI skills. From capt
 
 Helps users build AI agent-friendly project systems from scratch, or resume development from a previous session. Core philosophy: **Humans steer. Agents execute.**
 
-**7-Stage Guided Process**:
+**8-Stage Guided Process**:
 
 | Stage | Content |
 |-------|---------|
@@ -87,12 +87,13 @@ Helps users build AI agent-friendly project systems from scratch, or resume deve
 | 3. Generate Project Structure | Core/extended directory trees, intelligently adjusted by project type |
 | 4. Build Knowledge System | AGENTS.md + docs/ complete directory (ARCHITECTURE.md, DESIGN.md, QUALITY_SCORE.md, etc.) |
 | 5. Configure Architecture Constraints | Layered architecture + invariants + golden rules, preventing code degradation |
-| 6. Create ExecPlan | Self-contained, living document, beginner-friendly, demo-verifiable execution plan |
-| 7. Execution Guidance | Step-by-step verification, incremental delivery, one atomic commit at a time |
+| 6. Establish Workflow Governance | Gate process or lightweight path, risk-based validation selection |
+| 7. Create First Spec / ExecPlan | Specification and plan documents created and confirmed |
+| 8. Execution Guidance | Step-by-step verification, incremental delivery, one atomic commit at a time |
 
 **Resume Mechanism**: When a project already exists (AGENTS.md in the directory), automatically reads context and continues from the breakpoint instead of starting from scratch.
 
-**Entropy Management**: Tech debt tracking + quality scoring + knowledge freshness maintenance, ensuring long-term project health.
+**Entropy Management**: Tech debt tracking + quality scoring + knowledge freshness maintenance + document structure validation, ensuring long-term project health.
 
 > Use when: Wanting to build a project but unsure about tech stack, needing step-by-step guidance, building AI-friendly project structures, or saying "help me build something." Saying "continue developing / pick up where I left off" enters resume mode.
 
@@ -149,7 +150,7 @@ Automatically generates professional SVG illustrations for Markdown articles, re
 
 **Additional Features**: SVG to JPEG export, S-tier content can generate standalone bilingual illustration pages
 
-> Use when: Articles need visualization of flows/architecture/concepts, or complex concepts need conversion into easy-to-understand diagrams. English version available at [article-diagram-en](article-diagram-en/SKILL.md).
+> Use when: Articles need visualization of flows/architecture/concepts, or complex concepts need conversion into easy-to-understand diagrams. English version available at [article-diagram-en](skills/article-diagram-en/SKILL.md).
 
 ---
 
@@ -206,6 +207,22 @@ Demand Side (growth momentum) → Supply Side (contraction/constraints) → Supp
 
 > Use when: Analyzing an industry/target's cyclical attributes, determining if it's a cyclical investment opportunity, or evaluating price increase potential from supply-demand mismatches
 
+---
+
+### xhs-automator — Xiaohongshu (XHS) Automation Toolkit
+
+An AI-driven Xiaohongshu automation skill set covering the complete workflow from authentication and login to content publishing, search discovery, social interaction, and composite operations.
+
+**Core Capabilities**:
+
+- **Authentication & Login**: Cookie / device fingerprint / CAPTCHA handling, multi-account switching
+- **Content Publishing**: Image/text notes and video notes publishing and editing, scheduled posting support
+- **Search & Discovery**: Keyword search, note/user/topic retrieval
+- **Social Interaction**: Like, bookmark, comment, follow, direct message
+- **Composite Operations**: Batch publishing, data collection, competitor monitoring, automated workflow orchestration
+
+> Use when: Needing to publish content, collect data, perform competitor analysis, or automate operations on the Xiaohongshu platform
+
 ## Conventions & Resources
 
 ### Conventions — Development Standards
@@ -232,7 +249,7 @@ Core specification files for the Vibe Coding methodology, defining standard proc
 
 ### Using Existing Skills
 
-1. Choose the skill directory you need (e.g., `vibe-coding-launcher/`, `canvas-architect/`)
+1. Choose the skill you need (e.g., `skills/vibe-coding-launcher/`, `skills/canvas-architect/`)
 2. Copy the skill directory to your AI assistant's skills path
 3. Mention trigger words in conversation to activate the skill
 
@@ -240,6 +257,8 @@ Skill paths for different AI tools:
 - **Claude Code**: `.claude/skills/<skill-name>/`
 - **Codex / Trae**: `.trae/skills/<skill-name>/`
 - **Cursor**: `.cursor/skills/<skill-name>/`
+
+For the SOUL skill (at root level), copy the entire `SOUL/` directory; for skills under `skills/`, copy the `skills/<skill-name>/` directory.
 
 ### Using Vibe Coding Conventions
 
@@ -294,35 +313,49 @@ awesome-skills/
 │   ├── canvas-visualization-resource/  # Canvas visualization reference
 │   ├── docs-resource/                  # Engineering documentation reference
 │   └── glue-engineering-resource/      # Glue engineering reference
-├── SOUL/                         # Core personality framework
+├── SOUL/                         # Core personality framework (root level)
 │   ├── SKILL.md
 │   └── evals/
-├── skill-creator/                # Skill creation tool
-│   └── SKILL.md
-├── vibe-coding-launcher/         # Vibe Coding project launcher
-│   ├── SKILL.md
-│   └── evals/
-├── canvas-architect/             # Architecture visualization engine
-│   ├── SKILL.md
-│   └── evals/
-├── canvas-sequence/              # Interaction sequence diagram engine
-│   ├── SKILL.md
-│   └── evals/
-├── article-diagram/              # Article illustration generator (Chinese)
-│   ├── SKILL.md
-│   ├── scripts/
-│   └── package.json
-├── article-diagram-en/           # Article illustration generator (English)
-│   └── SKILL.md
-├── wechat-article-writer/        # WeChat article writing assistant
-│   ├── SKILL.md
-│   ├── references/
-│   └── assets/
-├── baidu-search/                 # Baidu AI Search
-│   ├── SKILL.md
-│   └── scripts/
-└── cycle-investment-analysis/    # Cyclical investment analysis framework
-    └── SKILL.md
+├── skills/                       # Skill collection
+│   ├── article-diagram/          # Article illustration generator (Chinese)
+│   │   ├── SKILL.md
+│   │   ├── scripts/
+│   │   └── package.json
+│   ├── article-diagram-en/       # Article illustration generator (English)
+│   │   ├── SKILL.md
+│   │   ├── scripts/
+│   │   └── references/
+│   ├── baidu-search/             # Baidu AI Search
+│   │   ├── SKILL.md
+│   │   └── scripts/
+│   ├── canvas-architect/         # Architecture visualization engine
+│   │   ├── SKILL.md
+│   │   └── evals/
+│   ├── canvas-sequence/          # Interaction sequence diagram engine
+│   │   ├── SKILL.md
+│   │   └── evals/
+│   ├── claude-code-skill-creator/ # Claude Code skill creation tool
+│   │   └── SKILL.md
+│   ├── cycle-investment-analysis/ # Cyclical investment analysis framework
+│   │   └── SKILL.md
+│   ├── vibe-coding-launcher/     # Vibe Coding project launcher
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   └── evals/
+│   ├── wechat-article-writer/    # WeChat article writing assistant
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   ├── assets/
+│   │   └── evals/
+│   └── xhs-automator/            # XHS (Xiaohongshu) automation toolkit
+│       ├── SKILL.md
+│       ├── scripts/
+│       └── evals/
+├── Workflow/                     # Workflow documentation
+│   └── WORKFLOW.md
+└── docs/                         # Project documentation
+    └── ...
 ```
 
 ## Best Practices
@@ -355,15 +388,16 @@ awesome-skills/
 ### Skill Documentation
 
 - [SOUL](SOUL/SKILL.md) - Core personality framework
-- [Skill Creator](skill-creator/SKILL.md) - Skill creation tool
-- [Vibe Coding Launcher](vibe-coding-launcher/SKILL.md) - Vibe Coding project launcher
-- [Canvas Architect](canvas-architect/SKILL.md) - Architecture visualization engine
-- [Canvas Sequence](canvas-sequence/SKILL.md) - Interaction sequence diagram engine
-- [Article Diagram](article-diagram/SKILL.md) - Article illustration generator (Chinese)
-- [Article Diagram EN](article-diagram-en/SKILL.md) - Article illustration generator (English)
-- [WeChat Article Writer](wechat-article-writer/SKILL.md) - WeChat article writing assistant
-- [Baidu Search](baidu-search/SKILL.md) - Baidu AI Search
-- [Cycle Investment Analysis](cycle-investment-analysis/SKILL.md) - Cyclical investment analysis framework
+- [Skill Creator](skills/claude-code-skill-creator/SKILL.md) - Skill creation tool
+- [Vibe Coding Launcher](skills/vibe-coding-launcher/SKILL.md) - Vibe Coding project launcher
+- [Canvas Architect](skills/canvas-architect/SKILL.md) - Architecture visualization engine
+- [Canvas Sequence](skills/canvas-sequence/SKILL.md) - Interaction sequence diagram engine
+- [Article Diagram](skills/article-diagram/SKILL.md) - Article illustration generator (Chinese)
+- [Article Diagram EN](skills/article-diagram-en/SKILL.md) - Article illustration generator (English)
+- [WeChat Article Writer](skills/wechat-article-writer/SKILL.md) - WeChat article writing assistant
+- [Baidu Search](skills/baidu-search/SKILL.md) - Baidu AI Search
+- [Cycle Investment Analysis](skills/cycle-investment-analysis/SKILL.md) - Cyclical investment analysis framework
+- [XHS Automator](skills/xhs-automator/SKILL.md) - Xiaohongshu automation toolkit
 
 ### Development Standards
 
