@@ -84,5 +84,6 @@ description: Vibe Coding 项目启动器与恢复器。帮用户从零建立 AI 
 - 不忽略 `TASKS.md` 维护。
 - 第七阶段生成 spec / ExecPlan，第八阶段执行计划，两者不可合并。
 - 新规则写回 `AGENTS.md`，冲突时以 `AGENTS.md` 为准。
+- 子文档新增/变更约束时，检查 AGENTS.md 核心信念是否已同步摘要；冲突时以 AGENTS.md 为准。
 - 对非平凡任务，不要直接从用户需求跳到代码；先形成可审查的 spec、ExecPlan 和任务拆分。
 - 完成声明必须包含验证结果、未运行项和残余风险；未通过硬门禁时不得声称完成。
