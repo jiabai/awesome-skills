@@ -1,0 +1,11 @@
+{
+  "name": "awesome-skills",
+  "skills": [
+    "./skills/article-diagram-en",
+    "./skills/canvas-architect",
+    "./skills/canvas-sequence",
+    "./skills/vibe-coding-launcher",
+    "./skills/wechat-article-writer",
+    "./skills/xhs-automator"
+  ]
+}
