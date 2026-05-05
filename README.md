@@ -247,6 +247,14 @@ Core specification files for the Vibe Coding methodology, defining standard proc
 
 ## Quick Start
 
+### One-Click Install (via skills.sh)
+
+Install all skills into your current project with a single command:
+
+```bash
+npx skills@latest add jiabai/awesome-skills
+```
+
 ### Using Existing Skills
 
 1. Choose the skill you need (e.g., `skills/vibe-coding-launcher/`, `skills/canvas-architect/`)
