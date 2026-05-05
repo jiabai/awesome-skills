@@ -73,6 +73,7 @@
 ## 使用规则
 
 - 小任务直接写入根目录 `TASKS.md`；大功能用 `ExecPlan + docs/exec-plans/active/<feature-slug>-tasks.md`，里程碑留在 ExecPlan Progress。
+- TASKS.md 的任务从 ExecPlan 里程碑拆解而来：先定里程碑，再将每个里程碑拆为可独立验证的执行级小任务。两层粒度不同，不存在重复。
 - 每次对话开始读取 `TASKS.md`，结束时更新它；全部完成后删除，历史由 ExecPlan 归档。
 - `TASKS.md` 记录执行级任务，ExecPlan Progress 记录计划级里程碑，不要重复写同一粒度的内容。
 - 对大型任务，使用 `docs/exec-plans/active/<feature-slug>-tasks.md` 作为 ExecPlan 的 sibling checklist；根级 `TASKS.md` 只保留恢复当前执行上下文所需的短清单。

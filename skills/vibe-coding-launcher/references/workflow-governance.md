@@ -36,7 +36,7 @@
 
 - 根级 `AGENTS.md`
 - `docs/design-docs/core-beliefs.md`
-- `docs/ARCHITECTURE.md` 或 `ARCHITECTURE.md`
+- `docs/ARCHITECTURE.md`（多文件项目）或 AGENTS.md 架构章节（CLI/单文件项目）
 - `docs/DESIGN.md`
 - `docs/SECURITY.md`
 - 当前改动区域最近的模块级 `AGENTS.md`
