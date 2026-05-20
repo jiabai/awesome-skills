@@ -15,6 +15,7 @@ description: 视频/音频转文字稿。从视频文件中提取音频，用 wh
 
 对于简单的转写任务，直接运行脚本：
 
+**Linux / macOS（nohup 后台执行）：**
 ```bash
 nohup python3 {skillDir}/scripts/transcribe.py /path/to/video.mp4 \
   --output-dir /path/to/output \
@@ -23,14 +24,35 @@ nohup python3 {skillDir}/scripts/transcribe.py /path/to/video.mp4 \
   > /tmp/transcribe.log 2>&1 &
 ```
 
-**必须用 `nohup` 后台执行**——长音频（>30 min）转写时间可达数十分钟到数小时，exec session 会超时。
+**Windows（cmd / PowerShell 后台执行）：**
+```batch
+REM cmd.exe — 用 start /B 实现后台运行
+start /B python {skillDir}\scripts\transcribe.py D:\path\to\video.mp4 ^
+  --output-dir D:\path\to\output ^
+  --output-name transcript ^
+  --diarize ^
+  > transcript.log 2>&1
+```
+
+```powershell
+# PowerShell 7+ — 用 & 后台操作符
+python {skillDir}\scripts\transcribe.py D:\path\to\video.mp4 `
+  --output-dir D:\path\to\output `
+  --output-name transcript `
+  --diarize *> transcript.log &
+```
+
+**必须后台执行**——长音频（>30 min）转写时间可达数十分钟到数小时，exec session 会超时。Linux/macOS 用 `nohup`，Windows cmd 用 `start /B`，PowerShell 7+ 用 `&` 后台操作符。
 
 ## 完整流程
 
 ### Step 1: 预处理
 
-1. 确认输入文件存在，获取时长：`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 <file>`
-2. 若文件名含 CJK 字符，创建 symlink 避免编码问题：`ln -sf "<原路径>" /tmp/input-video.mp4`
+1. 确认输入文件存在，获取时长（`ffprobe` 跨平台通用）：`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 <file>`
+2. 若文件名含 CJK 字符，创建 symlink 避免编码问题：
+   - **Linux/macOS**：`ln -sf "<原路径>" /tmp/input-video.mp4`
+   - **Windows cmd（管理员）**：`mklink C:\tmp\input-video.mp4 "<原路径>"`
+   - **Windows PowerShell（管理员）**：`New-Item -ItemType SymbolicLink -Path C:\tmp\input-video.mp4 -Target "<原路径>"`
 3. 脚本会自动判断：音频文件直接转写，视频文件先提取音频为 16kHz mono WAV
 
 ### Step 2: 转写
@@ -47,8 +69,9 @@ nohup python3 {skillDir}/scripts/transcribe.py /path/to/video.mp4 \
 
 ### Step 3: 监控进度
 
-长音频转写用 cron watcher 监控：
+长音频转写用定时任务监控：
 
+**Linux/macOS（cron watcher）：**
 ```bash
 # 创建 watcher 脚本
 cat > /tmp/watch-transcribe.sh << 'EOF'
@@ -59,6 +82,19 @@ EOF
 ```
 
 或通过 OpenClaw cron 每 5 分钟检查进程状态。
+
+**Windows（PowerShell 定时检查）：**
+```powershell
+# 手动检查指定 PID 是否仍在运行
+$pid = <PID>
+if (-not (Get-Process -Id $pid -ErrorAction SilentlyContinue)) {
+  "done $(Get-Date)" | Out-File C:\tmp\transcribe-status.txt
+}
+```
+
+将上述脚本保存为 `C:\tmp\watch-transcribe.ps1`，然后用任务计划程序（Task Scheduler）创建每 5 分钟运行一次的触发器任务。或在 PowerShell 中直接用 `Register-ScheduledJob` 注册定时作业。
+
+> Windows 上也可以用 `Start-Job` 在后台持续轮询：`Start-Job -Name WatchTranscribe -ScriptBlock { while (Get-Process -Id <PID> -ErrorAction SilentlyContinue) { Start-Sleep 300 } }`
 
 ### Step 4: 输出
 
@@ -81,7 +117,10 @@ EOF
 
 ## 注意事项
 
-- CJK 文件名在 nohup/shell 中容易乱码，始终用 symlink 或英文路径
+- CJK 文件名在 shell 中容易乱码，始终用 symlink（或 Windows 上的 mklink）改用纯英文路径
+  - Linux/macOS：`ln -sf "<中文路径>" /tmp/input-video.mp4`
+  - Windows（管理员 cmd）：`mklink C:\tmp\input-video.mp4 "<中文路径>"`
+  - Windows PowerShell 中也要注意代码页（`chcp 65001` 设为 UTF-8）
 - CPU 转写时 CPU 占用 300-400%，避免同时跑其他重负载任务
 - whisperX 的 diarization 依赖 pyannote，首次运行需要下载模型（~1GB）
 - 如果本地有 Whisper HTTP server（端口 9876），该 skill 不使用它——直接调用 whisperX Python API 更灵活
