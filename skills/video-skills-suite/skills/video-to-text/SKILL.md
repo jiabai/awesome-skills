@@ -8,7 +8,7 @@ description: 视频/音频转文字稿。从视频文件中提取音频，用 wh
 ## 依赖
 
 - **ffmpeg**: 从视频中提取音频（系统已安装）
-- **whisperX**: 语音识别 + 对齐 + 说话人分离（`pip install whisperx`）
+- **whisperX**: 语音识别 + 对齐 + 说话人分离（`uv pip install whisperx -i https://pypi.tuna.tsinghua.edu.cn/simple`）
 - **HF_TOKEN**: 说话人分离需要 HuggingFace token（环境变量 `HF_TOKEN`）
 
 ## 快速执行
