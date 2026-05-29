@@ -155,6 +155,20 @@
         {"name": "从断点继续", "check": "确认是第七阶段中断，应继续 Spec / ExecPlan 创建而非跳到第八阶段"}
       ],
       "files": []
+    },
+    {
+      "id": 12,
+      "eval_name": "已有治理项目的日常小功能",
+      "prompt": "这个项目已经有 AGENTS.md 和 WORKFLOW.md 了，帮我给设置页加一个深色模式开关",
+      "expected_output": "不应重新启动vibe-coding-launcher的8阶段流程。应读取AGENTS.md/WORKFLOW.md作为项目上下文，inspect相关设置页代码，按现有项目工作流实现小功能并运行相关验证；不生成新的项目骨架、docs体系或首个ExecPlan，除非现有工作流明确要求该功能先写计划。",
+      "assertions": [
+        {"name": "识别为常规迭代", "check": "明确识别这是已有治理项目中的日常功能请求，而非项目启动"},
+        {"name": "只读取既有治理上下文", "check": "读取或引用AGENTS.md/WORKFLOW.md作为上下文，但不重新生成它们"},
+        {"name": "不启动8阶段", "check": "不从第一阶段询问3个基础问题，也不走项目启动8阶段流程"},
+        {"name": "直接按现有工作流实现", "check": "inspect相关代码并按现有项目约定实现深色模式开关"},
+        {"name": "不生成新项目骨架", "check": "不创建新的docs体系、项目骨架或首个ExecPlan，除非现有工作流明确要求"}
+      ],
+      "files": []
     }
   ]
 }
