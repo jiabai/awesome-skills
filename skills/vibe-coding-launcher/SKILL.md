@@ -31,8 +31,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零建立 AI 代
 - 每个阶段都要等用户确认后再推进。
 - 不要生成空文档，不要把计划和执行混在一起。
 - `AGENTS.md` 只做快速入口地图；详细、变化快的规则放入 `docs/`。
-- 非平凡任务走 `Constitution → Spec → Plan → Tasks → Implementation` 的门禁流程；轻量任务必须同时满足低风险、小范围、无新边界等所有条件（详见 `references/workflow-governance.md` 中的明确定义）。
-- 收尾前应用完成门禁：代码路径已 inspect、最小有效验证通过、文档结构验证通过、计划/文档同步完成。
+- 非平凡任务、轻量路径和完成门禁的判断以 `references/workflow-governance.md` 为准。
 - 恢复时先 inspect 现有实现，再动手。
 - `TASKS.md` 是恢复上下文入口；全部完成后删除。
 - 需要确认话术、步骤模板、术语解释、常见陷阱和示例时，读 `references/phase-guidance.md`。
@@ -44,7 +43,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零建立 AI 代
 
 1. 读 `AGENTS.md`，了解项目架构和核心信念。
 2. 读 `TASKS.md`；若不存在，查看 `docs/exec-plans/active/` 和 `docs/exec-plans/completed/`。
-3. 先运行 `python scripts/validate_agents_docs.py --level ERROR`。
+3. 尝试运行文档验证：优先运行项目内 `python scripts/validate_agents_docs.py --level ERROR`；若项目内脚本缺失，使用本 skill 自带脚本加 `--project <项目根目录>` 验证，或把脚本缺失记录为恢复摘要中的阻塞/风险。不要因为验证脚本缺失而跳过恢复定位，也不要在用户确认前自动补生成文档。
 4. inspect 相关代码和测试，确认当前状态。
 5. 只输出恢复摘要并询问从哪里继续；用户再次确认前不要创建、修改或执行计划。
 
@@ -68,10 +67,10 @@ description: Vibe Coding 项目启动器与恢复器。用于从零建立 AI 代
 |------|------|---------|------|
 | 1 | 了解用户：项目 / 语言 / OS | 3 个问题答完 | `references/tech-stack-recommendations.md` |
 | 2 | 推荐技术栈 | 用户确认推荐 | `references/tech-stack-recommendations.md` |
-| 3 | 生成核心集（目录 + 文件内容） | 用户确认核心集/扩展集 | `references/project-structure.md` |
+| 3 | 生成核心集（目录 + 文件内容 + 根 AGENTS.md 初始约束机制） | 用户确认核心集/扩展集 | `references/project-structure.md`, `references/architecture-constraints.md` |
 | 4 | 生成扩展集（按需的 docs/ 子文档） | 核心集生成完毕 | `references/document-templates.md` |
-| 4.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
-| 5 | 配置架构约束 | 约束落地并写回根 AGENTS.md | `references/architecture-constraints.md` |
+| 5 | 配置/细化架构约束 | 根 AGENTS.md 已有 `约束机制`，必要时生成真实 linter 配置并回写 | `references/architecture-constraints.md` |
+| 5.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
 | 6 | 建立工作流治理 | 用户确认门禁流程或轻量路径 | `references/workflow-governance.md` |
 | 7 | 创建首个 Spec / ExecPlan | 规格和计划文档创建并确认 | `references/workflow-governance.md`, `references/execplan-format.md`, `references/task-management.md` |
 | 8 | 按计划执行 | 每步确认一次并满足完成门禁 | `references/ai-coding-workflow.md`, `references/phase-guidance.md`, `references/workflow-governance.md` |
@@ -80,25 +79,14 @@ description: Vibe Coding 项目启动器与恢复器。用于从零建立 AI 代
 
 ## 验证
 
-- 第四阶段后立即运行 `python scripts/validate_agents_docs.py --level ERROR`，有 ERROR 先修复再继续。
+- 第五阶段约束落地后立即运行 `python scripts/validate_agents_docs.py --level ERROR`，有 ERROR 先修复再继续。
 - 对话结束前运行 `python scripts/validate_agents_docs.py --level WARN`，发现 WARN 立即修复。
 - 验证细则和分级见 `references/validation-standards.md`。
-
-## 技能自身优化
-
-维护本 skill 时，把 `evals/evals.json` 当作回归评测集，把 `SKILL.md`、`references/`、`scripts/` 当作可调整参数。
-
-- 先运行 `python scripts/run_evals.py`，确认 eval 集结构有效。
-- 需要独立评测时，运行 `python scripts/run_evals.py --write-scorecards .eval-runs/scorecards --write-results-template .eval-runs/results.json`。
-- 将 scorecard 交给全新 agent 或人工执行，不要泄露预期修复方案；只记录响应是否满足每条 assertion。
-- 填写结果后运行 `python scripts/run_evals.py --results .eval-runs/results.json` 汇总通过率、失败项和待判定项。
-- 根据失败模式修改触发描述、阶段规则、参考文件或脚本；不要为了某个 eval prompt 写死一次性规则。
-- `scripts/run_evals.py` 只用于维护本 skill，不要复制到用户项目；用户项目只复制 `scripts/validate_agents_docs.py`。
 
 ## 全局规则
 
 - 不跳过阶段衔接确认。
-- 不跳过第四阶段验证。
+- 不跳过约束落地后的文档验证。
 - 不生成空文档。
 - 不忽略 `TASKS.md` 维护。
 - 第七阶段生成 spec / ExecPlan，第八阶段执行计划，两者不可合并。

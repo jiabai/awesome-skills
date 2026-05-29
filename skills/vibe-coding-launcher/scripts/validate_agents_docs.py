@@ -2,7 +2,9 @@
 """Validate vibe-coding-launcher project documentation.
 
 Checks:
-- Core documents exist (AGENTS.md, validate_agents_docs.py, ARCHITECTURE.md; TASKS.md optional)
+- Core documents exist (AGENTS.md, WORKFLOW.md or lightweight alternative,
+  validate_agents_docs.py, ARCHITECTURE.md or CLI alternative,
+  EXECUTION_GATES.md or AGENTS.md gate summary; TASKS.md optional)
 - AGENTS.md sections complete (simplified or full version)
 - Root AGENTS.md must declare explicit constraint mechanism
 - TASKS.md uses standard sections and per-task validation conditions (if exists)
@@ -155,6 +157,41 @@ def parse_constraint_mechanism(lines: list[str]) -> tuple[str | None, str | None
     return mode, config
 
 
+def read_text_if_exists(path: Path) -> str:
+    """Read a UTF-8 markdown file, returning empty text when absent."""
+    try:
+        return path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return ""
+
+
+def agents_has_lightweight_workflow(agents_md: Path) -> bool:
+    """Detect an AGENTS.md workflow alternative for tiny projects."""
+    content = read_text_if_exists(agents_md)
+    return (
+        "轻量流程" in content
+        or "Lightweight Path" in content
+        or ("轻量" in content and "流程" in content)
+    )
+
+
+def agents_has_execution_gate_summary(agents_md: Path) -> bool:
+    """Detect a compact completion-gate summary in AGENTS.md."""
+    content = read_text_if_exists(agents_md)
+    has_gate_label = (
+        "完成门禁" in content
+        or "收尾标准" in content
+        or "Definition Of Done" in content
+        or "Hard Gates" in content
+    )
+    has_validation_signal = (
+        "验证" in content
+        or "Residual risk" in content
+        or "残余风险" in content
+    )
+    return has_gate_label and has_validation_signal
+
+
 def validate_agents_md(
     path: Path,
     min_level: Severity,
@@ -271,6 +308,29 @@ def validate_agents_md(
     return results
 
 
+def validate_workflow_md(path: Path, agents_md: Path) -> list[ValidationResult]:
+    """Validate WORKFLOW.md or its AGENTS.md lightweight replacement."""
+    results: list[ValidationResult] = []
+
+    if path.exists():
+        line_count = len(path.read_text(encoding="utf-8").splitlines())
+        results.append(ValidationResult(path, Severity.INFO, f"{line_count} 行"))
+    elif agents_has_lightweight_workflow(agents_md):
+        results.append(ValidationResult(
+            path,
+            Severity.INFO,
+            "文件不存在（AGENTS.md 已包含轻量流程替代）",
+        ))
+    else:
+        results.append(ValidationResult(
+            path,
+            Severity.ERROR,
+            "文件不存在，且 AGENTS.md 未包含轻量流程替代",
+        ))
+
+    return results
+
+
 def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]:
     """Validate TASKS.md file (optional - may be deleted when all tasks complete)."""
     results: list[ValidationResult] = []
@@ -320,6 +380,32 @@ def validate_tasks_md(path: Path, min_level: Severity) -> list[ValidationResult]
     completed = sum(1 for _, line in task_lines if COMPLETED_TASK_PATTERN.match(line))
 
     results.append(ValidationResult(path, Severity.INFO, f"{pending} 项待办, {completed} 项已完成"))
+
+    return results
+
+
+def validate_execution_gates_md(
+    path: Path,
+    agents_md: Path,
+) -> list[ValidationResult]:
+    """Validate docs/EXECUTION_GATES.md or its AGENTS.md summary."""
+    results: list[ValidationResult] = []
+
+    if path.exists():
+        line_count = len(path.read_text(encoding="utf-8").splitlines())
+        results.append(ValidationResult(path, Severity.INFO, f"{line_count} 行"))
+    elif agents_has_execution_gate_summary(agents_md):
+        results.append(ValidationResult(
+            path,
+            Severity.INFO,
+            "文件不存在（AGENTS.md 已包含完成门禁摘要）",
+        ))
+    else:
+        results.append(ValidationResult(
+            path,
+            Severity.ERROR,
+            "文件不存在，且 AGENTS.md 未包含完成门禁摘要",
+        ))
 
     return results
 
@@ -398,10 +484,12 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
 
     # 核心文档
     agents_md = root / "AGENTS.md"
+    workflow_md = root / "WORKFLOW.md"
     validator_script = root / "scripts" / "validate_agents_docs.py"
     tasks_md = root / "TASKS.md"
     legacy_tasks_md = root / "tasks.md"
     architecture_md = root / "docs" / "ARCHITECTURE.md"
+    execution_gates_md = root / "docs" / "EXECUTION_GATES.md"
     docs_dir = root / "docs"
 
     if not validator_script.exists():
@@ -415,6 +503,7 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
             require_constraint_mechanism=True,
         )
     )
+    results.extend(validate_workflow_md(workflow_md, agents_md))
     if legacy_tasks_md.exists() and not tasks_md.exists():
         results.append(ValidationResult(
             legacy_tasks_md,
@@ -431,6 +520,7 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
             ))
         results.extend(validate_tasks_md(tasks_md, min_level))
     results.extend(validate_architecture_md(architecture_md, min_level, cli_project=cli))
+    results.extend(validate_execution_gates_md(execution_gates_md, agents_md))
     results.extend(validate_docs_structure(docs_dir, min_level, cli_project=cli))
 
     # 检查所有子目录 AGENTS.md

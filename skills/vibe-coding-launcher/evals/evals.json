@@ -154,7 +154,12 @@
         {"name": "暂停并确认", "check": "向用户简述当前状态后等待确认，而非自作主张推进"},
         {"name": "从断点继续", "check": "确认是第七阶段中断，应继续 Spec / ExecPlan 创建而非跳到第八阶段"}
       ],
-      "files": []
+      "files": [
+        {"path": "fixtures/recovery-stage7/AGENTS.md", "description": "已有项目的根级代理入口"},
+        {"path": "fixtures/recovery-stage7/TASKS.md", "description": "恢复断点和当前任务清单"},
+        {"path": "fixtures/recovery-stage7/WORKFLOW.md", "description": "恢复时的项目工作流"},
+        {"path": "fixtures/recovery-stage7/docs/exec-plans/active/login-feature.md", "description": "活跃 ExecPlan，显示第七阶段尚未完成"}
+      ]
     },
     {
       "id": 12,
@@ -168,7 +173,11 @@
         {"name": "直接按现有工作流实现", "check": "inspect相关代码并按现有项目约定实现深色模式开关"},
         {"name": "不生成新项目骨架", "check": "不创建新的docs体系、项目骨架或首个ExecPlan，除非现有工作流明确要求"}
       ],
-      "files": []
+      "files": [
+        {"path": "fixtures/existing-governed-app/AGENTS.md", "description": "治理体系已经建立的项目入口"},
+        {"path": "fixtures/existing-governed-app/WORKFLOW.md", "description": "轻量路径说明"},
+        {"path": "fixtures/existing-governed-app/src/settings/page.tsx", "description": "需要 inspect 的设置页代码"}
+      ]
     }
   ]
 }

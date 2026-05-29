@@ -16,7 +16,7 @@
 
 | 时机 | 检查范围 | 严重程度 |
 |------|---------|---------|
-| 第四阶段完成后 | 核心文档（AGENTS.md + WORKFLOW.md + 架构信息 + 完成门禁 + scripts/validate_agents_docs.py；TASKS.md 可选） | ERROR |
+| 约束机制落地后 | 核心文档（AGENTS.md + WORKFLOW.md + 架构信息 + 完成门禁 + scripts/validate_agents_docs.py；TASKS.md 可选） | ERROR |
 | 每次对话结束前 | TASKS.md 进度一致性 | WARN |
 | 项目恢复时 | 文档完整性 + 知识新鲜度 | ERROR + WARN |
 | 提交前 | 全量检查 | INFO |
@@ -193,12 +193,12 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ## 验证流程嵌入
 
-### 第四阶段后验证
+### 约束机制落地后验证
 
-生成核心文档后立即验证：
+生成核心文档、按需扩展文档，并在根 `AGENTS.md` 写入有效 `约束机制` 后立即验证：
 
 ```
-完成第四阶段 → 运行验证 → 有 ERROR 则修复 → 进入第五阶段
+完成阶段 5 → 运行验证 → 有 ERROR 则修复 → 进入阶段 6
 ```
 
 ### 每次对话结束验证
@@ -211,10 +211,10 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ### 项目恢复验证
 
-恢复时先验证文档状态：
+恢复时先尝试验证文档状态；如果项目内 `scripts/validate_agents_docs.py` 缺失，改用本 skill 自带脚本加 `--project` 校验，或把缺失记录到恢复摘要中，不阻断恢复定位：
 
 ```
-读取 AGENTS.md → 运行验证 --level ERROR → 确认核心文档完整 → 继续开发
+读取 AGENTS.md → 尝试运行验证 --level ERROR → 记录 ERROR/WARN/缺失脚本 → 输出恢复摘要并等待确认
 ```
 
 ---

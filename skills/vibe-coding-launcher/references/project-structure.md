@@ -13,7 +13,7 @@
 
 ```
 project-name/
-├── AGENTS.md                  # 代理入口地图（~150行，目录/地图，不写百科全书）
+├── AGENTS.md                  # 代理入口地图（~150行，含初始约束机制）
 ├── WORKFLOW.md                # 项目默认工作流（非平凡任务的门禁流程）
 ├── TASKS.md                   # 执行清单（轻量任务追踪）
 ├── README.md                  # 项目说明
@@ -24,7 +24,9 @@ project-name/
     └── EXECUTION_GATES.md     # 完成门禁（验证、风险、收尾标准）
 ```
 
-> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）和完成门禁摘要写入 AGENTS.md。
+> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）、完成门禁摘要和初始 `约束机制` 写入 AGENTS.md。
+
+根级 `AGENTS.md` 在核心集阶段就必须写入有效 `约束机制`。简单项目默认 `模式=agents-only`、`配置=N/A`；复杂项目若选择 `linter+agents`，必须同时生成真实配置文件路径，避免后续文档验证因缺少配置而失败。
 
 ## 扩展集（按需生成，阶段 4 完成）
 

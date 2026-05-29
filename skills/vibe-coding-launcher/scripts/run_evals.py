@@ -27,13 +27,19 @@ class EvalAssertion:
 
 
 @dataclass(frozen=True)
+class EvalFile:
+    path: str
+    description: str = ""
+
+
+@dataclass(frozen=True)
 class EvalCase:
     id: int
     name: str
     prompt: str
     expected_output: str
     assertions: list[EvalAssertion]
-    files: list[str]
+    files: list[EvalFile]
 
 
 @dataclass
@@ -122,6 +128,42 @@ def validate_suite_data(data: Any) -> tuple[list[EvalCase], list[str]]:
                 check = ""
             assertions.append(EvalAssertion(name=name, check=check))
 
+        eval_files: list[EvalFile] = []
+        seen_files: set[str] = set()
+        for file_index, file_item in enumerate(files, start=1):
+            file_prefix = f"eval {eval_id} file {file_index}"
+            file_path: str | None = None
+            description = ""
+
+            if isinstance(file_item, str):
+                file_path = file_item
+            elif isinstance(file_item, dict):
+                raw_path = file_item.get("path")
+                if isinstance(raw_path, str):
+                    file_path = raw_path
+                raw_description = file_item.get("description", "")
+                if isinstance(raw_description, str):
+                    description = raw_description
+                else:
+                    errors.append(f"{file_prefix}: description must be a string when present")
+            else:
+                errors.append(f"{file_prefix}: must be a string path or object")
+                continue
+
+            if file_path is None or not file_path.strip():
+                errors.append(f"{file_prefix}: path must be a non-empty string")
+                continue
+            normalized_path = file_path.replace("\\", "/").strip()
+            path_obj = Path(normalized_path)
+            if path_obj.is_absolute() or ".." in path_obj.parts:
+                errors.append(f"{file_prefix}: path must stay within the eval suite")
+                continue
+            if normalized_path in seen_files:
+                errors.append(f"{file_prefix}: duplicate file path {normalized_path!r}")
+                continue
+            seen_files.add(normalized_path)
+            eval_files.append(EvalFile(path=normalized_path, description=description))
+
         cases.append(
             EvalCase(
                 id=eval_id,
@@ -129,7 +171,7 @@ def validate_suite_data(data: Any) -> tuple[list[EvalCase], list[str]]:
                 prompt=str(prompt),
                 expected_output=str(expected_output),
                 assertions=assertions,
-                files=[str(path) for path in files],
+                files=eval_files,
             )
         )
 
@@ -158,8 +200,51 @@ def filter_cases(cases: list[EvalCase], ids: str | None) -> list[EvalCase]:
     return [case for case in cases if case.id in requested]
 
 
-def write_scorecards(cases: list[EvalCase], output_dir: Path) -> None:
+def validate_fixture_paths(cases: list[EvalCase], suite_dir: Path) -> list[str]:
+    errors: list[str] = []
+    suite_root = suite_dir.resolve()
+
+    for case in cases:
+        for eval_file in case.files:
+            fixture_path = resolve_fixture_path(eval_file, suite_root)
+            if fixture_path is None:
+                errors.append(f"eval {case.id}: fixture escapes suite: {eval_file.path}")
+            elif not fixture_path.exists():
+                errors.append(f"eval {case.id}: fixture does not exist: {eval_file.path}")
+            elif not fixture_path.is_file():
+                errors.append(f"eval {case.id}: fixture is not a file: {eval_file.path}")
+
+    return errors
+
+
+def resolve_fixture_path(eval_file: EvalFile, suite_dir: Path) -> Path | None:
+    suite_root = suite_dir.resolve()
+    fixture_path = (suite_root / eval_file.path).resolve()
+    if not fixture_path.is_relative_to(suite_root):
+        return None
+    return fixture_path
+
+
+def read_fixture(eval_file: EvalFile, suite_dir: Path) -> str:
+    fixture_path = resolve_fixture_path(eval_file, suite_dir)
+    if fixture_path is None:
+        return f"<fixture path escapes suite: {eval_file.path}>"
+    try:
+        return fixture_path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return f"<missing fixture: {eval_file.path}>"
+    except UnicodeDecodeError:
+        return f"<fixture is not UTF-8 text: {eval_file.path}>"
+
+
+def write_scorecards(
+    cases: list[EvalCase],
+    output_dir: Path,
+    *,
+    suite_dir: Path | None = None,
+) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
+    suite_root = suite_dir.resolve() if suite_dir is not None else DEFAULT_SUITE.parent
 
     for case in cases:
         path = output_dir / f"{case.id:03d}-{slugify(case.name)}.md"
@@ -174,13 +259,29 @@ def write_scorecards(cases: list[EvalCase], output_dir: Path) -> None:
             "",
             case.expected_output,
             "",
-            "## Response Under Test",
-            "",
-            "<paste the fresh-agent response or artifact summary here>",
-            "",
-            "## Assertion Results",
-            "",
         ]
+        if case.files:
+            lines.extend(["## Fixture Files", ""])
+            for eval_file in case.files:
+                lines.append(f"### {eval_file.path}")
+                lines.append("")
+                if eval_file.description:
+                    lines.append(eval_file.description)
+                    lines.append("")
+                lines.append("```text")
+                lines.append(read_fixture(eval_file, suite_root).rstrip())
+                lines.append("```")
+                lines.append("")
+        lines.extend(
+            [
+                "## Response Under Test",
+                "",
+                "<paste the fresh-agent response or artifact summary here>",
+                "",
+                "## Assertion Results",
+                "",
+            ]
+        )
         for assertion in case.assertions:
             lines.extend(
                 [
@@ -202,12 +303,19 @@ def write_results_template(cases: list[EvalCase], output_path: Path) -> None:
             {
                 "id": case.id,
                 "eval_name": case.name,
+                "prompt": case.prompt,
+                "response_under_test": "",
+                "artifacts": [],
+                "grader": "",
+                "graded_at": "",
                 "notes": "",
+                "overall_notes": "",
                 "assertions": [
                     {
                         "name": assertion.name,
                         "passed": None,
                         "reason": "",
+                        "evidence": "",
                     }
                     for assertion in case.assertions
                 ],
@@ -466,8 +574,14 @@ def main() -> int:
         return 2
 
     cases = filter_cases(cases, args.ids)
+    fixture_errors = validate_fixture_paths(cases, suite_path.parent)
+    if fixture_errors:
+        for error in fixture_errors:
+            print(f"ERROR {error}", file=sys.stderr)
+        return 2
+
     if args.write_scorecards:
-        write_scorecards(cases, args.write_scorecards.resolve())
+        write_scorecards(cases, args.write_scorecards.resolve(), suite_dir=suite_path.parent)
     if args.write_results_template:
         write_results_template(cases, args.write_results_template.resolve())
 
