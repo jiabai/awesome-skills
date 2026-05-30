@@ -37,7 +37,7 @@
 | `scripts/validate_agents_docs.py` | 存在 | 所有项目的核心验证脚本 |
 | `TASKS.md` | 存在时检查标准区段（`进行中` / `待办` / `已完成`）和每条任务的 `✅` 验证条件 | 不存在不算错误，全部完成后可删除 |
 | `tasks.md` | 旧命名兼容检查 | 存在时提示重命名为根目录 `TASKS.md` |
-| `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含"架构"章节） | 描述项目架构 |
+| `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含“架构”章节） | 描述项目架构 |
 | `docs/ARCHITECTURE.md` | 内容完整性（概述/模块或代码地图/关键文件/架构约束信息） | 缺项记 WARN，不阻断下一阶段 |
 | `docs/EXECUTION_GATES.md` | 多文件项目存在；CLI/单文件项目替代方案：AGENTS.md 包含完成门禁摘要 | 描述验证、风险和收尾标准 |
 | 根 `AGENTS.md` | `约束机制` 章节存在 | 项目级元数据只在根级声明 |
@@ -77,7 +77,7 @@
 
 ### ERROR 类问题
 
-- 核心文档不存在（AGENTS.md；WORKFLOW.md 且 AGENTS.md 无轻量流程替代；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无"架构"章节；CLI/单文件项目 AGENTS.md 缺少"架构"章节；多文件项目缺少 docs/EXECUTION_GATES.md 且 AGENTS.md 无完成门禁摘要）
+- 核心文档不存在（AGENTS.md；WORKFLOW.md 且 AGENTS.md 无轻量流程替代；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无“架构”章节；CLI/单文件项目 AGENTS.md 缺少“架构”章节；多文件项目缺少 docs/EXECUTION_GATES.md 且 AGENTS.md 无完成门禁摘要）
 - 缺少 `scripts/validate_agents_docs.py`
 - 必需章节缺失
 - 根 AGENTS.md 缺少 `约束机制` 章节或 `模式`

@@ -23,9 +23,11 @@
 | API服务 | Routes → Service → Repo → Config → Types |
 | 命令行 | CLI → Service → Config → Types |
 | AI应用 | Interface → Agent → Service → Config → Types |
-| 单文件/脚本 | 无需分层，在 AGENTS.md 核心信念中声明："保持单文件直到超过 200 行" |
+| 单文件/脚本 | 无需分层，在 AGENTS.md 核心信念中声明：“保持单文件直到超过 200 行” |
 
-依赖方向只能"向前"（向下），跨层依赖 → 机械禁止。
+依赖方向只能“向前”（向下），跨层依赖 → 机械禁止。
+
+> 表中为概念分层，未必逐一对应目录。例如 Web 应用的 **Runtime** 指运行时编排层（请求生命周期、状态管理）；简单项目可并入 Service，目录上无需单独建 `runtime/`（参见 `project-structure.md` 的目录建议）。
 
 ## 约束写入方式
 
@@ -72,7 +74,7 @@ flowchart TD
 1. 先决定根级 `约束机制.模式`
 2. `agents-only`：配置写 `N/A`，所有约束直接写根级 AGENTS.md
 3. `linter+agents`：在映射表中找到对应语言生态，选择真实配置文件路径，并写回根级 AGENTS.md
-4. 需要层间依赖方向强制时，启用"进阶配置文件"
+4. 需要层间依赖方向强制时，启用“进阶配置文件”
 5. 不可被 linter 强制的约束，始终写入根级 AGENTS.md 核心信念
 
 ### 可强制 vs 声明式约束
@@ -80,9 +82,9 @@ flowchart TD
 | 约束类型 | 判断标准 | 写入位置 | 示例 |
 |---------|---------|---------|------|
 | **可强制约束** | linter 规则能直接检测并报错 | linter 配置文件 | `no-console`、`unused-imports`、`import/no-restricted-paths` |
-| **声明式约束** | 需要人类判断，linter 无法机械检测 | 根级 AGENTS.md 核心信念 | "数据层不依赖展示层"、"优先使用共享工具包" |
+| **声明式约束** | 需要人类判断，linter 无法机械检测 | 根级 AGENTS.md 核心信念 | “数据层不依赖展示层”、“优先使用共享工具包” |
 
-Python 特殊说明：Ruff 不支持 import 路径限制（如"service 层不能导入 ui 层"）。如需强制层间依赖方向，需额外配置 `import-linter`（在 `pyproject.toml` `[tool.importlinter]` 中声明契约）。未配 import-linter 时，层间依赖方向只能作为声明式约束写入根级 AGENTS.md。
+Python 特殊说明：Ruff 不支持 import 路径限制（如“service 层不能导入 ui 层”）。如需强制层间依赖方向，需额外配置 `import-linter`（在 `pyproject.toml` `[tool.importlinter]` 中声明契约）。未配 import-linter 时，层间依赖方向只能作为声明式约束写入根级 AGENTS.md。
 
 ### 约束机制声明
 
@@ -116,7 +118,7 @@ Python 特殊说明：Ruff 不支持 import 路径限制（如"service 层不能
 |------|------|
 | 共享工具包优于手写 helper | 不变量集中，避免重复 |
 | 边界验证优于 YOLO 猜测 | 代理不能猜测数据形状 |
-| "无聊"技术优于新奇技术 | 训练集覆盖、API 稳定 |
+| “无聊”技术优于新奇技术 | 训练集覆盖、API 稳定 |
 | 自实现优于 opaque 库 | 代理能理解、修改、测试 |
 
 ## 验证能力
@@ -131,4 +133,4 @@ Python 特殊说明：Ruff 不支持 import 路径限制（如"service 层不能
 | **测试验证** | 所有项目（推荐） | 运行自动化测试 | `pytest` 全部通过 |
 | **类型验证** | 有类型系统的项目 | 静态类型检查 | `mypy src/` 或 `tsc --noEmit` 无错误 |
 
-原则：**每个 ExecPlan 的 Validation 章节必须包含至少一种可执行的验证方式**。验证命令必须具体到可直接复制运行，不要写"手动检查"这种模糊描述。
+原则：**每个 ExecPlan 的 Validation 章节必须包含至少一种可执行的验证方式**。验证命令必须具体到可直接复制运行，不要写“手动检查”这种模糊描述。

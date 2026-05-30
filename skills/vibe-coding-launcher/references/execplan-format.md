@@ -48,9 +48,9 @@ Decision Log, and Outcomes & Retrospective must be kept up to date as work proce
 
 ## 各章节详细规范
 
-**Purpose / Big Picture**：用 1-2 句话回答"完成后用户能做什么新事情？"和"怎么看到它工作？"。不要写技术细节，只写用户可感知的结果。
+**Purpose / Big Picture**：用 1-2 句话回答“完成后用户能做什么新事情？”和“怎么看到它工作？”。不要写技术细节，只写用户可感知的结果。
 
-**Progress**：列出所有待完成里程碑，每条前加 `- [ ]`，完成后改为 `- [x]` 并标注时间。里程碑粒度：每个里程碑是子功能可验证的完成节点（如"API 框架就绪"、"数据库 schema 完成"），对应根级 `TASKS.md` 或 `docs/exec-plans/active/<feature-slug>-tasks.md` 中的一批执行级任务。里程碑本身的完成条件是对应任务均已勾选并通过验证。
+**Progress**：列出所有待完成里程碑，每条前加 `- [ ]`，完成后改为 `- [x]` 并标注时间。里程碑粒度：每个里程碑是子功能可验证的完成节点（如“API 框架就绪”、“数据库 schema 完成”），对应根级 `TASKS.md` 或 `docs/exec-plans/active/<feature-slug>-tasks.md` 中的一批执行级任务。里程碑本身的完成条件是对应任务均已勾选并通过验证。
 
 **Surprises & Discoveries**：记录工作中发现的新事实，包含 Evidence。不要把猜测写成结论。
 
@@ -62,14 +62,14 @@ Decision Log, and Outcomes & Retrospective must be kept up to date as work proce
 
 **Plan of Work**：描述实施批次，帮助人类 review 范围。
 
-**Concrete Steps**：每个步骤必须包含工作目录（相对于项目根目录）、完整可复制的命令行、预期输出示例。不要写"运行安装命令"，要写"运行 `pip install flask`"。
+**Concrete Steps**：每个步骤必须包含工作目录（相对于项目根目录）、完整可复制的命令行、预期输出示例。不要写“运行安装命令”，要写“运行 `pip install flask`”。
 
-**Validation and Acceptance**：包含启动方式（如 `python app.py`）、可观察行为（如"浏览器打开 localhost:5000 看到 Hello World"）、测试命令和预期结果。
+**Validation and Acceptance**：包含启动方式（如 `python app.py`）、可观察行为（如“浏览器打开 localhost:5000 看到 Hello World”）、测试命令和预期结果。
 
 ## 首个 ExecPlan 建议
 
 推荐从最小可运行版本开始：
-- Web应用：一个能访问的页面，返回 "Hello World"
+- Web应用：一个能访问的页面，返回 “Hello World”
 - API服务：一个健康检查端点 `/health` 返回 200
 - 命令行：一个能打印帮助信息的命令
 - AI应用：一个能调用 API 并返回结果的脚本

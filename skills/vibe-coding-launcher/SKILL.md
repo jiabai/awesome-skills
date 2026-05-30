@@ -27,7 +27,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零建立 AI 代
 ## 使用原则
 
 - 新项目按阶段推进，旧项目先恢复再继续。
-- 触发后先做适用性自检：只有"新项目启动"或"项目恢复定位"继续使用本 skill；若实际是单函数、bug、调试、小功能、重构或编程问答，说明不进入启动流程并直接处理用户任务。
+- 触发后先做适用性自检：只有“新项目启动”或“项目恢复定位”继续使用本 skill；若实际是单函数、bug、调试、小功能、重构或编程问答，说明不进入启动流程并直接处理用户任务。
 - 每个阶段都要等用户确认后再推进。
 - 不要生成空文档，不要把计划和执行混在一起。
 - `AGENTS.md` 只做快速入口地图；详细、变化快的规则放入 `docs/`。
@@ -63,13 +63,13 @@ description: Vibe Coding 项目启动器与恢复器。用于从零建立 AI 代
 
 ## 阶段总览
 
-| 阶段 | 目标 | 进入条件 | 参考 |
+| 阶段 | 目标 | 完成条件 | 参考 |
 |------|------|---------|------|
 | 1 | 了解用户：项目 / 语言 / OS | 3 个问题答完 | `references/tech-stack-recommendations.md` |
 | 2 | 推荐技术栈 | 用户确认推荐 | `references/tech-stack-recommendations.md` |
-| 3 | 生成核心集（目录 + 文件内容 + 根 AGENTS.md 初始约束机制） | 用户确认核心集/扩展集 | `references/project-structure.md`, `references/architecture-constraints.md` |
-| 4 | 生成扩展集（按需的 docs/ 子文档） | 核心集生成完毕 | `references/document-templates.md` |
-| 5 | 配置/细化架构约束 | 根 AGENTS.md 已有 `约束机制`，必要时生成真实 linter 配置并回写 | `references/architecture-constraints.md` |
+| 3 | 生成核心集（目录 + 文件内容 + 根 AGENTS.md 初始约束机制） | 用户确认核心集/扩展集划分 | `references/project-structure.md`, `references/architecture-constraints.md` |
+| 4 | 生成扩展集（按需的 docs/ 子文档） | 扩展集生成完毕 | `references/document-templates.md` |
+| 5 | 配置/细化架构约束 | 架构约束配置完成，必要时生成真实 linter 配置并回写 | `references/architecture-constraints.md` |
 | 5.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
 | 6 | 建立工作流治理 | 用户确认门禁流程或轻量路径 | `references/workflow-governance.md` |
 | 7 | 创建首个 Spec / ExecPlan | 规格和计划文档创建并确认 | `references/workflow-governance.md`, `references/execplan-format.md`, `references/task-management.md` |

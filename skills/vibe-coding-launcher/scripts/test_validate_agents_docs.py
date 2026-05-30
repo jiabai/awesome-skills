@@ -122,6 +122,25 @@ class ValidateAgentsDocsTests(unittest.TestCase):
 
             self.assertEqual(errors, [])
 
+    def test_canonical_tasks_md_does_not_warn_legacy(self) -> None:
+        # 回归：在大小写不敏感文件系统上，正确命名的 TASKS.md 不应被
+        # 误报为旧命名 tasks.md（曾因 root / "tasks.md" 命中同一文件而误报）。
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_project_baseline(root)
+            (root / "TASKS.md").write_text(
+                "# 任务\n\n## 进行中\n\n## 待办\n\n- [ ] 写第一个功能 ✅ 通过测试\n\n## 已完成\n",
+                encoding="utf-8",
+            )
+
+            results = validate_agents_docs.validate_project(root, validate_agents_docs.Severity.WARN)
+            legacy_warns = [
+                r for r in results
+                if r.severity == validate_agents_docs.Severity.WARN and "旧命名" in r.message
+            ]
+
+            self.assertEqual(legacy_warns, [])
+
 
 if __name__ == "__main__":
     unittest.main()

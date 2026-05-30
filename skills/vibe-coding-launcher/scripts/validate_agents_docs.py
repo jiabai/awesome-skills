@@ -487,7 +487,15 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
     workflow_md = root / "WORKFLOW.md"
     validator_script = root / "scripts" / "validate_agents_docs.py"
     tasks_md = root / "TASKS.md"
-    legacy_tasks_md = root / "tasks.md"
+    # 旧命名检查必须按磁盘上的实际文件名判断：在大小写不敏感的文件系统
+    # （Windows、默认 macOS）上，root / "tasks.md" 与 TASKS.md 指向同一文件，
+    # 直接 .exists() 会把正确命名的 TASKS.md 误报为旧命名。改为扫描目录项。
+    root_task_names = {
+        p.name for p in root.iterdir()
+        if p.is_file() and p.name.lower() == "tasks.md"
+    }
+    has_canonical_tasks = "TASKS.md" in root_task_names
+    legacy_task_names = sorted(n for n in root_task_names if n != "TASKS.md")
     architecture_md = root / "docs" / "ARCHITECTURE.md"
     execution_gates_md = root / "docs" / "EXECUTION_GATES.md"
     docs_dir = root / "docs"
@@ -504,17 +512,18 @@ def validate_project(root: Path, min_level: Severity) -> list[ValidationResult]:
         )
     )
     results.extend(validate_workflow_md(workflow_md, agents_md))
-    if legacy_tasks_md.exists() and not tasks_md.exists():
+    if legacy_task_names and not has_canonical_tasks:
+        legacy_path = root / legacy_task_names[0]
         results.append(ValidationResult(
-            legacy_tasks_md,
+            legacy_path,
             Severity.WARN,
             "旧命名 tasks.md 已存在；请重命名为根目录 TASKS.md",
         ))
-        results.extend(validate_tasks_md(legacy_tasks_md, min_level))
+        results.extend(validate_tasks_md(legacy_path, min_level))
     else:
-        if legacy_tasks_md.exists():
+        if legacy_task_names:
             results.append(ValidationResult(
-                legacy_tasks_md,
+                root / legacy_task_names[0],
                 Severity.WARN,
                 "旧命名 tasks.md 仍存在；根目录任务清单统一使用 TASKS.md",
             ))
@@ -540,10 +549,12 @@ def filter_by_severity(results: list[ValidationResult], min_level: Severity) -> 
 
 
 def main() -> int:
+    # 输出含中文；管道/重定向时 Windows 默认回退到 gbk（locale 编码），
+    # 会让 UTF-8 消费者（AI 代理、CI、git-bash）看到乱码。统一强制 UTF-8。
     if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(errors="backslashreplace")
+        sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
     if hasattr(sys.stderr, "reconfigure"):
-        sys.stderr.reconfigure(errors="backslashreplace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="backslashreplace")
 
     parser = argparse.ArgumentParser(description="Validate vibe-coding-launcher documentation")
     parser.add_argument(

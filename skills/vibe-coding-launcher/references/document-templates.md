@@ -83,9 +83,9 @@
 
 快速入口中只列出已生成的文档路径。未生成的文档不要列出，避免死链。
 
-"架构"章节仅 CLI/单文件项目需要（替代 `docs/ARCHITECTURE.md`）。多文件项目不需要此章节，架构信息放 `docs/ARCHITECTURE.md`。CLI 项目的"架构"章节控制在 20 行以内，只写概述 + 关键文件 + 2-3 条不变量。
+“架构”章节仅 CLI/单文件项目需要（替代 `docs/ARCHITECTURE.md`）。多文件项目不需要此章节，架构信息放 `docs/ARCHITECTURE.md`。CLI 项目的“架构”章节控制在 20 行以内，只写概述 + 关键文件 + 2-3 条不变量。
 
-"约束机制"章节是**根级 `AGENTS.md`** 的固定机器可读入口。`agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填写真实约束文件路径。
+“约束机制”章节是**根级 `AGENTS.md`** 的固定机器可读入口。`agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填写真实约束文件路径。
 
 子级/模块级 `AGENTS.md` 继承根级的 `约束机制`，不要求重复声明；如出于可读性保留也允许，但不是必需项。
 
@@ -191,7 +191,7 @@
 
 **生成条件**：所有项目都必须生成。
 
-**生命周期**：创建（第四阶段）→ 执行期间持续更新 → 全部完成后删除。
+**生命周期**：创建（第三阶段，核心集）→ 执行期间持续更新 → 全部完成后删除。
 
 格式、写入标准、执行流程见 `task-management.md`。
 
@@ -241,12 +241,12 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ## docs/ARCHITECTURE.md
 
-架构地图，回答"X 在哪？"和"这段代码做什么？"。
+架构地图，回答“X 在哪？”和“这段代码做什么？”。
 
 **生成条件**：所有项目必须提供架构信息。
 
 - **多文件项目**：生成 `docs/ARCHITECTURE.md`，包含完整的架构地图。
-- **CLI/单文件项目**：不生成 `docs/` 目录。将架构概述 + 关键文件 + 架构不变量（2-3 条）写入 AGENTS.md 的"架构"章节，控制在 20 行以内。当项目后续演变为多文件项目时，再创建 `docs/ARCHITECTURE.md`。
+- **CLI/单文件项目**：不生成 `docs/` 目录。将架构概述 + 关键文件 + 架构不变量（2-3 条）写入 AGENTS.md 的“架构”章节，控制在 20 行以内。当项目后续演变为多文件项目时，再创建 `docs/ARCHITECTURE.md`。
 
 ### 规范
 
@@ -258,7 +258,7 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 概述、代码地图（模块划分 + 模块关系）、架构不变量、层级边界、横切关注点、关键文件。
 
-### 单文件项目精简版（写入 AGENTS.md "架构"章节）
+### 单文件项目精简版（写入 AGENTS.md “架构”章节）
 
 只写概述（项目做什么）+ 关键文件（1个）+ 架构不变量（2-3条），控制在 20 行以内。
 
@@ -313,7 +313,7 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ### 未生成时
 
-将关键安全约束（如"API Key 不得硬编码，使用环境变量"）写入 AGENTS.md 核心信念。
+将关键安全约束（如“API Key 不得硬编码，使用环境变量”）写入 AGENTS.md 核心信念。
 
 ## docs/design-docs/core-beliefs.md
 
@@ -332,7 +332,7 @@ python scripts/validate_agents_docs.py --project /path/to/project
 
 ### 未生成时
 
-核心信念直接写入 AGENTS.md 的"核心信念"章节（控制在 5 条以内）。
+核心信念直接写入 AGENTS.md 的“核心信念”章节（控制在 5 条以内）。
 
 ---
 

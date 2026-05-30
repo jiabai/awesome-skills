@@ -80,3 +80,9 @@ htmlcov/
 
 # 敏感配置文件（保留 .example 模板）
 baidu-search/scripts/config.json
+
+# Vibe Coding Launcher — 评测数据与辅助脚本（非核心能力代码）
+skills/vibe-coding-launcher/evals/
+skills/vibe-coding-launcher/scripts/run_evals.py
+skills/vibe-coding-launcher/scripts/test_run_evals.py
+skills/vibe-coding-launcher/scripts/test_validate_agents_docs.py

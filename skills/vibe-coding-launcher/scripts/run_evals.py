@@ -562,6 +562,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    # 摘要含中文（eval/断言名）；管道/重定向时 Windows 默认回退到 gbk，
+    # 会让 UTF-8 消费者看到乱码。统一强制 UTF-8。
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="backslashreplace")
+
     parser = build_parser()
     args = parser.parse_args()
 
