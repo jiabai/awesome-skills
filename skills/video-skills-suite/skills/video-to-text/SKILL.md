@@ -1,15 +1,34 @@
 ---
 name: video-to-text
-description: 视频/音频转文字稿。从视频文件中提取音频，用 whisperX 进行语音识别、时间戳对齐和说话人分离，输出带时间戳和说话人标签的文字稿。适用于：直播回放转写、会议录音转文字、播客转录、任何视频/音频转文稿的场景。
+description: 视频/音频转文字稿。从视频文件中提取音频，用 SenseVoiceSmall 进行语音识别，再用 ct-punc 恢复标点符号，输出带时间戳的文字稿。适用于：直播回放转写、会议录音转文字、播客转录、任何视频/音频转文稿的场景。
 ---
 
 # Video to Text — 视频/音频转文字稿
 
 ## 依赖
 
-- **ffmpeg**: 从视频中提取音频（系统已安装）
-- **whisperX**: 语音识别 + 对齐 + 说话人分离（`uv pip install whisperx -i https://pypi.tuna.tsinghua.edu.cn/simple`）
-- **HF_TOKEN**: 说话人分离需要 HuggingFace token（环境变量 `HF_TOKEN`）
+- **ffmpeg**: 从视频中提取音频
+
+  | 系统 | 安装方式 |
+  |------|---------|
+  | **macOS** | `brew install ffmpeg` |
+  | **Ubuntu/Debian** | `sudo apt install ffmpeg` |
+  | **Fedora/CentOS** | `sudo dnf install ffmpeg` |
+  | **Arch Linux** | `sudo pacman -S ffmpeg` |
+  | **Windows (winget)** | `winget install ffmpeg` |
+  | **Windows (手动)** | 从 [ffmpeg.org](https://ffmpeg.org/download.html) 下载 Windows builds，解压后将 `bin\` 目录添加到系统 `PATH` 环境变量 |
+
+  安装后验证：`ffmpeg -version`
+
+- **funasr**（含 SenseVoiceSmall + ct-punc）：语音识别 + 标点恢复
+
+  ```bash
+  pip install modelscope funasr
+  ```
+
+  - `modelscope`：提供 SenseVoiceSmall ASR pipeline（`iic/SenseVoiceSmall`，首次下载 ~400MB）
+  - `funasr`：提供 ct-punc 标点恢复模型（首次下载 ~50MB）
+  - SenseVoice 内置 ffmpeg 后端，视频文件无需手动提取音频
 
 ## 快速执行
 
@@ -20,7 +39,6 @@ description: 视频/音频转文字稿。从视频文件中提取音频，用 wh
 nohup python3 {skillDir}/scripts/transcribe.py /path/to/video.mp4 \
   --output-dir /path/to/output \
   --output-name transcript \
-  --diarize \
   > /tmp/transcribe.log 2>&1 &
 ```
 
@@ -30,7 +48,6 @@ REM cmd.exe — 用 start /B 实现后台运行
 start /B python {skillDir}\scripts\transcribe.py D:\path\to\video.mp4 ^
   --output-dir D:\path\to\output ^
   --output-name transcript ^
-  --diarize ^
   > transcript.log 2>&1
 ```
 
@@ -39,7 +56,7 @@ start /B python {skillDir}\scripts\transcribe.py D:\path\to\video.mp4 ^
 python {skillDir}\scripts\transcribe.py D:\path\to\video.mp4 `
   --output-dir D:\path\to\output `
   --output-name transcript `
-  --diarize *> transcript.log &
+  *> transcript.log &
 ```
 
 **必须后台执行**——长音频（>30 min）转写时间可达数十分钟到数小时，exec session 会超时。Linux/macOS 用 `nohup`，Windows cmd 用 `start /B`，PowerShell 7+ 用 `&` 后台操作符。
@@ -61,11 +78,8 @@ python {skillDir}\scripts\transcribe.py D:\path\to\video.mp4 `
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `--model` | large-v3 | Whisper 模型，large-v3 最准但最慢 |
-| `--language` | zh | 语言代码 |
-| `--diarize` | off | 启用说话人分离（需 HF_TOKEN） |
+| `--language` | zh | 语言代码：zh、en、yue、ja、ko、auto |
 | `--device` | cpu | cpu 或 cuda |
-| `--batch-size` | 8 | 批次大小，内存不够可降低 |
 
 ### Step 3: 监控进度
 
@@ -98,9 +112,8 @@ if (-not (Get-Process -Id $pid -ErrorAction SilentlyContinue)) {
 
 ### Step 4: 输出
 
-脚本生成两个文件：
-- **`<name>.txt`**: 人类可读文稿，按说话人分段，带 `[MM:SS]` 时间戳
-- **`<name>.json`**: 完整 whisperX 输出，含 word-level 时间戳
+脚本生成一个文件：
+- **`<name>.txt`**: 带标点的纯文本
 
 ### 存档
 
@@ -111,9 +124,11 @@ if (-not (Get-Process -Id $pid -ErrorAction SilentlyContinue)) {
 
 | 音频时长 | 模型 | 设备 | 预计耗时 |
 |----------|------|------|----------|
-| 30 min | large-v3 | CPU (M-series) | ~15 min |
-| 1 hour | large-v3 | CPU (M-series) | ~30 min |
-| 2 hours | large-v3 | CPU (M-series) | ~60 min |
+| 30 min | SenseVoiceSmall | CPU (M-series) | ~3 min |
+| 1 hour | SenseVoiceSmall | CPU (M-series) | ~6 min |
+| 2 hours | SenseVoiceSmall | CPU (M-series) | ~12 min |
+
+> SenseVoiceSmall 基于 ONNX 推理，处理 10 秒音频仅需约 70ms，比 whisperX 快 5-10 倍。
 
 ## 注意事项
 
@@ -121,6 +136,7 @@ if (-not (Get-Process -Id $pid -ErrorAction SilentlyContinue)) {
   - Linux/macOS：`ln -sf "<中文路径>" /tmp/input-video.mp4`
   - Windows（管理员 cmd）：`mklink C:\tmp\input-video.mp4 "<中文路径>"`
   - Windows PowerShell 中也要注意代码页（`chcp 65001` 设为 UTF-8）
-- CPU 转写时 CPU 占用 300-400%，避免同时跑其他重负载任务
-- whisperX 的 diarization 依赖 pyannote，首次运行需要下载模型（~1GB）
-- 如果本地有 Whisper HTTP server（端口 9876），该 skill 不使用它——直接调用 whisperX Python API 更灵活
+- SenseVoiceSmall 首次运行会自动下载模型（~400MB），确保网络畅通
+- ct-punc 首次运行会自动下载模型（~50MB），与 ASR 模型分开下载
+- SenseVoice 内置 ffmpeg 后端处理视频文件，视频无需手动提取音频
+- 如需说话人分离，可额外使用 pyannote-audio 等工具对结果 JSON 做后处理
