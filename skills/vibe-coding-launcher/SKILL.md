@@ -1,6 +1,6 @@
 ---
 name: vibe-coding-launcher
-description: Vibe Coding 项目启动器与恢复器。用于从零建立 AI 代理友好的项目体系（AGENTS.md + docs/ + 架构约束 + ExecPlan），或恢复已有 AGENTS.md/TASKS.md/exec-plans 的项目上下文。触发：vibe coding、从零开发项目、项目启动、帮我做个项目/网站/工具/AI应用、不会编程需要一步步搭项目、继续开发/接着做/上次的项目/项目恢复。不要用于单个函数或代码片段、普通 bug 修复、调试报错、日常小功能、重构、编程问答，或项目治理体系已建立后的常规开发；这些场景只需按现有 AGENTS.md 作为上下文直接处理，不启动 8 阶段流程。
+description: Vibe Coding 项目启动器与恢复器。用于从零启动一个新软件项目，并先建立 AI 代理友好的项目治理体系（AGENTS.md、WORKFLOW.md、TASKS.md、架构约束、验证脚本、按需 docs/ 与首个 Spec/ExecPlan）；也用于恢复已有 AGENTS.md/TASKS.md/exec-plans 的项目上下文并定位断点。应在用户明确表示要 vibe coding、从零做项目、项目启动、搭项目骨架、建立 AI 协作/代理友好项目体系、不知道技术栈、不会编程需要一步步开始、继续开发/接着做/上次项目/项目恢复时使用。不要用于单个函数或代码片段、普通 bug 修复、调试报错、日常小功能、重构、编程问答，或治理体系已建立后的常规迭代；这些场景只读取现有 AGENTS.md/WORKFLOW.md 作为项目上下文，直接处理任务，不启动 8 阶段流程。
 ---
 
 # Vibe Coding Launcher
