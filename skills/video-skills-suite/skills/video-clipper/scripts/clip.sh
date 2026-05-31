@@ -1,5 +1,5 @@
 #!/bin/bash
-# clip.sh — 视频切片 + 去卡顿（音画同步版）
+# clip.sh — 视频切片 + 静音压缩（音画同步版）
 # 用法:
 #   clip.sh --input video.mp4 --clips clips.txt --output ./clips/
 #   clip.sh --input video.mp4 --start 30:16 --end 31:58 --name "01-胆子够大" --output ./clips/
@@ -8,7 +8,7 @@
 #   30:16|31:58|01-胆子够大
 #   1:50:08|1:52:20|02-AI后背发凉
 #
-# 去卡顿原理: silencedetect → 逐段切出非静音片段 → concat 拼接
+# 静音压缩原理: silencedetect → 逐段切出非静音片段 → concat 拼接
 # 每段都是从原始素材直接裁的，音画天然对齐
 
 set -euo pipefail
@@ -63,6 +63,31 @@ to_hms() {
   printf "%d:%02d:%s" $((mm/60)) $((mm%60)) "$ss"
 }
 
+float_sub() {
+  awk -v a="$1" -v b="$2" 'BEGIN { printf "%.6f", a - b }'
+}
+
+float_gt() {
+  awk -v a="$1" -v b="$2" 'BEGIN { exit !(a > b) }'
+}
+
+abs_path() {
+  local path="$1" dir base
+  dir=$(dirname "$path")
+  base=$(basename "$path")
+  printf "%s/%s" "$(cd "$dir" && pwd -P)" "$base"
+}
+
+ffmpeg_concat_path() {
+  local path="$1" abs
+  abs=$(abs_path "$path")
+  if command -v cygpath >/dev/null 2>&1; then
+    cygpath -am "$abs"
+  else
+    printf "%s" "$abs"
+  fi
+}
+
 # 处理单条切片
 process_clip() {
   local start="$1" end="$2" name="$3"
@@ -90,7 +115,7 @@ process_clip() {
     local sz dur
     sz=$(du -h "$OUTDIR/${name}.mp4" | cut -f1)
     dur=$(ffprobe -v error -show_entries format=duration -of default=nk=1:nw=1 "$OUTDIR/${name}.mp4" 2>/dev/null | cut -d. -f1)
-    echo "  ✅ ${sz}, ${dur}s (原始，未去卡顿)"
+    echo "  ✅ ${sz}, ${dur}s (原始，未压缩静音)"
     return 0
   fi
   
@@ -123,17 +148,17 @@ process_clip() {
   
   local SEGS=() PREV="0"
   for i in $(seq 0 $((NS-1))); do
-    local ss="${S_STARTS[$i]}" se="${S_ENDS[$i]}"
+    local ss="${S_STARTS[$i]}" se="${S_ENDS[$i]:-$DUR}"
     local dur_seg
-    dur_seg=$(echo "$ss - $PREV" | bc 2>/dev/null)
-    if [ -n "$dur_seg" ] && (( $(echo "$dur_seg > 0.05" | bc 2>/dev/null) )); then
+    dur_seg=$(float_sub "$ss" "$PREV")
+    if [ -n "$dur_seg" ] && float_gt "$dur_seg" "0.05"; then
       SEGS+=("$PREV|$ss")
     fi
     PREV="$se"
   done
   local dur_seg
-  dur_seg=$(echo "$DUR - $PREV" | bc 2>/dev/null)
-  if [ -n "$dur_seg" ] && (( $(echo "$dur_seg > 0.05" | bc 2>/dev/null) )); then
+  dur_seg=$(float_sub "$DUR" "$PREV")
+  if [ -n "$dur_seg" ] && float_gt "$dur_seg" "0.05"; then
     SEGS+=("$PREV|$DUR")
   fi
   
@@ -158,17 +183,18 @@ process_clip() {
       -c:a aac -b:a 128k \
       -y "$SEG_FILE" 2>/dev/null
     if [ -f "$SEG_FILE" ] && [ -s "$SEG_FILE" ]; then
-      echo "file '${SEG_FILE}'" >> "$CONCAT_LIST"
+      local ABS_SEG_FILE ESC_SEG_FILE
+      ABS_SEG_FILE=$(ffmpeg_concat_path "$SEG_FILE")
+      ESC_SEG_FILE=$(printf "%s" "$ABS_SEG_FILE" | sed "s/'/'\\\\''/g")
+      echo "file '${ESC_SEG_FILE}'" >> "$CONCAT_LIST"
     fi
   done
   
-  ffmpeg -f concat -safe 0 -i "$CONCAT_LIST" \
+  if ! ffmpeg -f concat -safe 0 -i "$CONCAT_LIST" \
     -c:v libx264 -preset fast -crf 23 \
     -c:a aac -b:a 128k \
     -movflags +faststart \
-    -y "$OUTDIR/${name}.mp4" 2>/dev/null
-  
-  if [ $? -ne 0 ]; then
+    -y "$OUTDIR/${name}.mp4" 2>/dev/null; then
     echo "  ⚠️ Concat 失败，用原始切片"
     cp "$RAW" "$OUTDIR/${name}.mp4"
   fi
@@ -180,7 +206,7 @@ process_clip() {
     local sz dur
     sz=$(du -h "$OUTDIR/${name}.mp4" | cut -f1)
     dur=$(ffprobe -v error -show_entries format=duration -of default=nk=1:nw=1 "$OUTDIR/${name}.mp4" 2>/dev/null | cut -d. -f1)
-    echo "  ✅ ${sz}, ${dur}s (去停顿: $NS, 拼接段: $NSEG)"
+    echo "  ✅ ${sz}, ${dur}s (静音段: $NS, 拼接段: $NSEG)"
   fi
 }
 

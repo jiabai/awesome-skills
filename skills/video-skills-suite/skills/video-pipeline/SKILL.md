@@ -20,16 +20,14 @@ metadata: {"openclaw": {"emoji": "🎬"}}
 ┌─────────────────────────────────────────────┐
 │ Stage 1: video-to-text                       │
 │ 转写 → 带时间戳的文字稿 + JSON               │
-│ (去口吃的基础数据也在这里产生)                │
 └──────────────────┬──────────────────────────┘
                    │
-        ┌──────────┴──────────┐
-        ▼                     ▼
+        ▼
 ┌───────────────┐   ┌─────────────────────┐
 │ Stage 2:       │   │ Stage 3:             │
 │ insight-       │   │ video-clipper        │
 │ extractor      │   │ 按观点切片 →         │
-│ 提炼观点/金句  │   │ 去静音/去口吃 →      │
+│ 提炼观点/金句  │   │ 删除较长静音停顿 →    │
 │ /争议点        │   │ 短视频成品           │
 └───────┬───────┘   └─────────────────────┘
         │
@@ -73,17 +71,22 @@ metadata: {"openclaw": {"emoji": "🎬"}}
 
 1. 读取 `video-to-text` SKILL.md
 2. 创建项目目录：`workspace/pipeline/<project-name>/`
-3. 用 nohup 后台执行转写脚本：
+3. 确定用于后续步骤的输入视频路径：优先使用原始路径；如果文件名含 CJK 字符或 shell 处理不稳定，先创建英文 symlink，并在 Stage 3 复用同一个路径。
+4. 用 nohup 后台执行转写脚本：
    ```bash
    nohup python3 {video-to-text-skillDir}/scripts/transcribe.py \
-     /path/to/video.mp4 \
+     {input-video-path-or-symlink} \
      --output-dir workspace/pipeline/<project-name>/ \
      --output-name transcript \
-     --diarize \
      > /tmp/pipeline-transcribe.log 2>&1 &
    ```
-4. 等待完成（用 process poll 或检查输出文件）
-5. 产出：`transcript.txt` + `transcript.json`
+5. 等待完成（用 process poll 或检查 `transcript.txt` 和 `transcript.json`）
+6. 产出：`transcript.txt` + `transcript.json`
+
+`transcript.json` 必须包含：
+- `segments`: 句子/片段级时间戳
+- `word_segments`: 词/字级时间戳；如果 ASR 未返回精确词级时间戳，则由 `video-to-text` 按片段时间估算
+- `metadata.timestamp_source` 和 `metadata.word_timestamp_source`: 标明时间戳来源，方便判断切片精度
 
 **⚠️ 这是最耗时的阶段**，30 分钟视频大约需要 10-20 分钟转写。后续阶段都很快。
 
@@ -102,15 +105,20 @@ metadata: {"openclaw": {"emoji": "🎬"}}
 
 ### Stage 3: 视频切片（video-clipper）
 
-可以和 Stage 2 并行（都只依赖 Stage 1 的输出）。
+默认等待 Stage 2 完成后再执行，因为切片候选优先来自 `insights.md`。只有用户已经明确给出切片主题或起止时间时，才可以跳过 `insights.md`，直接基于 `transcript.json` 定位。
 
 1. 读取 `video-clipper` SKILL.md
-2. 基于 `insights.md` 的观点 + `transcript.json` 的时间戳定位切片边界
-3. 执行四阶段切片流程：
-   - 用 `batch-clip-v4.sh` 批量切片（去静音 + 去口吃 + crossfade）
-   - 用 `batch-postcheck.sh` 二次质检
-   - 必要时用 `iterate-until-clean.py` 迭代修复
-4. 产出：`clips/01-xxx.mp4`, `clips/02-xxx.mp4`, ...
+2. 基于 `insights.md` 的观点 + `transcript.json` 的时间戳定位切片边界；如果没有 `insights.md`，必须由用户提供明确候选片段或主题
+3. 生成 `clips.txt`，每行一条 `start|end|name`
+4. 用 `video-clipper/scripts/clip.sh` 批量切片：
+   ```bash
+   nohup bash {video-clipper-skillDir}/scripts/clip.sh \
+     --input {input-video-path-or-symlink} \
+     --clips workspace/pipeline/<project-name>/clips.txt \
+     --output workspace/pipeline/<project-name>/clips \
+     > /tmp/pipeline-clip.log 2>&1 &
+   ```
+5. 产出：`clips/01-xxx.mp4`, `clips/02-xxx.mp4`, ...
 
 **优化：** 优先切 insights 中标记为「金句」和「争议点」的片段——这些做短视频最有传播力。
 
@@ -129,27 +137,28 @@ metadata: {"openclaw": {"emoji": "🎬"}}
 ```
 时间线:
 ─────────────────────────────────────────────────>
-  Stage 1 (转写)     Stage 2 (观点)     Stage 4 (文章)
-  ████████████████    ████████           ████████
-                      Stage 3 (切片)
-                      ████████████████
+  Stage 1 (转写)     Stage 2 (观点)     Stage 3 (切片)
+  ████████████████    ████████           ████████████████
+                                      Stage 4 (文章)
+                                      ████████
 ```
 
-- Stage 2 和 Stage 3 可以**并行**（用 sessions_spawn 分别跑）
-- Stage 4 依赖 Stage 2 的输出，串行
+- 默认串行：Stage 3 依赖 Stage 2 的 `insights.md`
+- Stage 4 依赖 Stage 2 的输出；如果不需要切片，可以和 Stage 3 分别启动
+- 只有用户已给出切片起止时间或明确候选主题时，Stage 3 才能和 Stage 2 并行
 - Stage 1 最慢，占总时间 60-70%
 
 ## 子 agent 编排
 
-推荐用 `sessions_spawn` 并行化：
+如果运行环境支持子 agent，可在 Stage 2 完成后并行执行文章生成和视频切片：
 
 ```
 主 agent:
   1. 启动 Stage 1（转写，等待完成）
-  2. spawn 子 agent A → Stage 2（观点提炼）
-  3. spawn 子 agent B → Stage 3（视频切片）
-  4. 等 A 完成 → 启动 Stage 4（文章生成）
-  5. 等 B 完成 → 汇总输出
+  2. 执行 Stage 2（观点提炼，产出 insights.md）
+  3. spawn 子 agent A → Stage 3（视频切片）
+  4. spawn 子 agent B → Stage 4（文章生成）
+  5. 等 A/B 完成 → 汇总输出
 ```
 
 ## 输出汇总模板
@@ -192,8 +201,9 @@ metadata: {"openclaw": {"emoji": "🎬"}}
 ## 注意事项
 
 - Stage 1 转写**必须用 nohup 后台**，否则超时
-- 文件名含中文要建英文 symlink
-- 切片依赖 transcript.json 的 word_segments，不是 transcript.txt
+- 文件名含中文时建议建英文 symlink，并在转写和切片阶段复用同一个输入路径
+- 切片依赖 `transcript.json` 的 `segments` / `word_segments`，不是 `transcript.txt`
+- 当前 `video-to-text` 不内置说话人分离；`speaker` 可能为 `null`
 - 文章生成依赖 insights.md，不能跳过 Stage 2 直接到 Stage 4
 - 所有产出存 `workspace/pipeline/<project-name>/`，不用 /tmp/
 - 用完浏览器后必须 `browser stop`
