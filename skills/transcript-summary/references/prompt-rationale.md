@@ -1,6 +1,6 @@
 # 提示词设计原理与多语言适配
 
-本技能的提示词源自 FrameQ 桌面客户端 `worker/frameq_worker/insightflow/prompt.py` 的 `build_mindmap_prompt` 与 `build_summary_prompt`，经多轮产物约束验证。SKILL.md 中的中文版为简体中文固化版；本文件记录设计原理与多语言适配方法，供需要深入或切换语言时查阅。
+本技能的提示词围绕“先生成思维导图，再基于原文与导图生成要点总结”的流程设计，经过多轮产物约束验证。SKILL.md 中的中文版为简体中文固化版；本文件记录设计原理与多语言适配方法，供需要深入或切换语言时查阅。
 
 ## 核心设计原则
 
@@ -20,7 +20,7 @@
 优先提取：观点、方法、因果、步骤、冲突、结论、可迁移经验。
 剔除：寒暄、重复、填充词、空洞过渡。
 
-口语转写稿含大量"嗯""那个""然后"等填充与寒暄，本原则确保提炼结果信息密度高、可读性强。
+口语化文字稿含大量"嗯""那个""然后"等填充与寒暄，本原则确保提炼结果信息密度高、可读性强。
 
 ### 4. 产物格式闭集
 
@@ -37,7 +37,7 @@
 
 ## 多语言适配
 
-SKILL.md 中为简体中文固化版。原始 FrameQ 实现通过 `output_language_semantics()` 注入不同语言的 `prompt_instruction` 与示例值，支持 zh-CN / zh-TW / en-US 三种输出语言。
+SKILL.md 中为简体中文固化版。若需要切换输出语言，可按同样思路替换提示词中的输出语言要求、Mermaid 示例节点与总结标题，适配 zh-CN / zh-TW / en-US 等场景。
 
 ### 切换输出语言
 
@@ -57,17 +57,4 @@ SKILL.md 中为简体中文固化版。原始 FrameQ 实现通过 `output_langua
 
 ### 指令语言的选择
 
-原始 FrameQ 提示词用英文指令加 `prompt_instruction` 强制输出语言，优点是 LLM 指令遵循更稳定。本技能 SKILL.md 固化为中文指令版以贴合中文使用场景；现代主流 LLM 对中文指令遵循已足够。
-
-若发现某些模型对英文指令遵循更稳（如格式约束被忽略），可改回英文指令版：把"角色""任务""生成规则"等段落标题与指令改回英文，仅保留"输出语言要求"段强制中文输出。
-
-## 原始实现参照
-
-如需对照原始英文指令版与完整实现，对应 FrameQ 源码位置：
-
-- `build_mindmap_prompt`：`worker/frameq_worker/insightflow/prompt.py`
-- `build_summary_prompt`：同文件
-- 输出语言语义表：`worker/frameq_worker/output_language.py`（`OUTPUT_LANGUAGE_SEMANTICS` 字典）
-- 调用编排：`worker/frameq_worker/insightflow/summary.py`（`generate_summary_from_markdown`：先脑图后总结）
-
-原始实现中，脑图与总结各调用一次 LLM，脑图源码经 `normalize_mermaid_mindmap` 规整（剥离围栏、保证首行 `mindmap`）后再喂给总结提示词。
+本技能 SKILL.md 固化为中文指令版以贴合中文使用场景；现代主流 LLM 对中文指令遵循已足够。若发现某些模型对英文指令遵循更稳（如格式约束被忽略），也可以把"角色""任务""生成规则"等段落标题与指令改回英文，仅保留"输出语言要求"段强制中文输出。
