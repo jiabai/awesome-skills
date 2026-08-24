@@ -107,9 +107,11 @@ Vibe Coding Launcher 帮你**一次性解决这些问题**——它为你的项�
 | 需求采集方法论（阶段 1.5） | `references/requirements-elicitation.md` |
 | 技术栈推荐 | `references/tech-stack-recommendations.md` |
 | 项目文件结构 | `references/project-structure.md` |
-| 生成文档模板 | `references/document-templates.md` |
+| 核心集文档模板（AGENTS/WORKFLOW/TASKS/验证脚本） | `references/document-templates.md` |
+| 扩展集文档模板（docs/ 子文档、CONTEXT.md、ADR） | `references/docs-templates.md` |
 | 文档验证标准 | `references/validation-standards.md` |
 | 架构约束与 linter 模式 | `references/architecture-constraints.md` |
+| 特殊架构（桌面/TUI/Rust workspace/跨代码库）详解 | `references/architecture-special-cases.md` |
 | Spec / ExecPlan / 轻量路径 / 完成门禁判断 | `references/workflow-governance.md` |
 | `TASKS.md` 格式与生命周期 | `references/task-management.md` |
 | ExecPlan 文档格式 | `references/execplan-format.md` |
@@ -127,8 +129,10 @@ vibe-coding-launcher/
 ├── references/
 │   ├── ai-coding-workflow.md         # 日常开发执行流程
 │   ├── architecture-constraints.md   # 架构约束配置
+│   ├── architecture-special-cases.md # 特殊架构详解（桌面/TUI/Rust workspace）
 │   ├── deployment-spec.md            # 部署规范生成与引导
-│   ├── document-templates.md         # 文档模板
+│   ├── docs-templates.md             # 扩展集文档模板（阶段 4）
+│   ├── document-templates.md         # 核心集文档模板（阶段 3）
 │   ├── execplan-format.md            # ExecPlan 格式
 │   ├── phase-guidance.md             # 阶段互动细则
 │   ├── project-structure.md          # 项目结构推荐

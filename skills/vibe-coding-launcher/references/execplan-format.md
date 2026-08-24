@@ -5,6 +5,9 @@
 - [必需章节](#必需章节)
 - [各章节详细规范](#各章节详细规范)
 - [首个 ExecPlan 建议](#首个-execplan-建议)
+- [完成与归档](#完成与归档)
+- [docs/exec-plans 目录模板](#docsexec-plans-目录模板)
+- [进阶：开发循环](#进阶开发循环)
 
 ---
 
@@ -86,6 +89,63 @@ Decision Log, and Outcomes & Retrospective must be kept up to date as work proce
 3. 更新 `active/index.md` 和 `completed/index.md`。
 4. 如果产生跨任务技术债，记录到 `docs/exec-plans/tech-debt-tracker.md`。
 5. 不要把完成计划继续留在 active 目录。
+
+## docs/exec-plans 目录模板
+
+### index.md
+
+```markdown
+# Exec Plans
+
+## Purpose
+
+Exec plans capture task-specific implementation intent, progress, and recovery context.
+
+## Entry Points
+
+- Active plans: `active/index.md`
+- Completed plans: `completed/index.md`
+- Shared debt list: `tech-debt-tracker.md`
+
+## Rules
+
+- Keep active work in `active/`.
+- Move completed work to `completed/`.
+- Capture cross-cutting debt in `tech-debt-tracker.md`.
+```
+
+`active/index.md` 和 `completed/index.md` 使用表格列出 `File` 与 `Focus`：
+
+```markdown
+# {Active|Completed} Exec Plans
+
+| File | Focus |
+|------|-------|
+```
+
+### tech-debt-tracker.md
+
+```markdown
+# Tech Debt Tracker
+
+Last updated: {YYYY-MM-DD}
+
+## High Priority
+
+| Topic | Why it matters | Source | Removal Condition |
+|------|----------------|--------|-------------------|
+
+## Medium Priority
+
+| Topic | Why it matters | Source | Removal Condition |
+|------|----------------|--------|-------------------|
+
+## Debt Handling Rules
+
+- Add debt here when it spans more than one file or more than one task.
+- Remove or downgrade debt when a change clearly addresses it.
+- Link back to the plan, design doc, or code path that best explains the issue.
+```
 
 ## 进阶：开发循环
 

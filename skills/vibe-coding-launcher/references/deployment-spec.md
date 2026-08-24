@@ -1,6 +1,6 @@
 # 部署规范生成与引导（docs/DEPLOYMENT.md）
 
-本文件定义：什么项目生成 `docs/DEPLOYMENT.md`、模板长什么样、开发完成后 agent 如何按该文档引导用户部署。完整方法论见仓库 `Conventions/DEPLOY-SOP.md`；本文件是面向 launcher 的执行版。
+本文件定义：什么项目生成 `docs/DEPLOYMENT.md`、模板长什么样、开发完成后 agent 如何按该文档引导用户部署。
 
 ## 生成条件
 

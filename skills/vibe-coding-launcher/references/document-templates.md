@@ -1,36 +1,12 @@
-# 文档生成模板
+# 核心集文档模板（阶段 3）
 
-本文件只定义“要生成什么模板、模板长什么样”；流程、验证口径和执行细则分别见 `task-management.md`、`validation-standards.md`、`ai-coding-workflow.md`。
-
-## 目录
-
-- [AGENTS.md（简化版）](#agentsmd简化版)
-- [WORKFLOW.md](#workflowmd)
-- [docs/EXECUTION_GATES.md](#docsexecution_gatesmd)
-- [CONTEXT.md](#contextmd)
-- [TASKS.md](#tasksmd)
-- [scripts/validate_agents_docs.py](#scriptsvalidate_agents_docspy)
-- [docs/ARCHITECTURE.md](#docsarchitecturemd)
-- [docs/DESIGN.md](#docsdesignmd)
-- [docs/QUALITY_SCORE.md](#docsquality_scoremd)
-- [docs/SECURITY.md](#docssecuritymd)
-- [docs/DEPLOYMENT.md](#docsdeploymentmd)
-- [docs/design-docs/core-beliefs.md](#docsdesign-docscore-beliefsmd)
-- [设计决策记录（ADR）](#设计决策记录adr)
-- [docs/product-specs](#docsproduct-specs)
-- [docs/exec-plans 索引与技术债](#docsexec-plans-索引与技术债)
-- [AGENTS.md（成熟项目版）](#agentsmd成熟项目版)
-- [模板选择指南](#模板选择指南)
-
----
+本文件定义核心集模板——所有项目都必须生成或默认生成的根级治理文档。扩展集（`docs/` 下按需生成的文档、CONTEXT.md、ADR）模板见 `docs-templates.md`；product spec 模板见 `workflow-governance.md`；ExecPlan 及 `docs/exec-plans/` 目录模板见 `execplan-format.md`。
 
 ## AGENTS.md（简化版）
 
-代理的入口地图，不是百科全书。控制在 150 行以内。
+代理的入口地图，不是百科全书。控制在 150 行以内。**所有项目都必须生成**。
 
-**生成条件**：所有项目都必须生成。
-
-**作用域**：此模板默认用于**根级 `AGENTS.md`**。如果项目后续拆分出子级/模块级 `AGENTS.md`，子级文件继承根级的项目级元数据（尤其是 `约束机制`），不要求重复维护。
+默认用于**根级 `AGENTS.md`**。子级/模块级 `AGENTS.md` 继承根级的项目级元数据（尤其是 `约束机制`），不要求重复维护。
 
 ### 模板
 
@@ -39,6 +15,7 @@
 
 ## 快速入口
 
+<!-- 只列出已生成的文档路径，未生成的不列，避免死链 -->
 - 架构：见 `docs/ARCHITECTURE.md`（如已生成），CLI/单文件项目见下方"架构"章节
 - 设计规范：见 `docs/DESIGN.md`（如已生成）
 - 核心信念：见 `docs/design-docs/core-beliefs.md`（如已生成，否则见下方）
@@ -59,7 +36,7 @@
 
 ## 架构
 
-<!-- 仅 CLI/单文件项目需要此章节（替代 docs/ARCHITECTURE.md） -->
+<!-- 仅 CLI/单文件项目需要此章节（替代 docs/ARCHITECTURE.md），控制在 20 行以内 -->
 <!-- 多文件项目删除此章节，架构信息放 docs/ARCHITECTURE.md -->
 
 概述：{一句话描述项目做什么}
@@ -70,36 +47,23 @@
 
 ## 约束机制
 
-<!-- 所有项目都必须保留此章节，供验证脚本机器读取 -->
-<!-- CLI/单文件项目 + 简单多文件项目：模式=agents-only，配置=N/A -->
-<!-- 复杂项目：模式=linter+agents，配置=真实约束文件路径 -->
-
+<!-- 所有项目必须保留此章节，供验证脚本机器读取 -->
 - 模式：`{agents-only 或 linter+agents}`
 - 配置：`{N/A 或 ruff.toml / eslint.config.js / analysis_options.yaml / pyproject.toml}`
 
 ## 常用命令
 
 - `{命令}` — 说明
-- `{命令}` — 说明
 ```
 
-### 注意事项
+要点：
 
-快速入口中只列出已生成的文档路径。未生成的文档不要列出，避免死链。
-
-“架构”章节仅 CLI/单文件项目需要（替代 `docs/ARCHITECTURE.md`）。多文件项目不需要此章节，架构信息放 `docs/ARCHITECTURE.md`。CLI 项目的“架构”章节控制在 20 行以内，只写概述 + 关键文件 + 2-3 条不变量。
-
-“约束机制”章节是**根级 `AGENTS.md`** 的固定机器可读入口。`agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填写真实约束文件路径。
-
-子级/模块级 `AGENTS.md` 继承根级的 `约束机制`，不要求重复声明；如出于可读性保留也允许，但不是必需项。
+- "架构"章节仅 CLI/单文件项目需要，只写概述 + 关键文件 + 2-3 条不变量。
+- `agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填真实约束文件路径。
 
 ## WORKFLOW.md
 
-项目的默认做事流程，回答“这个项目里任务应该怎么从想法走到实现”。
-
-**生成条件**：默认生成。极小一次性脚本可以不单独生成，但必须在 AGENTS.md 的开发流程中写明轻量路径。
-
-### 模板
+项目的默认做事流程。**默认生成**；极小一次性脚本可不单独生成，但必须在 AGENTS.md 开发流程中写明轻量路径。
 
 ```markdown
 # Project Workflow
@@ -148,94 +112,11 @@
 - 技术债：`docs/exec-plans/tech-debt-tracker.md`
 ```
 
-## docs/EXECUTION_GATES.md
-
-完成门禁，回答“什么时候可以说完成”。
-
-**生成条件**：多文件项目、Web/API/桌面项目、或任何需要测试/发布/交付标准的项目。
-
-### 模板
-
-```markdown
-# Execution Gates
-
-## Purpose
-
-本文件定义任务完成前必须满足的检查。验证应与风险成比例，并在最终交付中可见。
-
-## Hard Gates
-
-- 受影响代码路径或文档事实来源已 inspect。
-- 受影响区域的最小有效测试或检查通过。
-- 文档结构验证通过：`python scripts/validate_agents_docs.py --level ERROR`。
-- touched active ExecPlan 的 Progress、Decision Log 和验证记录已更新。
-- 非平凡任务完成双轴自审：Spec 轴（是否忠实实现来源意图）与 Standards 轴（是否符合项目自身标准）分开检查、分开报告；问题已修复或记录为技术债。
-- 架构、安全、流程、运行时 contract 或运维行为变化已同步到 durable docs。
-
-## Soft Gates
-
-- 更广范围回归。
-- 手动运行时检查。
-- 依赖或安全扫描。
-- 覆盖率报告。
-
-跳过相关软门禁时，在最终说明或 active ExecPlan 中记录原因和残余风险。
-
-## Definition Of Done
-
-1. 请求行为已实现、修复，或明确记录为 out of scope。
-2. 所有受影响区域的硬门禁通过。
-3. 相关 spec、design doc、reference、AGENTS map 或 ExecPlan 已同步。
-4. 新技术债已记录到 active plan 或 `docs/exec-plans/tech-debt-tracker.md`。
-5. 最终交付列出 Passed、Not run、Residual risk；非平凡任务另加 Spec 自审、Standards 自审两行。
-```
-
-## CONTEXT.md
-
-项目术语表，位于项目根目录。记录本项目关键概念的标准叫法、定义和要避免的别名，让用户和 AI 用同一套语言；spec 标题、任务名、测试名、代码命名都应使用标准术语。
-
-**生成条件**：阶段 1.5 需求采集中澄清的项目特有术语 ≥ 3 个（采集方法见 `requirements-elicitation.md`）。术语不足或无歧义时不生成，关键概念写入 AGENTS.md 核心信念即可。
-
-**写入位置**：项目根目录 `CONTEXT.md`（与 AGENTS.md、TASKS.md 平级）。
-
-**AGENTS.md 联动**：生成后在根级 AGENTS.md 快速入口追加一行 `- 术语表：见 CONTEXT.md`。未生成时不列出，避免死链。
-
-### 模板
-
-```markdown
-# {项目名} 术语表
-
-本文件定义项目关键概念的标准叫法。AI 生成的 spec、任务、测试和代码命名必须使用标准术语，不使用"避免"列中的别名。
-
-## 语言
-
-**{标准术语}**：
-{一两句话定义：它是什么。}
-_避免_：{别名 1}、{别名 2}
-
-**{标准术语}**：
-{一两句话定义。}
-_避免_：{别名}
-```
-
-### 注意事项
-
-- 定义写"它是什么"，不写"它做什么"；一两句话为限。
-- 只收录本项目特有的概念；超时、缓存等通用编程词不入表。
-- 同一概念有多个叫法时，选定一个标准术语，其余全部列入"避免"。
-- 术语来自需求采集的真实澄清，不要为了填表编造术语。
-
 ## TASKS.md
 
-执行期间的临时任务清单，位于项目根目录；代理被异常打断时通过它恢复上下文。不要创建 `docs/TASKS.md`；非平凡功能的任务清单放 `docs/exec-plans/active/<feature-slug>-tasks.md`。
+执行期间的临时任务清单，位于项目根目录（不要创建 `docs/TASKS.md`）。**所有项目必须生成**。
 
-**生成条件**：所有项目都必须生成。
-
-**生命周期**：创建（第三阶段，核心集）→ 执行期间持续更新 → 全部完成后删除。
-
-格式、写入标准、执行流程见 `task-management.md`。
-
-### 模板
+生命周期：创建（阶段 3）→ 执行期间持续更新 → 全部完成后删除。格式和写入标准见 `task-management.md`。
 
 ```markdown
 # Tasks
@@ -252,280 +133,21 @@ _避免_：{别名}
 
 ## scripts/validate_agents_docs.py
 
-文档验证脚本，检查项目文档的结构完整性和格式合规性。
+**所有项目必须生成（核心集）**。生成方式：读取本 skill 的 `scripts/validate_agents_docs.py`，原样写入用户项目，不要定制。
 
-**生成条件**：所有项目都必须生成（核心集）。
-
-**生成方式**：读取本 skill 的 `scripts/validate_agents_docs.py`，将内容原样写入用户项目的 `scripts/validate_agents_docs.py`，不要定制。
-
-**用途**：阶段 5 约束机制落地后校验核心文档、对话结束前检查知识新鲜度、恢复时确认文档状态。
-
-**使用方式**：
+用途：阶段 5 约束落地后校验核心文档、对话结束前检查知识新鲜度、恢复时确认文档状态。
 
 ```bash
-# 只显示 ERROR
-python scripts/validate_agents_docs.py --level ERROR
-
-# 显示 ERROR + WARN
-python scripts/validate_agents_docs.py --level WARN
-
-# 指定项目目录
-python scripts/validate_agents_docs.py --project /path/to/project
+python scripts/validate_agents_docs.py --level ERROR   # 只显示 ERROR
+python scripts/validate_agents_docs.py --level WARN    # 显示 ERROR + WARN
+python scripts/validate_agents_docs.py --project /path/to/project  # 指定项目目录
 ```
 
-### 注意事项
-
-- 脚本仅使用 Python 标准库，无外部依赖
-- 脚本默认以自身所在目录的上一级作为项目根目录（`Path(__file__).resolve().parents[1]`），在用户项目中可正确解析
-- 不要修改脚本内容；验证规则见 `validation-standards.md`
-
-## docs/ARCHITECTURE.md
-
-架构地图，回答“X 在哪？”和“这段代码做什么？”。
-
-**生成条件**：所有项目必须提供架构信息。
-
-- **多文件项目**：生成 `docs/ARCHITECTURE.md`，包含完整的架构地图。
-- **CLI/单文件项目**：不生成 `docs/` 目录。将架构概述 + 关键文件 + 架构不变量（2-3 条）写入 AGENTS.md 的“架构”章节，控制在 20 行以内。当项目后续演变为多文件项目时，再创建 `docs/ARCHITECTURE.md`。
-
-### 规范
-
-- 保持简短（50-150 行）
-- 只写稳定内容，不写频繁变化的
-- 不链接，用符号名
-
-### 必须包含
-
-概述、代码地图（模块划分 + 模块关系）、架构不变量、层级边界、横切关注点、关键文件。
-
-### 单文件项目精简版（写入 AGENTS.md “架构”章节）
-
-只写概述（项目做什么）+ 关键文件（1个）+ 架构不变量（2-3条），控制在 20 行以内。
-
-## docs/DESIGN.md
-
-设计规范文档，描述项目的视觉/交互/技术设计标准。
-
-**生成条件**：项目有 UI 或 API 时生成。
-
-### 内容举例
-
-- UI 组件规范（颜色、间距、字体）
-- API 设计规范（RESTful 风格、错误码格式）
-- 代码风格（命名规范、注释规范）
-
-### 未生成时
-
-将最关键的设计约束（2-3条）写入 AGENTS.md 核心信念。
-
-## docs/QUALITY_SCORE.md
-
-质量评分追踪表，按模块评估质量。
-
-**生成条件**：项目超过 3 个模块时生成。
-
-### 内容举例
-
-```
-| 模块 | 可维护性 | 测试覆盖 | 文档完整度 | 综合 |
-|------|---------|---------|-----------|------|
-| src/ui | 🟢 | 🟡 | 🟢 | 🟢 |
-| src/service | 🟢 | 🟢 | 🟡 | 🟢 |
-```
-
-评分用 🟢🟡🔴 表示，随里程碑更新。
-
-### 未生成时
-
-项目启动时模块不足 3 个则不生成，等模块增长后再创建。无需在 AGENTS.md 中补充。
-
-## docs/SECURITY.md
-
-安全规范，声明项目的安全约束。
-
-**生成条件**：项目涉及网络请求、数据存储或 API Key 时生成。
-
-### 内容举例
-
-- 敏感数据（API Key、密码）的存储方式
-- 输入验证要求
-- 依赖安全扫描频率
-
-### 未生成时
-
-将关键安全约束（如“API Key 不得硬编码，使用环境变量”）写入 AGENTS.md 核心信念。
-
-## docs/DEPLOYMENT.md
-
-部署规范，回答“开发完成后怎么上线到云服务器”。开发完成后 agent 按此文档引导用户手动部署（agent 给命令、用户在自己的 SSH 终端执行并回报结果）。
-
-**生成条件**：Web/API/需长期运行的服务端项目（Node.js / Python / Go），且用户有云服务器部署需求。
-
-**模板**：完整模板、占位符说明和 agent 引导规则见 `deployment-spec.md`。生成的文档必须自包含并填入项目实际信息（技术栈、端口、启动命令等）。
-
-**未生成时**
-
-CLI 本地工具或无服务器项目不生成。后续需要部署时按 `deployment-spec.md` 的模板补生成，并在 AGENTS.md 快速入口补链接。
-
-## docs/design-docs/core-beliefs.md
-
-核心信念展开文档，阐述项目不可协商的原则。
-
-**生成条件**：项目有 3 条以上核心信念需要展开时生成。
-
-### 内容举例
-
-```
-- 数据层不依赖展示层
-- 所有外部输入必须验证
-- 配置集中在 Config 模块
-- 错误处理使用统一 Error 类型
-```
-
-### 未生成时
-
-核心信念直接写入 AGENTS.md 的“核心信念”章节（控制在 5 条以内）。
-
----
-
-## 设计决策记录（ADR）
-
-记录“为什么这么做”的轻量决策文档。存放在 `docs/design-docs/`，文件名 `NNNN-<slug>.md`（从 `0001` 递增）。
-
-**生成条件**：一项决策同时满足以下三条才记录，任何一条不满足都跳过：
-
-1. **难以逆转** — 现在改主意的代价可感知（数据库选型、是否上框架）；随手能改的不记。
-2. **无上下文会困惑** — 未来读者（包括以后的 AI 代理）会问“当初为什么这么搞”。
-3. **真实权衡** — 存在合理备选项，且是因具体理由选定的；没有备选项的顺理成章不记。
-
-典型该记的：技术选型带锁定效应的（数据库、部署目标）、数据归属边界（“客户数据只归客户模块，别人只引用 ID”）、有意偏离常规的做法（“手写 SQL 不用 ORM，因为 X”——防止后人好心‘修复’它）。
-
-**与 ExecPlan Decision Log 的分工**：只影响单个任务的决策写进该任务 ExecPlan 的 Decision Log，随计划归档；跨任务长期有效、需要被未来工作尊重的决策才写 ADR。同一决策不写两处。
-
-### 模板
-
-```markdown
-# {决策的短标题}
-
-{1-3 句话：什么背景下、决定了什么、为什么。}
-```
-
-就是这些。ADR 的价值在于记录“做过这个决定”和“为什么”，不在于填满章节。仅在真正需要时追加可选章节：**备选项**（被否掉的方案值得被记住时）、**后果**（下游影响不明显时）。
-
-### 注意事项
-
-- 编号取 `docs/design-docs/` 中现有最大号 +1。
-- 新增 ADR 后同步更新 `docs/design-docs/index.md`。
-- 不要批量预生成空 ADR；出现符合三条件的决策时才创建。
-
----
-
-## docs/product-specs
-
-产品规格描述用户可见意图，不记录实施流水账。
-
-**生成条件**：改变用户可见行为、新增边界、影响认证/权限/数据/部署/安全，或功能范围需要人类确认。
-
-### index.md 模板
-
-```markdown
-# Product Specs Index
-
-## Purpose
-
-Product specs describe user-visible intent and boundaries before or alongside implementation work.
-
-## Current Specs
-
-| File | Scope |
-|------|-------|
-```
-
-### 单个 spec 模板
-
-```markdown
-# {功能标题}
-
-## 背景
-
-## 目标
-
-## 用户故事
-
-（编号列表："作为<角色>，我想要<功能>，以便<好处>"；未做过需求采集的项目可省略本章节）
-
-## 非目标
-
-## 使用场景
-
-## 约束
-
-## 验收标准
-```
-
-## docs/exec-plans 索引与技术债
-
-### 索引模板
-
-`docs/exec-plans/index.md`：
-
-```markdown
-# Exec Plans
-
-## Purpose
-
-Exec plans capture task-specific implementation intent, progress, and recovery context.
-
-## Entry Points
-
-- Active plans: `active/index.md`
-- Completed plans: `completed/index.md`
-- Shared debt list: `tech-debt-tracker.md`
-
-## Rules
-
-- Keep active work in `active/`.
-- Move completed work to `completed/`.
-- Capture cross-cutting debt in `tech-debt-tracker.md`.
-```
-
-`active/index.md` 和 `completed/index.md` 使用表格列出 `File` 与 `Focus`。
-
-### 技术债模板
-
-```markdown
-# Tech Debt Tracker
-
-Last updated: {YYYY-MM-DD}
-
-## High Priority
-
-| Topic | Why it matters | Source | Removal Condition |
-|------|----------------|--------|-------------------|
-
-## Medium Priority
-
-| Topic | Why it matters | Source | Removal Condition |
-|------|----------------|--------|-------------------|
-
-## Debt Handling Rules
-
-- Add debt here when it spans more than one file or more than one task.
-- Remove or downgrade debt when a change clearly addresses it.
-- Link back to the plan, design doc, or code path that best explains the issue.
-```
+要点：仅用 Python 标准库；默认以脚本所在目录的上一级为项目根，在用户项目中可正确解析；验证规则见 `validation-standards.md`。
 
 ## AGENTS.md（成熟项目版）
 
-### 适用条件
-
-- 项目超过 3 个模块
-- 有多人协作
-- 使用多个 AI 工具（Claude、Cursor、Copilot）
-
-**默认用途**：此模板默认用于**根级 `AGENTS.md`** 的完整版。模块级/子级 `AGENTS.md` 可复用其余章节结构，但项目级 `约束机制` 继承根级，不要求重复维护。
-
-### 必需章节（根级 AGENTS.md）
+**适用条件**（满足任一）：项目超过 3 个模块；多人协作；使用多个 AI 工具。默认用于根级 AGENTS.md 的完整版，行数 ≤140；模块级可复用章节结构，`约束机制` 继承根级。
 
 | 章节 | 内容 | 条数 |
 |------|------|------|
@@ -536,8 +158,6 @@ Last updated: {YYYY-MM-DD}
 | **Commands** | 常用命令清单 | 4-8 条 |
 | **Tests** | 验证策略 | 2-4 条 |
 | **Related Skills** | 相关参考链接 | 2-4 条 |
-
-### 模板
 
 ```markdown
 # {模块名} AI Collaboration Rules
@@ -579,40 +199,11 @@ Last updated: {YYYY-MM-DD}
 ## Related Skills
 
 - `{相关文档路径}` [说明]
+- `{相关文档路径}` [说明]
 ```
 
----
+## 模板选择
 
-## 模板选择指南
-
-根据项目阶段选择合适的 AGENTS.md 模板：
-
-| 项目阶段 | 使用模板 | 行数限制 |
-|---------|---------|---------|
-| 刚启动（≤3模块） | 简化版 | ≤150 行 |
-| 成长中（>3模块） | 简化版 → 完整版过渡 | ≤150 → ≤140 |
-| 成熟（多人协作） | 完整版 | ≤140 行 |
-| 使用多AI工具 | 完整版 + 层次继承 | ≤140 行 |
-
-### 过渡时机
-
-当以下条件满足时，考虑从简化版过渡到完整版：
-
-1. 模块数超过 3 个
-2. 开始使用多个 AI 工具
-3. 团队成员超过 1 人
-4. 出现跨模块协作需求
-
-### 层次继承说明
-
-完整版支持层次继承：从最近的 AGENTS.md 开始，向上继承未覆盖的规则。
-
-```
-模块级 AGENTS.md → 子系统级 AGENTS.md → 根级 AGENTS.md
-```
-
-**原则**：
-- 模块级规则只写该模块特有内容
-- 共享规则放上层，避免重复
-- 项目级 `约束机制` 只维护在根级 `AGENTS.md`，子级默认继承，不要求重复
-- 本地文件覆盖上层，不冲突时继承
+- 刚启动（≤3 模块）→ 简化版（≤150 行）
+- 成长中（>3 模块 / 多 AI 工具 / 多人协作 / 出现跨模块协作需求）→ 完整版（≤140 行）
+- 层次继承：模块级 AGENTS.md 只写该模块特有内容，共享规则放上层；本地文件覆盖上层，不冲突时继承。

@@ -16,10 +16,12 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 | 需求采集 | `references/requirements-elicitation.md` |
 | 技术栈推荐 | `references/tech-stack-recommendations.md` |
 | 项目结构 | `references/project-structure.md` |
-| 文档模板 | `references/document-templates.md` |
+| 核心集文档模板 | `references/document-templates.md` |
+| 扩展集文档模板 | `references/docs-templates.md` |
 | 部署规范 | `references/deployment-spec.md` |
 | 验证标准 | `references/validation-standards.md` |
 | 架构约束 | `references/architecture-constraints.md` |
+| 特殊架构（桌面/TUI/Rust workspace/跨代码库） | `references/architecture-special-cases.md` |
 | 工作流治理与完成门禁 | `references/workflow-governance.md` |
 | ExecPlan 格式 | `references/execplan-format.md` |
 | 任务管理 | `references/task-management.md` |
@@ -73,7 +75,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 | 1.5 | 需求采集：用户故事 + 术语澄清 + 验收雏形 | 用户故事清单成型且用户确认 | `references/requirements-elicitation.md` |
 | 2 | 推荐技术栈 | 用户确认推荐 | `references/tech-stack-recommendations.md` |
 | 3 | 生成核心集（目录 + 文件内容 + 根 AGENTS.md 初始约束机制） | 用户确认核心集/扩展集划分 | `references/project-structure.md`, `references/architecture-constraints.md` |
-| 4 | 生成扩展集（按需的 docs/ 子文档，含可部署项目的 `docs/DEPLOYMENT.md`） | 扩展集生成完毕 | `references/document-templates.md`, `references/deployment-spec.md` |
+| 4 | 生成扩展集（按需的 docs/ 子文档，含可部署项目的 `docs/DEPLOYMENT.md`） | 扩展集生成完毕 | `references/docs-templates.md`, `references/deployment-spec.md` |
 | 5 | 配置/细化架构约束 | 架构约束配置完成，必要时生成真实 linter 配置并回写 | `references/architecture-constraints.md` |
 | 5.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
 | 6 | 建立工作流治理 | 用户确认门禁流程或轻量路径 | `references/workflow-governance.md` |

@@ -1,6 +1,6 @@
 # 需求采集方法论（阶段 1.5）
 
-本文件定义阶段 1.5（了解用户之后、推荐技术栈之前）如何把用户的一句想法采集成可写进 spec 的需求。Spec 模板见 `document-templates.md` 与 `workflow-governance.md`；阶段互动话术见 `phase-guidance.md`。
+本文件定义阶段 1.5（了解用户之后、推荐技术栈之前）如何把用户的一句想法采集成可写进 spec 的需求。Spec 模板见 `workflow-governance.md`；阶段互动话术见 `phase-guidance.md`。
 
 ## 目录
 
@@ -114,7 +114,7 @@
 
 | 条件 | 动作 |
 |------|------|
-| 澄清的项目特有术语 ≥ 3 个 | 生成根目录 `CONTEXT.md`，模板见 `document-templates.md` |
+| 澄清的项目特有术语 ≥ 3 个 | 生成根目录 `CONTEXT.md`，模板见 `docs-templates.md` |
 | 术语 < 3 个或无歧义 | 不生成；关键概念写进 AGENTS.md 核心信念即可 |
 
 生成 `CONTEXT.md` 后，在根级 `AGENTS.md` 快速入口追加一行 `- 术语表：见 CONTEXT.md`。
