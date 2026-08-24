@@ -3,6 +3,7 @@
 ## 目录
 
 - [分层架构](#分层架构)
+- [模块设计基线](#模块设计基线)
 - [约束写入方式](#约束写入方式)
   - [决策流程](#决策流程)
   - [硬约束配置文件映射表](#硬约束配置文件映射表)
@@ -39,6 +40,17 @@
 > TUI 应用特殊说明：**EventLoop** 是主循环，驱动事件分发和渲染调度；**View** 负责终端渲染（布局、ANSI 输出、滚动区域），通常用 ratatui 的 `Widget`/`Layout` trait；**State** 维护应用状态树（会话、缓冲区、光标位置等），禁止 View 直接修改状态，必须通过 **Command** 层提交变更；**Command** 是事件处理器，将按键/鼠标事件翻译为状态变更或服务调用。TUI 性能约束：单次渲染帧 < 16ms（60fps），终端兼容性覆盖 xterm/kitty/warp。
 >
 > Rust workspace 跨 crate 特殊说明：**Interface** crate（如 `codex-cli`、`codex-tui`）是入口点，只依赖 Core 的公共 API；**Core** crate（如 `codex-core`）是业务核心，不得依赖任何 Interface 层 crate；**Service** crate（如 `codex-exec`、`codex-skills`）提供独立服务，可依赖 Core 但不得互相依赖；**Infra** crate（如 `codex-config`、`codex-protocol`、`codex-secrets`）是底层基础设施，可被所有上层 crate 依赖。**关键约束**：Core crate 不得"膨胀"——新功能应创建新 crate 而非加入 Core（参见 AGENTS.md 的"resist adding code to codex-core"原则）。
+
+## 模块设计基线
+
+划分模块边界、编写 `docs/ARCHITECTURE.md` 和审查模块形状时，使用以下判据：
+
+- **接口小，实现深**：好模块让调用者学的东西少、能做的事多。设计接口先问三句：方法能更少吗？参数能更简单吗？还能把更多复杂度藏进去吗？
+- **删除测试**：想象删掉这个模块——复杂度直接消失，说明它只是转发层，删掉；复杂度扩散到所有调用点重新出现，说明它在承担真实工作，保留。
+- **接受依赖，不自己创建**：模块需要的协作对象从参数传入，不在内部创建（不在函数体里 `new` 数据库连接、`new` 外部客户端）——这是可测试性的来源。
+- **返回结果，不做隐蔽副作用**：计算型函数返回新值，不就地修改传入的对象。
+
+适用于任何粒度：函数、类、文件、目录分层。项目的关键模块如果明显符合"接口小实现深"，可作为架构不变量写入 `docs/ARCHITECTURE.md` 或 AGENTS.md 架构章节。
 
 ## 约束写入方式
 

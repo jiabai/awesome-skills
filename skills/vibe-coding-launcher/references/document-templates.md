@@ -7,6 +7,7 @@
 - [AGENTS.md（简化版）](#agentsmd简化版)
 - [WORKFLOW.md](#workflowmd)
 - [docs/EXECUTION_GATES.md](#docsexecution_gatesmd)
+- [CONTEXT.md](#contextmd)
 - [TASKS.md](#tasksmd)
 - [scripts/validate_agents_docs.py](#scriptsvalidate_agents_docspy)
 - [docs/ARCHITECTURE.md](#docsarchitecturemd)
@@ -15,6 +16,7 @@
 - [docs/SECURITY.md](#docssecuritymd)
 - [docs/DEPLOYMENT.md](#docsdeploymentmd)
 - [docs/design-docs/core-beliefs.md](#docsdesign-docscore-beliefsmd)
+- [设计决策记录（ADR）](#设计决策记录adr)
 - [docs/product-specs](#docsproduct-specs)
 - [docs/exec-plans 索引与技术债](#docsexec-plans-索引与技术债)
 - [AGENTS.md（成熟项目版）](#agentsmd成熟项目版)
@@ -167,6 +169,7 @@
 - 受影响区域的最小有效测试或检查通过。
 - 文档结构验证通过：`python scripts/validate_agents_docs.py --level ERROR`。
 - touched active ExecPlan 的 Progress、Decision Log 和验证记录已更新。
+- 非平凡任务完成双轴自审：Spec 轴（是否忠实实现来源意图）与 Standards 轴（是否符合项目自身标准）分开检查、分开报告；问题已修复或记录为技术债。
 - 架构、安全、流程、运行时 contract 或运维行为变化已同步到 durable docs。
 
 ## Soft Gates
@@ -184,8 +187,43 @@
 2. 所有受影响区域的硬门禁通过。
 3. 相关 spec、design doc、reference、AGENTS map 或 ExecPlan 已同步。
 4. 新技术债已记录到 active plan 或 `docs/exec-plans/tech-debt-tracker.md`。
-5. 最终交付列出 Passed、Not run 和 Residual risk。
+5. 最终交付列出 Passed、Not run、Residual risk；非平凡任务另加 Spec 自审、Standards 自审两行。
 ```
+
+## CONTEXT.md
+
+项目术语表，位于项目根目录。记录本项目关键概念的标准叫法、定义和要避免的别名，让用户和 AI 用同一套语言；spec 标题、任务名、测试名、代码命名都应使用标准术语。
+
+**生成条件**：阶段 1.5 需求采集中澄清的项目特有术语 ≥ 3 个（采集方法见 `requirements-elicitation.md`）。术语不足或无歧义时不生成，关键概念写入 AGENTS.md 核心信念即可。
+
+**写入位置**：项目根目录 `CONTEXT.md`（与 AGENTS.md、TASKS.md 平级）。
+
+**AGENTS.md 联动**：生成后在根级 AGENTS.md 快速入口追加一行 `- 术语表：见 CONTEXT.md`。未生成时不列出，避免死链。
+
+### 模板
+
+```markdown
+# {项目名} 术语表
+
+本文件定义项目关键概念的标准叫法。AI 生成的 spec、任务、测试和代码命名必须使用标准术语，不使用"避免"列中的别名。
+
+## 语言
+
+**{标准术语}**：
+{一两句话定义：它是什么。}
+_避免_：{别名 1}、{别名 2}
+
+**{标准术语}**：
+{一两句话定义。}
+_避免_：{别名}
+```
+
+### 注意事项
+
+- 定义写"它是什么"，不写"它做什么"；一两句话为限。
+- 只收录本项目特有的概念；超时、缓存等通用编程词不入表。
+- 同一概念有多个叫法时，选定一个标准术语，其余全部列入"避免"。
+- 术语来自需求采集的真实澄清，不要为了填表编造术语。
 
 ## TASKS.md
 
@@ -350,6 +388,38 @@ CLI 本地工具或无服务器项目不生成。后续需要部署时按 `deplo
 
 ---
 
+## 设计决策记录（ADR）
+
+记录“为什么这么做”的轻量决策文档。存放在 `docs/design-docs/`，文件名 `NNNN-<slug>.md`（从 `0001` 递增）。
+
+**生成条件**：一项决策同时满足以下三条才记录，任何一条不满足都跳过：
+
+1. **难以逆转** — 现在改主意的代价可感知（数据库选型、是否上框架）；随手能改的不记。
+2. **无上下文会困惑** — 未来读者（包括以后的 AI 代理）会问“当初为什么这么搞”。
+3. **真实权衡** — 存在合理备选项，且是因具体理由选定的；没有备选项的顺理成章不记。
+
+典型该记的：技术选型带锁定效应的（数据库、部署目标）、数据归属边界（“客户数据只归客户模块，别人只引用 ID”）、有意偏离常规的做法（“手写 SQL 不用 ORM，因为 X”——防止后人好心‘修复’它）。
+
+**与 ExecPlan Decision Log 的分工**：只影响单个任务的决策写进该任务 ExecPlan 的 Decision Log，随计划归档；跨任务长期有效、需要被未来工作尊重的决策才写 ADR。同一决策不写两处。
+
+### 模板
+
+```markdown
+# {决策的短标题}
+
+{1-3 句话：什么背景下、决定了什么、为什么。}
+```
+
+就是这些。ADR 的价值在于记录“做过这个决定”和“为什么”，不在于填满章节。仅在真正需要时追加可选章节：**备选项**（被否掉的方案值得被记住时）、**后果**（下游影响不明显时）。
+
+### 注意事项
+
+- 编号取 `docs/design-docs/` 中现有最大号 +1。
+- 新增 ADR 后同步更新 `docs/design-docs/index.md`。
+- 不要批量预生成空 ADR；出现符合三条件的决策时才创建。
+
+---
+
 ## docs/product-specs
 
 产品规格描述用户可见意图，不记录实施流水账。
@@ -379,6 +449,10 @@ Product specs describe user-visible intent and boundaries before or alongside im
 ## 背景
 
 ## 目标
+
+## 用户故事
+
+（编号列表："作为<角色>，我想要<功能>，以便<好处>"；未做过需求采集的项目可省略本章节）
 
 ## 非目标
 

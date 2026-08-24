@@ -95,30 +95,6 @@ Vibe Coding Launcher 帮你**一次性解决这些问题**——它为你的项�
 
 以下内容是维护者说明，不属于 `SKILL.md` 运行时指令；不要复制到 `SKILL.md` 或 `references/`。
 
-这个 skill 可以按 eval 驱动方式迭代：
-
-```bash
-python scripts/run_evals.py
-python scripts/run_evals.py --write-scorecards .eval-runs/scorecards --write-results-template .eval-runs/results.json
-python scripts/run_evals.py --results .eval-runs/results.json
-```
-
-流程是：用 `evals/evals.json` 保存真实用例和断言，导出 scorecard 给全新 agent 或人工评测，再把结果填入 JSON 模板汇总分数。失败后优先归纳失败模式，再修改 `SKILL.md`、`references/` 或脚本。
-
-复杂案例可以把最小项目上下文放到 `evals/fixtures/`，并在 eval 的 `files` 字段引用。scorecard 会嵌入这些文件内容，评分结果模板会保留 `response_under_test`、`artifacts`、`reason` 和 `evidence`，便于追溯每次判断。
-
-修改评估脚本后运行：
-
-```bash
-python scripts/test_run_evals.py
-```
-
-修改文档验证脚本后运行：
-
-```bash
-python scripts/test_validate_agents_docs.py
-```
-
 ### 维护规则归属
 
 维护时只在对应文件修改规则细节，运行时文件之间只保留必要交叉引用，避免同一规则多处漂移。
@@ -128,6 +104,7 @@ python scripts/test_validate_agents_docs.py
 | 触发/不触发边界 | `SKILL.md` frontmatter `description` |
 | 阶段顺序、恢复模式硬门禁 | `SKILL.md` |
 | 阶段确认话术、术语、常见陷阱 | `references/phase-guidance.md` |
+| 需求采集方法论（阶段 1.5） | `references/requirements-elicitation.md` |
 | 技术栈推荐 | `references/tech-stack-recommendations.md` |
 | 项目文件结构 | `references/project-structure.md` |
 | 生成文档模板 | `references/document-templates.md` |
@@ -137,7 +114,7 @@ python scripts/test_validate_agents_docs.py
 | `TASKS.md` 格式与生命周期 | `references/task-management.md` |
 | ExecPlan 文档格式 | `references/execplan-format.md` |
 | 日常执行、文档同步、渐进验证顺序 | `references/ai-coding-workflow.md` |
-| eval harness 行为 | `scripts/run_evals.py` + `scripts/test_run_evals.py` |
+| 部署规范生成与部署引导 | `references/deployment-spec.md` |
 
 ---
 
@@ -150,22 +127,18 @@ vibe-coding-launcher/
 ├── references/
 │   ├── ai-coding-workflow.md         # 日常开发执行流程
 │   ├── architecture-constraints.md   # 架构约束配置
+│   ├── deployment-spec.md            # 部署规范生成与引导
 │   ├── document-templates.md         # 文档模板
 │   ├── execplan-format.md            # ExecPlan 格式
 │   ├── phase-guidance.md             # 阶段互动细则
 │   ├── project-structure.md          # 项目结构推荐
+│   ├── requirements-elicitation.md   # 需求采集方法论（阶段 1.5）
 │   ├── task-management.md            # 任务管理规范
 │   ├── tech-stack-recommendations.md # 技术栈推荐
 │   ├── validation-standards.md       # 验证标准
 │   └── workflow-governance.md        # 工作流治理与完成门禁
-├── scripts/
-│   ├── run_evals.py                  # 技能评估汇总脚本
-│   ├── test_run_evals.py             # 评估脚本自测
-│   ├── test_validate_agents_docs.py   # 文档验证脚本自测
-│   └── validate_agents_docs.py       # 文档结构验证脚本
-└── evals/
-    ├── evals.json                    # 评估用例
-    └── fixtures/                     # 评估用最小项目上下文
+└── scripts/
+    └── validate_agents_docs.py       # 文档结构验证脚本
 ```
 
 ---

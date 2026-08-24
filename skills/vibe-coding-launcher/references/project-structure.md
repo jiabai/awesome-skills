@@ -32,6 +32,7 @@ project-name/
 
 ```
 project-name/
+├── CONTEXT.md                 # 项目术语表（需求采集中澄清的术语 ≥ 3 个时生成）
 ├── docs/
 │   ├── DESIGN.md              # 设计规范
 │   ├── QUALITY_SCORE.md       # 质量评分追踪
@@ -64,6 +65,7 @@ project-name/
 | 文件/目录 | 生成条件 | 不生成时的替代方案 |
 |-----------|---------|-----------------|
 | `WORKFLOW.md` | 所有项目默认生成；极小一次性脚本可并入 AGENTS.md | AGENTS.md 写明轻量流程 |
+| `CONTEXT.md` | 需求采集（阶段 1.5）中澄清的项目特有术语 ≥ 3 个 | 不生成；关键概念写入 AGENTS.md 核心信念 |
 | `docs/EXECUTION_GATES.md` | 多文件项目或需要测试/发布/交付标准 | AGENTS.md 写明最小验证和收尾格式 |
 | `docs/DESIGN.md` | 项目有 UI 或 API | 设计规范写入 AGENTS.md 核心信念 |
 | `docs/QUALITY_SCORE.md` | 项目超过 3 个模块 | 不生成，待模块增长后再创建 |

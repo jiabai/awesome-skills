@@ -13,6 +13,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 
 | 主题 | 参考文件 |
 |------|----------|
+| 需求采集 | `references/requirements-elicitation.md` |
 | 技术栈推荐 | `references/tech-stack-recommendations.md` |
 | 项目结构 | `references/project-structure.md` |
 | 文档模板 | `references/document-templates.md` |
@@ -28,6 +29,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 ## 使用原则
 
 - 新项目按阶段推进，旧项目先恢复再继续。
+- 新项目在推荐技术栈前先完成阶段 1.5 需求采集；采集方法、深度分级和完成条件见 `references/requirements-elicitation.md`。
 - 触发后先做适用性自检：只有“新项目启动”或“项目恢复定位”继续使用本 skill；若实际是单函数、bug、调试、小功能、重构或编程问答，说明不进入启动流程并直接处理用户任务。
 - 每个阶段都要等用户确认后再推进。
 - 不要生成空文档，不要把计划和执行混在一起。
@@ -68,6 +70,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 | 阶段 | 目标 | 完成条件 | 参考 |
 |------|------|---------|------|
 | 1 | 了解用户：项目 / 语言 / OS | 3 个问题答完 | `references/tech-stack-recommendations.md` |
+| 1.5 | 需求采集：用户故事 + 术语澄清 + 验收雏形 | 用户故事清单成型且用户确认 | `references/requirements-elicitation.md` |
 | 2 | 推荐技术栈 | 用户确认推荐 | `references/tech-stack-recommendations.md` |
 | 3 | 生成核心集（目录 + 文件内容 + 根 AGENTS.md 初始约束机制） | 用户确认核心集/扩展集划分 | `references/project-structure.md`, `references/architecture-constraints.md` |
 | 4 | 生成扩展集（按需的 docs/ 子文档，含可部署项目的 `docs/DEPLOYMENT.md`） | 扩展集生成完毕 | `references/document-templates.md`, `references/deployment-spec.md` |

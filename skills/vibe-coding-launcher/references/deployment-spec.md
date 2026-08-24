@@ -58,11 +58,27 @@
 
 ## 前置条件（一次性）
 
-- 云服务器已初始化：Git / 运行时（Node/Python/Go）/ PM2 / Nginx 已安装，SSH 免密已配置，安全组已开放 22、80、443 端口
+- 云服务器已初始化（未初始化时先执行 Phase 0）：Git / 运行时（Node/Python/Go）/ PM2 / Nginx 已安装，SSH 免密已配置，安全组已开放 22、80、443 端口
 - 本地已装 Tabby，知道服务器 IP
 - Gitee 上已创建项目仓库（如使用 Git 传输）
 
 ## 部署流程（首次）
+
+### Phase 0：初始化服务器（仅首次，已装过可跳过）
+
+```bash
+apt update && apt install -y git nginx
+# 运行时（按项目技术栈三选一）
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt install -y nodejs   # Node.js 项目
+apt install -y python3 python3-pip                                                   # Python 项目
+apt install -y golang                                                                # Go 项目
+# PM2（仅 Node.js 项目需要）
+npm install -g pm2
+```
+
+验证点：`git --version && nginx -v` 有版本输出；`node -v` / `python3 --version` / `go version` 与项目要求的运行时版本一致。
+
+> 端口开放（22/80/443）需在云厂商控制台的安全组中设置，只能用户自己操作；完成后告知 agent 再继续。
 
 ### Phase 1：连接服务器
 
