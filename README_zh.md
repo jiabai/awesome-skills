@@ -10,7 +10,7 @@
 
 <p>
   <img src="https://img.shields.io/badge/Skills-11-blueviolet?style=for-the-badge" alt="Skills" />
-  <img src="https://img.shields.io/badge/Conventions-3-orange?style=for-the-badge" alt="Conventions" />
+  <img src="https://img.shields.io/badge/Conventions-4-orange?style=for-the-badge" alt="Conventions" />
   <img src="https://img.shields.io/badge/Vibe_Coding-2026-brightgreen?style=for-the-badge" alt="Vibe Coding" />
   <img src="https://img.shields.io/badge/License-Open_Source-success?style=for-the-badge" alt="License" />
 </p>
@@ -85,7 +85,7 @@ AI 助手的行为操作系统，定义了 AI 应如何与人类协作。它不�
 | 1. 了解用户 | 3 个关键问题：做什么、技术水平、偏好 |
 | 2. 推荐技术栈 | 16 种项目类型推荐表，匹配最佳技术组合 |
 | 3. 生成项目结构 | 核心集/扩展集目录树，按项目类型智能调整 |
-| 4. 建立知识体系 | AGENTS.md + docs/ 完整目录（ARCHITECTURE.md、DESIGN.md、QUALITY_SCORE.md 等） |
+| 4. 建立知识体系 | AGENTS.md + docs/ 完整目录（ARCHITECTURE.md、DESIGN.md、QUALITY_SCORE.md、DEPLOYMENT.md 等） |
 | 5. 配置架构约束 | 分层架构 + 不变量 + 黄金原则，防止代码退化 |
 | 6. 建立工作流治理 | 门禁流程或轻量路径，按风险选择验证 |
 | 7. 创建首个 Spec / ExecPlan | 规格和计划文档创建并确认 |
@@ -94,6 +94,8 @@ AI 助手的行为操作系统，定义了 AI 应如何与人类协作。它不�
 **恢复机制**：当项目已存在（目录中有 AGENTS.md）时，自动读取上下文从断点继续，而非从零开始。
 
 **熵管理**：技术债追踪 + 质量评分 + 知识新鲜度维护 + 文档结构验证，确保项目长期健康。
+
+**部署引导**：可部署的服务端项目（Node.js / Python / Go）在启动时生成自包含的 `docs/DEPLOYMENT.md` 部署规范；开发完成后，agent 按该规范一步步引导用户手动部署（agent 给命令，用户在自己的 SSH 终端执行并回报结果）。
 
 > 适用场景：想开发项目但不确定技术栈、需要一步步指导、想建立 AI 友好的项目结构、或说"帮我做个东西"时使用。说"继续开发/接着做"时进入恢复模式。
 
@@ -234,6 +236,7 @@ Vibe Coding 方法论的核心规范文件，定义 AI 代理驱动开发的标�
 | `VIBE-CODING-STANDARD.md` | 全局操作系统：知识管理 + 架构约束 + 开发流程 + 可观测性 |
 | `ARCHITECTURE-TEMPLATE.md` | 架构文档模板：如何编写简短、稳定、定位功能的 ARCHITECTURE.md |
 | `PLANS-UNIVERSAL.md` | 执行规范模板：如何编写自包含、活文档、可验证的 ExecPlan |
+| `DEPLOY-SOP.md` | 云服务器部署 SOP：面向非技术用户的 Agent 指导式手动部署（工具、流程、排查、安全规范） |
 
 ### Resource — 参考资源
 
@@ -316,7 +319,8 @@ awesome-skills/
 ├── Conventions/                  # 开发规范
 │   ├── VIBE-CODING-STANDARD.md  # Vibe Coding 全局规范
 │   ├── ARCHITECTURE-TEMPLATE.md # 架构文档模板
-│   └── PLANS-UNIVERSAL.md       # 执行规范模板
+│   ├── PLANS-UNIVERSAL.md       # 执行规范模板
+│   └── DEPLOY-SOP.md            # 云服务器部署 SOP
 ├── Resource/                     # 参考资源
 │   ├── canvas-visualization-resource/  # Canvas 可视化参考
 │   ├── docs-resource/                  # 工程文档参考
@@ -412,6 +416,7 @@ awesome-skills/
 - [Vibe Coding Standard](Conventions/VIBE-CODING-STANDARD.md) - AI 代理驱动开发全局规范
 - [Architecture Template](Conventions/ARCHITECTURE-TEMPLATE.md) - 架构文档生成模板
 - [Plans Universal](Conventions/PLANS-UNIVERSAL.md) - 执行规范模板
+- [Deploy SOP](Conventions/DEPLOY-SOP.md) - 云服务器部署 SOP
 
 ## 贡献
 

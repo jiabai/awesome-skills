@@ -13,6 +13,7 @@
 - [docs/DESIGN.md](#docsdesignmd)
 - [docs/QUALITY_SCORE.md](#docsquality_scoremd)
 - [docs/SECURITY.md](#docssecuritymd)
+- [docs/DEPLOYMENT.md](#docsdeploymentmd)
 - [docs/design-docs/core-beliefs.md](#docsdesign-docscore-beliefsmd)
 - [docs/product-specs](#docsproduct-specs)
 - [docs/exec-plans 索引与技术债](#docsexec-plans-索引与技术债)
@@ -42,6 +43,7 @@
 - 执行清单：见 `TASKS.md`（如存在，全部完成后删除）
 - 工作流：见 `WORKFLOW.md`（如已生成）
 - 完成门禁：见 `docs/EXECUTION_GATES.md`（如已生成）
+- 部署：见 `docs/DEPLOYMENT.md`（如已生成）
 - 执行计划：见 `docs/exec-plans/active/`（如已生成）
 - 技术债：见 `docs/exec-plans/tech-debt-tracker.md`（如已生成）
 
@@ -314,6 +316,18 @@ python scripts/validate_agents_docs.py --project /path/to/project
 ### 未生成时
 
 将关键安全约束（如“API Key 不得硬编码，使用环境变量”）写入 AGENTS.md 核心信念。
+
+## docs/DEPLOYMENT.md
+
+部署规范，回答“开发完成后怎么上线到云服务器”。开发完成后 agent 按此文档引导用户手动部署（agent 给命令、用户在自己的 SSH 终端执行并回报结果）。
+
+**生成条件**：Web/API/需长期运行的服务端项目（Node.js / Python / Go），且用户有云服务器部署需求。
+
+**模板**：完整模板、占位符说明和 agent 引导规则见 `deployment-spec.md`。生成的文档必须自包含并填入项目实际信息（技术栈、端口、启动命令等）。
+
+**未生成时**
+
+CLI 本地工具或无服务器项目不生成。后续需要部署时按 `deployment-spec.md` 的模板补生成，并在 AGENTS.md 快速入口补链接。
 
 ## docs/design-docs/core-beliefs.md
 

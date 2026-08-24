@@ -1,6 +1,6 @@
 ---
 name: vibe-coding-launcher
-description: Vibe Coding 项目启动器与恢复器。用于从零启动一个新软件项目，并先建立 AI 代理友好的项目治理体系（AGENTS.md、WORKFLOW.md、TASKS.md、架构约束、验证脚本、按需 docs/ 与首个 Spec/ExecPlan）；也用于恢复已有 AGENTS.md/TASKS.md/exec-plans 的项目上下文并定位断点。应在用户明确表示要 vibe coding、从零做项目、项目启动、搭项目骨架、建立 AI 协作/代理友好项目体系、不知道技术栈、不会编程需要一步步开始、继续开发/接着做/上次项目/项目恢复时使用。不要用于单个函数或代码片段、普通 bug 修复、调试报错、日常小功能、重构、编程问答，或治理体系已建立后的常规迭代；这些场景只读取现有 AGENTS.md/WORKFLOW.md 作为项目上下文，直接处理任务，不启动 8 阶段流程。
+description: Vibe Coding 项目启动器与恢复器。用于从零启动一个新软件项目，并先建立 AI 代理友好的项目治理体系（AGENTS.md、WORKFLOW.md、TASKS.md、架构约束、验证脚本、按需 docs/、可部署项目的部署规范与首个 Spec/ExecPlan），开发完成后可按项目内部署规范引导用户手动部署；也用于恢复已有 AGENTS.md/TASKS.md/exec-plans 的项目上下文并定位断点。应在用户明确表示要 vibe coding、从零做项目、项目启动、搭项目骨架、建立 AI 协作/代理友好项目体系、不知道技术栈、不会编程需要一步步开始、继续开发/接着做/上次项目/项目恢复时使用。不要用于单个函数或代码片段、普通 bug 修复、调试报错、日常小功能、重构、编程问答，或治理体系已建立后的常规迭代；这些场景只读取现有 AGENTS.md/WORKFLOW.md 作为项目上下文，直接处理任务，不启动 8 阶段流程。
 ---
 
 # Vibe Coding Launcher
@@ -16,6 +16,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 | 技术栈推荐 | `references/tech-stack-recommendations.md` |
 | 项目结构 | `references/project-structure.md` |
 | 文档模板 | `references/document-templates.md` |
+| 部署规范 | `references/deployment-spec.md` |
 | 验证标准 | `references/validation-standards.md` |
 | 架构约束 | `references/architecture-constraints.md` |
 | 工作流治理与完成门禁 | `references/workflow-governance.md` |
@@ -36,6 +37,7 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 - `TASKS.md` 是恢复上下文入口；全部完成后删除。
 - 需要确认话术、步骤模板、术语解释、常见陷阱和示例时，读 `references/phase-guidance.md`。
 - 需要判断是否要创建 spec、ExecPlan、任务清单、设计文档、技术债记录或收尾门禁时，读 `references/workflow-governance.md`。
+- 需要为可部署项目生成 `docs/DEPLOYMENT.md`，或在开发完成后引导用户部署时，读 `references/deployment-spec.md`。
 
 ## 恢复模式
 
@@ -68,12 +70,12 @@ description: Vibe Coding 项目启动器与恢复器。用于从零启动一个�
 | 1 | 了解用户：项目 / 语言 / OS | 3 个问题答完 | `references/tech-stack-recommendations.md` |
 | 2 | 推荐技术栈 | 用户确认推荐 | `references/tech-stack-recommendations.md` |
 | 3 | 生成核心集（目录 + 文件内容 + 根 AGENTS.md 初始约束机制） | 用户确认核心集/扩展集划分 | `references/project-structure.md`, `references/architecture-constraints.md` |
-| 4 | 生成扩展集（按需的 docs/ 子文档） | 扩展集生成完毕 | `references/document-templates.md` |
+| 4 | 生成扩展集（按需的 docs/ 子文档，含可部署项目的 `docs/DEPLOYMENT.md`） | 扩展集生成完毕 | `references/document-templates.md`, `references/deployment-spec.md` |
 | 5 | 配置/细化架构约束 | 架构约束配置完成，必要时生成真实 linter 配置并回写 | `references/architecture-constraints.md` |
 | 5.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
 | 6 | 建立工作流治理 | 用户确认门禁流程或轻量路径 | `references/workflow-governance.md` |
 | 7 | 创建首个 Spec / ExecPlan | 规格和计划文档创建并确认 | `references/workflow-governance.md`, `references/execplan-format.md`, `references/task-management.md` |
-| 8 | 按计划执行 | 每步确认一次并满足完成门禁 | `references/ai-coding-workflow.md`, `references/phase-guidance.md`, `references/workflow-governance.md` |
+| 8 | 按计划执行 | 每步确认一次并满足完成门禁；交付后按 `docs/DEPLOYMENT.md` 引导部署 | `references/ai-coding-workflow.md`, `references/phase-guidance.md`, `references/workflow-governance.md`, `references/deployment-spec.md` |
 
 > 阶段 7 触发条件：改变用户可见行为或新增边界时，先写 Spec 再写 ExecPlan；仅内部重构或架构调整时，只写 ExecPlan。
 

@@ -36,6 +36,7 @@ project-name/
 │   ├── DESIGN.md              # 设计规范
 │   ├── QUALITY_SCORE.md       # 质量评分追踪
 │   ├── SECURITY.md            # 安全规范
+│   ├── DEPLOYMENT.md          # 部署规范（可部署的服务端项目）
 │   ├── design-docs/
 │   │   ├── index.md           # 设计文档索引
 │   │   ├── core-beliefs.md    # 核心信念和原则
@@ -67,6 +68,7 @@ project-name/
 | `docs/DESIGN.md` | 项目有 UI 或 API | 设计规范写入 AGENTS.md 核心信念 |
 | `docs/QUALITY_SCORE.md` | 项目超过 3 个模块 | 不生成，待模块增长后再创建 |
 | `docs/SECURITY.md` | 项目涉及网络请求、数据存储或 API Key | 安全约束写入 AGENTS.md 核心信念 |
+| `docs/DEPLOYMENT.md` | Web/API/需长期运行的服务端项目，且用户有云服务器部署需求（模板见 `deployment-spec.md`） | CLI 本地工具或无服务器项目不生成；待需要部署时补生成 |
 | `docs/design-docs/` | 项目有 3 条以上核心信念需要展开 | 核心信念直接写入 AGENTS.md |
 | `docs/exec-plans/` | 项目需要多步骤开发计划（见 task-management.md） | 小任务用根目录 TASKS.md 追踪，无需建此目录 |
 | `docs/product-specs/` | 项目有多个功能需要规格描述 | 不生成，待功能明确后再创建 |

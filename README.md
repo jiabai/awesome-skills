@@ -10,7 +10,7 @@
 
 <p>
   <img src="https://img.shields.io/badge/Skills-11-blueviolet?style=for-the-badge" alt="Skills" />
-  <img src="https://img.shields.io/badge/Conventions-3-orange?style=for-the-badge" alt="Conventions" />
+  <img src="https://img.shields.io/badge/Conventions-4-orange?style=for-the-badge" alt="Conventions" />
   <img src="https://img.shields.io/badge/Vibe_Coding-2026-brightgreen?style=for-the-badge" alt="Vibe Coding" />
   <img src="https://img.shields.io/badge/License-Open_Source-success?style=for-the-badge" alt="License" />
 </p>
@@ -85,7 +85,7 @@ Helps users build AI agent-friendly project systems from scratch, or resume deve
 | 1. Understand User | 3 key questions: what to build, skill level, preferences |
 | 2. Recommend Tech Stack | 16 project type recommendation table, matching optimal tech combinations |
 | 3. Generate Project Structure | Core/extended directory trees, intelligently adjusted by project type |
-| 4. Build Knowledge System | AGENTS.md + docs/ complete directory (ARCHITECTURE.md, DESIGN.md, QUALITY_SCORE.md, etc.) |
+| 4. Build Knowledge System | AGENTS.md + docs/ complete directory (ARCHITECTURE.md, DESIGN.md, QUALITY_SCORE.md, DEPLOYMENT.md, etc.) |
 | 5. Configure Architecture Constraints | Layered architecture + invariants + golden rules, preventing code degradation |
 | 6. Establish Workflow Governance | Gate process or lightweight path, risk-based validation selection |
 | 7. Create First Spec / ExecPlan | Specification and plan documents created and confirmed |
@@ -94,6 +94,8 @@ Helps users build AI agent-friendly project systems from scratch, or resume deve
 **Resume Mechanism**: When a project already exists (AGENTS.md in the directory), automatically reads context and continues from the breakpoint instead of starting from scratch.
 
 **Entropy Management**: Tech debt tracking + quality scoring + knowledge freshness maintenance + document structure validation, ensuring long-term project health.
+
+**Deployment Guidance**: For server-deployable projects (Node.js / Python / Go), generates a self-contained `docs/DEPLOYMENT.md` spec at project setup; after development completes, the agent guides the user through manual deployment step by step (agent gives commands, user executes in their SSH terminal and reports back).
 
 > Use when: Wanting to build a project but unsure about tech stack, needing step-by-step guidance, building AI-friendly project structures, or saying "help me build something." Saying "continue developing / pick up where I left off" enters resume mode.
 
@@ -234,6 +236,7 @@ Core specification files for the Vibe Coding methodology, defining standard proc
 | `VIBE-CODING-STANDARD.md` | Global operating system: knowledge management + architecture constraints + development process + observability |
 | `ARCHITECTURE-TEMPLATE.md` | Architecture document template: how to write concise, stable, function-oriented ARCHITECTURE.md |
 | `PLANS-UNIVERSAL.md` | Execution specification template: how to write self-contained, living, verifiable ExecPlans |
+| `DEPLOY-SOP.md` | Cloud server deployment SOP: agent-guided manual deployment for non-technical users (tooling, phases, troubleshooting, security rules) |
 
 ### Resource — Reference Resources
 
@@ -316,7 +319,8 @@ awesome-skills/
 ├── Conventions/                  # Development standards
 │   ├── VIBE-CODING-STANDARD.md  # Vibe Coding global specification
 │   ├── ARCHITECTURE-TEMPLATE.md # Architecture document template
-│   └── PLANS-UNIVERSAL.md       # Execution specification template
+│   ├── PLANS-UNIVERSAL.md       # Execution specification template
+│   └── DEPLOY-SOP.md            # Cloud server deployment SOP
 ├── Resource/                     # Reference resources
 │   ├── canvas-visualization-resource/  # Canvas visualization reference
 │   ├── docs-resource/                  # Engineering documentation reference
@@ -412,6 +416,7 @@ awesome-skills/
 - [Vibe Coding Standard](Conventions/VIBE-CODING-STANDARD.md) - AI agent-driven development global specification
 - [Architecture Template](Conventions/ARCHITECTURE-TEMPLATE.md) - Architecture document generation template
 - [Plans Universal](Conventions/PLANS-UNIVERSAL.md) - Execution specification template
+- [Deploy SOP](Conventions/DEPLOY-SOP.md) - Cloud server deployment SOP
 
 ## Contributing
 
