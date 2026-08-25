@@ -34,6 +34,8 @@
 
 <简短描述：描述任务 → 运行代理 → 创建PR → 代理审查>
 
+MUST NOT skip documentation for non-trivial tasks. Create spec → plan → tasks before writing code. Lightweight path ONLY for trivial changes as defined in WORKFLOW.md.
+
 ## 架构
 
 <!-- 仅 CLI/单文件项目需要此章节（替代 docs/ARCHITECTURE.md），控制在 20 行以内 -->
@@ -58,6 +60,7 @@
 
 要点：
 
+- "开发流程"章节必须逐字保留上面的 MUST NOT 强约束，不得改写成"Follow the workflow"之类的软性表述，不得省略；轻量路径的适用范围以 `WORKFLOW.md` 定义为准。
 - "架构"章节仅 CLI/单文件项目需要，只写概述 + 关键文件 + 2-3 条不变量。
 - `agents-only` 模式的配置必须写 `N/A`；`linter+agents` 模式必须填真实约束文件路径。
 
@@ -159,6 +162,8 @@ python scripts/validate_agents_docs.py --project /path/to/project  # 指定项�
 | **Tests** | 验证策略 | 2-4 条 |
 | **Related Skills** | 相关参考链接 | 2-4 条 |
 
+与简化版一致，完整版的 `Avoid` 首条必须逐字保留流程强约束（见下），不得软化或省略。
+
 ```markdown
 # {模块名} AI Collaboration Rules
 
@@ -177,9 +182,9 @@ python scripts/validate_agents_docs.py --project /path/to/project  # 指定项�
 
 ## Avoid
 
+- MUST NOT skip documentation for non-trivial tasks. Create spec → plan → tasks before writing code. Lightweight path ONLY for trivial changes as defined in WORKFLOW.md.
 - [应避免反模式 1]
 - [应避免反模式 2]
-- [应避免反模式 3]
 
 ## 约束机制
 
