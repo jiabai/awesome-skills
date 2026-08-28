@@ -1,130 +1,121 @@
-# AI Coding 执行流程
+# AI Coding Execution Workflow
 
-本文件只负责执行流程、判断方法和回写规则；`TASKS.md` 结构见 `task-management.md`，验证口径见 `validation-standards.md`。
+This document defines execution, decision rules, and write-back behavior. See `task-management.md` for TASKS.md structure and `validation-standards.md` for validation criteria.
 
-## 目录
+## Contents
 
-- [设计原则](#设计原则)
-- [执行流程](#执行流程)
-- [关键步骤](#关键步骤)
-- [验证策略](#验证策略)
-- [执行中遇到 bug](#执行中遇到-bug)
-- [与 ExecPlan 的关系](#与-execplan-的关系)
+- [Design Principles](#design-principles)
+- [Execution Workflow](#execution-workflow)
+- [Key Steps](#key-steps)
+- [Validation Strategy](#validation-strategy)
+- [Bugs During Execution](#bugs-during-execution)
+- [Relationship to ExecPlans](#relationship-to-execplans)
 
 ---
 
-## 设计原则
+## Design Principles
 
-- **入口地图**：`AGENTS.md` 是默认读取入口和关键约束摘要，子文档展开细节但不写冲突规则。
-- **层次继承**：从最近的 `AGENTS.md` 起向上继承，模块级只写特有内容。
-- **避免重复**：共享规则放上层，本地只补差异。
-- **回写触发**：新增或变更子文档时，要同步检查并回写 `AGENTS.md`。
-- **自动标注**：生成的文档要带注释，提醒编辑源头而非产物。
-- **入口分层**：`AGENTS.md` 只做地图，完整流程放 `WORKFLOW.md`，完成标准放 `docs/EXECUTION_GATES.md`。
+- **Entry-point map:** AGENTS.md is the default entry point and key constraint summary. Child documents expand details without conflicting rules.
+- **Hierarchical inheritance:** start with the nearest AGENTS.md and inherit upward. Module-level documents contain only local differences.
+- **No duplication:** shared rules live above; local documents add only differences.
+- **Write-back trigger:** after adding or changing a child document, inspect and update AGENTS.md summaries when needed.
+- **Generated annotation:** generated documents include a comment directing edits to the source rather than the artifact.
+- **Layered entry points:** AGENTS.md is the map, WORKFLOW.md contains the process, and `docs/EXECUTION_GATES.md` defines completion.
 
-### 约束优先级链
+### Constraint Priority
 
-当多个文档中的约束存在冲突时，按以下优先级解决：
+Resolve conflicts in this order:
 
 ```
-AGENTS.md 核心信念 > linter 硬约束配置 > 子文档详细规范
+AGENTS.md core beliefs > mechanically enforced linter configuration > child-document details
 ```
 
-- AGENTS.md 核心信念是最高优先级，子文档约束不得与之矛盾。
-- linter 硬约束是机械强制的，优先级仅次于 AGENTS.md。
-- 子文档可以比 AGENTS.md 更具体，但不能更宽松或相反。
+- AGENTS.md core beliefs have highest priority; child documents never contradict them.
+- Linter constraints mechanically enforce the next priority.
+- Child documents may be more specific, but never looser or opposite.
 
-### 回写触发条件
+### Write-Back Triggers
 
-以下情况必须检查并回写 AGENTS.md：
+Inspect and update AGENTS.md when:
 
-1. 新增子文档时 — 将核心约束摘要写入 AGENTS.md 核心信念。
-2. 子文档中约束发生变更时 — 同步更新 AGENTS.md 中的对应摘要。
-3. 发现子文档与 AGENTS.md 矛盾时 — 以 AGENTS.md 为准修正子文档；如确需放宽，先改 AGENTS.md 再改子文档。
+1. A child document is added—summarize its core constraints in AGENTS.md core beliefs.
+2. A child constraint changes—update the corresponding summary.
+3. A child document conflicts with AGENTS.md—correct the child using AGENTS.md as authority. If relaxation is truly required, change AGENTS.md first.
 
----
+## Execution Workflow
 
-## 执行流程
+### Routine Development
 
-### 日常开发流程
+1. Locate and read the nearest AGENTS.md, then inherit parent rules.
+2. Inspect the implementation, call sites, tests, and relevant documents.
+3. Route durable intent to a Product Spec, architecture rationale to a design document, implementation sequencing to an ExecPlan, and active execution to root TASKS.md or a sibling plan checklist.
+4. Decide whether a Product Spec is needed. User-visible behavior, new boundaries, or changes to security/data/deployment semantics require `docs/product-specs/` first.
+5. Execute at the right granularity: implement small work directly; for non-trivial work, formal coding follows the approved active ExecPlan and its sibling checklist when present.
+6. Update TASKS.md after each task; create task-scoped commits only when authorized.
+7. Validate minimum → expanded → full.
+8. Before delivery, check AGENTS.md, document synchronization, constraint consistency, and completion gates.
 
-1. 定位最近的 `AGENTS.md`，先读它，再向上继承规则。
-2. Inspect 现有实现、调用点、测试和相关文档。
-3. 判断是否需要创建 `docs/topic.md`、根级 `TASKS.md` 或 `docs/exec-plans/active/<slug>-tasks.md` checklist。
-4. 判断是否需要 product spec；改变用户可见行为、新边界、安全/数据/部署语义时，先写 `docs/product-specs/`。
-5. 按任务粒度执行；小任务直接实现，大功能交给 ExecPlan。
-6. 每完成一项就更新 `TASKS.md`，必要时原子提交。
-7. 按最小 → 扩大 → 全量做验证。
-8. 提交前检查 `AGENTS.md`、文档同步、约束一致性和完成门禁。
+## Key Steps
 
----
+### 1. Locate the Nearest AGENTS.md
 
-## 关键步骤
+- Search upward from the working directory.
+- Read the nearest file first, then inherit uncovered parent rules.
 
-### 1. 定位最近的 `AGENTS.md`
+### 2. Inspect the Existing Implementation
 
-- 从当前工作目录向上查找最近的 `AGENTS.md`。
-- 先读最近的，再向上继承未覆盖规则。
+- Before changing code, read the current implementation, adjacent call sites, nearest tests, and relevant documents.
+- Never edit code from assumptions alone.
 
-### 2. Inspect 现有实现
+### 3. Design Decision
 
-- 修改代码前先读当前实现、相邻调用点、最近测试和相关文档。
-- 不基于假设直接修改代码。
+- **Cross-module change:** when multiple directories or shared interfaces/types change, create `docs/exec-plans/active/<slug>-plan.md` and, for a larger task list, a sibling `<slug>-tasks.md`. Keep root TASKS.md focused on current recovery context.
+- **Architecture decision:** when adding a durable layer, dependency direction, or abstraction, create `docs/design-docs/<slug>.md` explaining the decision and constraints.
+- **User-visible behavior:** create or update `docs/product-specs/YYYY-MM-DD-<slug>.md` and confirm goals, non-goals, and acceptance criteria first.
+- **Non-trivial implementation:** use `docs/exec-plans/active/<slug>-plan.md` according to `workflow-governance.md` and execute after human confirmation.
+- **Formal coding gate:** before writing code, read the approved active ExecPlan and its sibling checklist when present. Follow their scope, sequence, acceptance, validation, and constraints; pause for any required plan change.
+- **Small single-module change:** implement directly when one directory changes and no shared interface/type is touched.
 
-### 3. 设计判断
+First list files expected to change, group them by directory, and identify shared types and interfaces.
 
-- **跨模块变更**：修改多个目录或共享接口/类型时，创建 `docs/topic.md` + `docs/exec-plans/active/<slug>-tasks.md` checklist；根级 `TASKS.md` 只记录当前断点恢复需要。
-- **新架构决策**：添加新层级、新依赖方向、新抽象层时，创建 `docs/topic.md` 明确理由。
-- **用户可见行为变更**：新增或修改 `docs/product-specs/YYYY-MM-DD-<slug>.md`，先确认目标、非目标和验收标准。
-- **非平凡实施**：符合 `workflow-governance.md` 中定义的非平凡任务，创建 `docs/exec-plans/active/<slug>-plan.md`，并在人类确认后执行。
-- **单模块小改动**：只改单个目录且不触及共享接口/类型时，直接实现。
+### 4. Execution Tracking
 
-判断时先列出将修改的文件，再按目录分组，看是否涉及共享类型或共享接口。
+- TASKS.md records execution-level tasks; see `task-management.md`.
+- Check each item immediately after completion instead of batching updates.
+- Update the active ExecPlan's Progress, Decision Log, and validation records after each meaningful batch.
 
-### 4. 执行追踪
+### 5. Commit Policy
 
-- `TASKS.md` 记录执行级任务；格式和写法见 `task-management.md`。
-- 每完成一项就勾选一项，不要攒着一起改。
+- Commit only when the user or repository workflow authorizes it.
+- Stage explicit task-scoped paths and commit a meaningful independently verifiable batch. Keep unrelated and incomplete work out of the commit.
 
-### 5. 原子提交
+### 6. Progressive Validation
 
-- 每完成一个可独立验证的小任务就更新 `TASKS.md` 并提交。
-- 多项相关任务可以合并，但不能把未完成的内容一起提交。
+- Run the smallest check first, then decide whether to expand.
+- See `validation-standards.md` for layers and skip criteria.
 
-### 6. 渐进验证
+### 7. Document Synchronization
 
-- 先跑最小验证，再决定是否扩大。
-- 具体验证层次和跳过条件见 `validation-standards.md`。
+- Before delivery or an authorized commit, determine whether AGENTS.md needs an update.
+- Add new rules, remove stale ones, and resolve conflicts in favor of AGENTS.md.
 
-### 7. 文档同步
+## Validation Strategy
 
-- 提交前检查 `AGENTS.md` 是否需要更新。
-- 新规则写入、过时规则删除，冲突时以 `AGENTS.md` 为准。
+Keep only one ordering: minimum → expanded → full. See `validation-standards.md` for detailed checks, commands, and severities.
 
----
+## Bugs During Execution
 
-## 验证策略
+Core discipline: **build the smallest stable reproduction loop before attempting a fix.** Reading code and forming theories before making the failure appear is guessing. Stop immediately if that happens.
 
-- 只保留验证顺序：最小 → 扩大 → 全量。
-- 更细的校验口径、命令和严重程度见 `validation-standards.md`。
+1. **Reproduce:** find an action or command that reliably triggers the issue, such as refreshing a page, curling an endpoint, or running a script. Increase the reproduction rate of intermittent failures by looping or applying load.
+2. **Minimize:** remove irrelevant steps and data until the smallest scenario still fails; every remaining element must contribute.
+3. **Fix:** change the code.
+4. **Retest:** confirm the reproduction command no longer fails and remove every temporary diagnostic message.
+5. **If blocked:** when reproduction or repair is impossible, report what was tried and request the original error text or screenshot. Do not make blind changes without a reproduction.
 
----
+## Relationship to ExecPlans
 
-## 执行中遇到 bug
-
-核心纪律：**先构建能稳定复现问题的最小回路，再动手修**。没有复现手段就开始读代码提假设，是瞎猜——发现自己在"还没让错误出现就开始推理"时，立即停下。
-
-1. **复现**：找到一个能稳定让问题出现的操作或命令（刷新某个页面、`curl` 某个端点、跑某个脚本）。偶发问题先提高复现率（循环跑 10 次、加压）。
-2. **缩小**：去掉无关步骤和数据，缩到最小场景仍能复现；剩下的每个元素都对复现有贡献。
-3. **修复**：改代码。
-4. **复测**：确认复现命令不再报错；临时加的调试输出全部清理干净。
-5. **走不通时**：无法复现或修不好，如实向用户报告已尝试的手段，并请用户提供报错原文或截图；不在没有复现的情况下盲改代码。
-
----
-
-## 与 ExecPlan 的关系
-
-- 30 分钟内能完成的事，用本流程 + 根级 `TASKS.md`。
-- 需要数小时到数天的功能，用 ExecPlan + `docs/exec-plans/active/<slug>-tasks.md`。
-- ExecPlan 负责里程碑，本文件负责执行动作。
-- ExecPlan 完成后移动到 `docs/exec-plans/completed/`，同步 active/completed 索引；跨任务技术债写入 `docs/exec-plans/tech-debt-tracker.md`。
+- Work that fits within 30 minutes uses this workflow plus root TASKS.md.
+- Multi-hour or multi-day work uses an ExecPlan plus `docs/exec-plans/active/<slug>-tasks.md`.
+- ExecPlans own milestones and approved scope; this document owns execution actions within that scope.
+- Move completed ExecPlans to `completed/`, update both indexes, and record cross-task debt in `tech-debt-tracker.md`.

@@ -1,103 +1,64 @@
 ---
 name: vibe-coding-launcher
-description: Vibe Coding 项目启动器与恢复器。用于从零启动一个新软件项目，并先建立 AI 代理友好的项目治理体系（AGENTS.md、WORKFLOW.md、TASKS.md、架构约束、验证脚本、按需 docs/、可部署项目的部署规范与首个 Spec/ExecPlan），开发完成后可按项目内部署规范引导用户手动部署；也用于恢复已有 AGENTS.md/TASKS.md/exec-plans 的项目上下文并定位断点。应在用户明确表示要 vibe coding、从零做项目、项目启动、搭项目骨架、建立 AI 协作/代理友好项目体系、不知道技术栈、不会编程需要一步步开始、继续开发/接着做/上次项目/项目恢复时使用。不要用于单个函数或代码片段、普通 bug 修复、调试报错、日常小功能、重构、编程问答，或治理体系已建立后的常规迭代；这些场景只读取现有 AGENTS.md/WORKFLOW.md 作为项目上下文，直接处理任务，不启动 8 阶段流程。
+description: Use when launching a software project from scratch, choosing a stack for a non-programmer, establishing AI-agent project governance, or recovering an existing project from AGENTS.md, TASKS.md, or ExecPlans. Excludes routine implementation, debugging, bug fixes, isolated features, refactoring, and programming questions after governance exists.
 ---
 
 # Vibe Coding Launcher
 
-你是 Vibe Coding 项目启动器与恢复器。目标是先帮用户搭起 AI 代理友好的项目体系，再按阶段推进开发。
+Establish an AI-agent-friendly project system. Core principle: **Humans steer. Agents execute.**
 
-核心原则：**Humans steer. Agents execute.**
+## Route
 
-## 入口索引
+1. **Launch:** new project, undecided stack, or governance setup.
+2. **Recovery:** an existing project has `AGENTS.md` and the user asks to resume or locate the stopping point.
+3. Otherwise exit this workflow and follow existing project instructions.
 
-| 主题 | 参考文件 |
-|------|----------|
-| 需求采集 | `references/requirements-elicitation.md` |
-| 技术栈推荐 | `references/tech-stack-recommendations.md` |
-| 项目结构 | `references/project-structure.md` |
-| 核心集文档模板 | `references/document-templates.md` |
-| 扩展集文档模板 | `references/docs-templates.md` |
-| 部署规范 | `references/deployment-spec.md` |
-| 验证标准 | `references/validation-standards.md` |
-| 架构约束 | `references/architecture-constraints.md` |
-| 特殊架构（桌面/TUI/Rust workspace/跨代码库） | `references/architecture-special-cases.md` |
-| 工作流治理与完成门禁 | `references/workflow-governance.md` |
-| ExecPlan 格式 | `references/execplan-format.md` |
-| 任务管理 | `references/task-management.md` |
-| 执行流程 | `references/ai-coding-workflow.md` |
-| 互动细则 | `references/phase-guidance.md` |
+Read only current-phase references. Add `references/phase-guidance.md` for interaction examples and special-case references when applicable.
 
-## 使用原则
+## Human Gates
 
-- 新项目按阶段推进，旧项目先恢复再继续。
-- 新项目在推荐技术栈前先完成阶段 1.5 需求采集；采集方法、深度分级和完成条件见 `references/requirements-elicitation.md`。
-- 触发后先做适用性自检：只有“新项目启动”或“项目恢复定位”继续使用本 skill；若实际是单函数、bug、调试、小功能、重构或编程问答，说明不进入启动流程并直接处理用户任务。
-- 每个阶段都要等用户确认后再推进。
-- 不要生成空文档，不要把计划和执行混在一起。
-- `AGENTS.md` 只做快速入口地图；详细、变化快的规则放入 `docs/`。
-- 非平凡任务、轻量路径和完成门禁的判断以 `references/workflow-governance.md` 为准。
-- 恢复时先 inspect 现有实现，再动手。
-- `TASKS.md` 是恢复上下文入口；全部完成后删除。
-- 需要确认话术、步骤模板、术语解释、常见陷阱和示例时，读 `references/phase-guidance.md`。
-- 需要判断是否要创建 spec、ExecPlan、任务清单、设计文档、技术债记录或收尾门禁时，读 `references/workflow-governance.md`。
-- 需要为可部署项目生成 `docs/DEPLOYMENT.md`，或在开发完成后引导用户部署时，读 `references/deployment-spec.md`。
+Pause for decisions about requirements, stack, document set, Product Spec, and ExecPlan. Always pause after a recovery summary.
 
-## 恢复模式
+After approval of an ExecPlan or lightweight task, execute through meaningful milestones. Pause for a missing decision, authorization for an external or irreversible action, material scope or risk changes, or an unresolved error. Guided deployment remains one user-executed command per confirmation.
 
-当项目目录里已有 `AGENTS.md` 时：
+## Formal Coding Gate
 
-1. 读 `AGENTS.md`，了解项目架构和核心信念。
-2. 读 `TASKS.md`；若不存在，查看 `docs/exec-plans/active/` 和 `docs/exec-plans/completed/`。
-3. 尝试运行文档验证：优先运行项目内 `python scripts/validate_agents_docs.py --level ERROR`；若项目内脚本缺失，使用本 skill 自带脚本加 `--project <项目根目录>` 验证，或把脚本缺失记录为恢复摘要中的阻塞/风险。不要因为验证脚本缺失而跳过恢复定位，也不要在用户确认前自动补生成文档。
-4. inspect 相关代码和测试，确认当前状态。
-5. 只输出恢复摘要并询问从哪里继续；用户再次确认前不要创建、修改或执行计划。
+Formal coding starts only after reading the approved active ExecPlan and its sibling task checklist when present. Treat the active ExecPlan as the execution source of truth for scope, sequence, acceptance, validation, and constraints. Update its progress and decisions after each meaningful batch. If work needs a plan change, pause, update it, and obtain approval before continuing.
 
-恢复摘要必须包含：
+## Recovery
 
-- 已读取的上下文来源（如 `AGENTS.md`、`TASKS.md`、active ExecPlan）。
-- 当前阶段、当前任务或上次断点。
-- 已完成事项、下一步候选和阻塞/不确定项。
-- 一个明确确认问题：是否从某个具体断点继续。
+1. Read root `AGENTS.md`, optional `TASKS.md`, and any ExecPlan needed to locate the stopping point.
+2. Attempt `python scripts/validate_agents_docs.py --level WARN`. If the project script is missing, use this skill's validator with `--project <project-root>` or record the missing validator as an uncertainty.
+3. Inspect relevant implementation and tests to verify document claims.
+4. Summarize sources, stopping point, completed work, next step, blockers, validation findings, and one specific continuation question.
 
-恢复原则：
+The first recovery turn is orientation only: preserve project files and wait after the summary. “Continue development” authorizes orientation, not implementation.
 
-- 不重新生成已有文档。
-- 不重复已完成工作。
-- 先 inspect，再动手。
-- 用户说“继续开发”“接着做”“上次的项目”只表示进入恢复定位，不等于允许直接推进；完成恢复摘要后，用户再次明确确认前不推进到下一阶段。
+## Launch Phases
 
-## 阶段总览
+| Phase | Action | Checkable completion criterion | Read |
+|------|--------|--------------------------------|------|
+| 1 | Capture project goal, user language familiarity, and OS | All three answers are recorded | `references/tech-stack-recommendations.md` |
+| 1.5 | Elicit user stories, terms, coverage, and draft acceptance | Stories, applicable coverage, and acceptance are explicitly confirmed | `references/requirements-elicitation.md` |
+| 2 | Recommend the simplest suitable stack with tradeoffs | The user selects a stack | `references/tech-stack-recommendations.md` |
+| 3 | Generate the mandatory core set and conditionally create `TASKS.md` | Required files, validator, and root `Constraint Mechanism` exist; the user confirms the file set | `references/project-structure.md`, `references/document-templates.md`, `references/architecture-constraints.md` |
+| 4 | Generate only applicable extended documents | Each applicable document is non-empty and every Quick Entry link resolves | `references/docs-templates.md`, `references/deployment-spec.md` |
+| 5 | Configure architecture constraints | The declared mode is valid; `linter+agents` names an existing configuration | `references/architecture-constraints.md`; add `references/architecture-special-cases.md` when applicable |
+| 5.1 | Validate documents | No ERROR remains; every WARN is resolved or explicitly accepted with a reason and residual risk | `references/validation-standards.md` |
+| 6 | Classify the workflow | Full or lightweight path and completion gates are recorded | `references/workflow-governance.md` |
+| 7 | Write the first Spec and/or ExecPlan | Required artifacts and validation steps exist; the user approves the execution plan | `references/workflow-governance.md`, `references/execplan-format.md`, `references/task-management.md` |
+| 8 | Execute the approved work | Tests and hard gates pass, active records are current, and delivery reports validation and residual risk | `references/ai-coding-workflow.md`, `references/execplan-format.md`, `references/workflow-governance.md`, `references/deployment-spec.md` |
 
-| 阶段 | 目标 | 完成条件 | 参考 |
-|------|------|---------|------|
-| 1 | 了解用户：项目 / 语言 / OS | 3 个问题答完 | `references/tech-stack-recommendations.md` |
-| 1.5 | 需求采集：用户故事 + 术语澄清 + 验收雏形 | 用户故事清单成型且用户确认 | `references/requirements-elicitation.md` |
-| 2 | 推荐技术栈 | 用户确认推荐 | `references/tech-stack-recommendations.md` |
-| 3 | 生成核心集（目录 + 文件内容 + 根 AGENTS.md 初始约束机制） | 用户确认核心集/扩展集划分 | `references/project-structure.md`, `references/architecture-constraints.md` |
-| 4 | 生成扩展集（按需的 docs/ 子文档，含可部署项目的 `docs/DEPLOYMENT.md`） | 扩展集生成完毕 | `references/docs-templates.md`, `references/deployment-spec.md` |
-| 5 | 配置/细化架构约束 | 架构约束配置完成，必要时生成真实 linter 配置并回写 | `references/architecture-constraints.md` |
-| 5.1 | 文档验证 | 通过 `--level ERROR` | `references/validation-standards.md` |
-| 6 | 建立工作流治理 | 用户确认门禁流程或轻量路径 | `references/workflow-governance.md` |
-| 7 | 创建首个 Spec / ExecPlan | 规格和计划文档创建并确认 | `references/workflow-governance.md`, `references/execplan-format.md`, `references/task-management.md` |
-| 8 | 按计划执行 | 每步确认一次并满足完成门禁；交付后按 `docs/DEPLOYMENT.md` 引导部署 | `references/ai-coding-workflow.md`, `references/phase-guidance.md`, `references/workflow-governance.md`, `references/deployment-spec.md` |
+Write a Product Spec before the ExecPlan for user-visible behavior or a new product, data, security, or deployment boundary. Durable architecture decisions also need a design document.
 
-> 阶段 7 触发条件：改变用户可见行为或新增边界时，先写 Spec 再写 ExecPlan；仅内部重构或架构调整时，只写 ExecPlan。
+## Rules
 
-## 验证
+- Phase 7 plans; Phase 8 implements.
+- Generate documents only when their stated conditions are met. Create `TASKS.md` while execution tasks exist, keep it current, and delete it after completion.
+- Non-trivial work requires a reviewable Spec when applicable, an ExecPlan, and verifiable task breakdown before code changes.
+- Keep root `AGENTS.md` concise. Summarize child-document constraints in its core beliefs; root `AGENTS.md` is authoritative when rules conflict.
+- Completion claims list passed checks, checks not run, accepted WARNs, and residual risks. A failing hard gate prevents a completion claim.
 
-- 第五阶段约束落地后立即运行 `python scripts/validate_agents_docs.py --level ERROR`，有 ERROR 先修复再继续。
-- 对话结束前运行 `python scripts/validate_agents_docs.py --level WARN`，发现 WARN 立即修复。
-- 验证细则和分级见 `references/validation-standards.md`。
+## Validation
 
-## 全局规则
-
-- 不跳过阶段衔接确认。
-- 不跳过约束落地后的文档验证。
-- 不生成空文档。
-- 不忽略 `TASKS.md` 维护。
-- 第七阶段生成 spec / ExecPlan，第八阶段执行计划，两者不可合并。
-- 新规则写回 `AGENTS.md`，冲突时以 `AGENTS.md` 为准。
-- 子文档新增/变更约束时，检查 AGENTS.md 核心信念是否已同步摘要；冲突时以 AGENTS.md 为准。
-- 对非平凡任务，不要直接从用户需求跳到代码；先形成可审查的 spec、ExecPlan 和任务拆分。
-- 完成声明必须包含验证结果、未运行项和残余风险；未通过硬门禁时不得声称完成。
+At each document gate, run `python scripts/validate_agents_docs.py --level WARN`. Resolve every ERROR. Resolve every WARN or record why it is accepted, together with the residual risk. Report accepted WARNs explicitly; they are not a clean zero-finding pass. See `references/validation-standards.md` for severity and command details.

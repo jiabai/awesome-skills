@@ -1,96 +1,99 @@
-# ExecPlan 格式标准
+# ExecPlan Format Standard
 
-## 目录
+## Contents
 
-- [必需章节](#必需章节)
-- [各章节详细规范](#各章节详细规范)
-- [首个 ExecPlan 建议](#首个-execplan-建议)
-- [完成与归档](#完成与归档)
-- [docs/exec-plans 目录模板](#docsexec-plans-目录模板)
-- [进阶：开发循环](#进阶开发循环)
+- [Required Sections](#required-sections)
+- [Section Requirements](#section-requirements)
+- [First ExecPlan](#first-execplan)
+- [Completion and Archival](#completion-and-archival)
+- [docs/exec-plans Templates](#docsexec-plans-templates)
+- [Advanced Development Loop](#advanced-development-loop)
 
 ---
 
-## 必需章节
+## Required Sections
 
-每个计划必须包含：
+Every plan contains:
 
 ```markdown
-# <简短、行动导向的描述>
+# <Short, Action-Oriented Description>
 
-This ExecPlan is a living document. The sections Progress, Surprises & Discoveries,
+This ExecPlan is a living document and the execution source of truth while active. The sections Progress, Surprises & Discoveries,
 Decision Log, and Outcomes & Retrospective must be kept up to date as work proceeds.
 
 ## Purpose / Big Picture
-完成后用户能做什么新事情？如何看到它工作？
+What new thing can the user do afterward, and how can they see it work?
 
 ## Progress
-- [ ] 待完成的里程碑（每条标注时间戳）
+- [ ] Incomplete milestone with timestamp
 
 ## Surprises & Discoveries
-工作中发现的事实、证据和影响。
+New facts, evidence, and impact discovered during the work.
 
 ## Decision Log
-重要决策、理由、日期和作者。
+Important decisions, rationale, date, and author.
 
 ## Outcomes & Retrospective
-完成结果、验证结果、遗留风险和后续工作。
+Actual results, validation, residual risk, and follow-up work.
 
 ## Context and Orientation
-当前状态、关键文件、术语和需要先读的上下文。
+Current state, key files, terminology, and prerequisite context.
 
 ## Plan of Work
-按顺序列出工作批次。
+Ordered implementation batches.
 
 ## Concrete Steps
-工作目录、完整命令行、预期输出
+Working directory, complete commands, and expected output.
 
 ## Validation and Acceptance
-启动方式、可观察行为、测试命令和预期结果
+Startup instructions, observable behavior, test commands, and expected results.
 ```
 
-## 各章节详细规范
+## Section Requirements
 
-**Purpose / Big Picture**：用 1-2 句话回答“完成后用户能做什么新事情？”和“怎么看到它工作？”。不要写技术细节，只写用户可感知的结果。
+**Purpose / Big Picture:** In one or two sentences, answer what new capability the user gains and how they will observe it. Describe user-visible outcomes, not technical details.
 
-**Progress**：列出所有待完成里程碑，每条前加 `- [ ]`，完成后改为 `- [x]` 并标注时间。里程碑粒度：每个里程碑是子功能可验证的完成节点（如“API 框架就绪”、“数据库 schema 完成”），对应根级 `TASKS.md` 或 `docs/exec-plans/active/<feature-slug>-tasks.md` 中的一批执行级任务。里程碑本身的完成条件是对应任务均已勾选并通过验证。
+**Progress:** List every milestone with `- [ ]`; change to `- [x]` with a timestamp when complete. A milestone is a verifiable sub-feature, such as "API framework ready" or "database schema complete," corresponding to a batch of execution tasks in root TASKS.md or a sibling task file. Mark it complete only when all corresponding tasks and validation pass.
 
-**Surprises & Discoveries**：记录工作中发现的新事实，包含 Evidence。不要把猜测写成结论。
+**Surprises & Discoveries:** Record newly discovered facts with Evidence. Never present a guess as a conclusion.
 
-**Decision Log**：记录会影响后续维护的选择，格式建议为 Decision / Rationale / Date/Author。
+**Decision Log:** Record choices that affect future maintenance. Recommended fields: Decision / Rationale / Date / Author.
 
-**Outcomes & Retrospective**：计划完成、废弃或被替代时更新。说明实际完成了什么、验证了什么、未验证什么、还有什么风险。
+**Outcomes & Retrospective:** Update when the plan completes, is abandoned, or is superseded. State what was completed, what was and was not validated, and remaining risk.
 
-**Context and Orientation**：列出相关路径和为什么重要。恢复模式下先读这一节和 Progress。
+**Context and Orientation:** List relevant paths and why they matter. In recovery mode, read this and Progress first.
 
-**Plan of Work**：描述实施批次，帮助人类 review 范围。
+**Plan of Work:** Describe implementation batches so humans can review scope.
 
-**Concrete Steps**：每个步骤必须包含工作目录（相对于项目根目录）、完整可复制的命令行、预期输出示例。不要写“运行安装命令”，要写“运行 `pip install flask`”。
+While active, follow the approved plan's scope, sequence, acceptance, validation, and constraints. Record approved deviations in the Decision Log before implementing them.
 
-**Validation and Acceptance**：包含启动方式（如 `python app.py`）、可观察行为（如“浏览器打开 localhost:5000 看到 Hello World”）、测试命令和预期结果。
+**Concrete Steps:** Every step names its working directory relative to project root, a complete copyable command, and representative expected output. Write `pip install flask`, not "run the install command."
 
-## 首个 ExecPlan 建议
+**Validation and Acceptance:** Include how to start the project, observable behavior, test commands, and expected results.
 
-推荐从最小可运行版本开始：
-- Web应用：一个能访问的页面，返回 “Hello World”
-- API服务：一个健康检查端点 `/health` 返回 200
-- 命令行：一个能打印帮助信息的命令
-- AI应用：一个能调用 API 并返回结果的脚本
-- 单文件脚本：一个能运行并输出结果的 main 函数
+## First ExecPlan
 
-文件保存到 `docs/exec-plans/active/`，文件名格式：`YYYY-MM-DD-简短描述.md`。
+Start with the smallest runnable version:
 
-## 完成与归档
+- Web app: one accessible page returning "Hello World."
+- API service: `/health` returns 200.
+- CLI: one command that prints help.
+- AI application: one script that calls the API and returns a result.
+- Single-file script: one `main` function that runs and prints output.
 
-计划完成后：
+Save under `docs/exec-plans/active/` as `YYYY-MM-DD-short-description.md`.
 
-1. 更新 `Outcomes & Retrospective`，写明通过的验证、未运行项和残余风险。
-2. 将文件从 `docs/exec-plans/active/` 移到 `docs/exec-plans/completed/`。
-3. 更新 `active/index.md` 和 `completed/index.md`。
-4. 如果产生跨任务技术债，记录到 `docs/exec-plans/tech-debt-tracker.md`。
-5. 不要把完成计划继续留在 active 目录。
+## Completion and Archival
 
-## docs/exec-plans 目录模板
+After a plan completes:
+
+1. Update `Outcomes & Retrospective` with passed validation, checks not run, and residual risks.
+2. Move the file from `docs/exec-plans/active/` to `docs/exec-plans/completed/`.
+3. Update `active/index.md` and `completed/index.md`.
+4. Record cross-task technical debt in `docs/exec-plans/tech-debt-tracker.md`.
+5. Do not leave completed plans in `active/`.
+
+## docs/exec-plans Templates
 
 ### index.md
 
@@ -114,7 +117,7 @@ Exec plans capture task-specific implementation intent, progress, and recovery c
 - Capture cross-cutting debt in `tech-debt-tracker.md`.
 ```
 
-`active/index.md` 和 `completed/index.md` 使用表格列出 `File` 与 `Focus`：
+Both `active/index.md` and `completed/index.md` list File and Focus:
 
 ```markdown
 # {Active|Completed} Exec Plans
@@ -133,35 +136,33 @@ Last updated: {YYYY-MM-DD}
 ## High Priority
 
 | Topic | Why it matters | Source | Removal Condition |
-|------|----------------|--------|-------------------|
+|-------|----------------|--------|-------------------|
 
 ## Medium Priority
 
 | Topic | Why it matters | Source | Removal Condition |
-|------|----------------|--------|-------------------|
+|-------|----------------|--------|-------------------|
 
 ## Debt Handling Rules
 
 - Add debt here when it spans more than one file or more than one task.
 - Remove or downgrade debt when a change clearly addresses it.
-- Link back to the plan, design doc, or code path that best explains the issue.
+- Link back to the plan, design document, or code path that best explains the issue.
 ```
 
-## 进阶：开发循环
+## Advanced Development Loop
 
-当项目完成首个 ExecPlan 并进入日常迭代后，逐步引入更高效的工作循环：
+After the first ExecPlan and once routine iteration begins, adopt:
 
 ```
-描述任务 → 运行代理（按 ExecPlan 执行）→ 验证结果 → 处理反馈 → 合并
+Describe task → Run agent against ExecPlan → Validate → Address feedback → Merge
 ```
 
-核心原则：
+| Principle | Meaning |
+|-----------|---------|
+| Short lifecycle | Each ExecPlan covers one feature and finishes quickly |
+| Minimum blocking | One failed test does not block unrelated progress; address it in the next run |
+| Corrections are cheap; waiting is expensive | Finish, then optimize; avoid perfectionism |
+| Agent self-review | The agent runs lints and tests before human review |
 
-| 原则 | 说明 |
-|------|------|
-| 短生命周期 | 每个 ExecPlan 聚焦一个功能，快速完成 |
-| 最小阻塞 | 单个测试失败不阻塞整体，后续运行处理 |
-| 修正便宜，等待昂贵 | 先完成再优化，不过度追求完美 |
-| 代理自审查 | 代理执行后自行检查 linter 和测试，再交付人类审查 |
-
-日常迭代的 ExecPlan 更轻量——可以省略 Context and Orientation 章节（已有 AGENTS.md 提供），但 Purpose、Progress、Concrete Steps、Validation 仍然必须。
+Routine ExecPlans may omit Context and Orientation because AGENTS.md already provides it, but Purpose, Progress, Concrete Steps, and Validation remain mandatory.

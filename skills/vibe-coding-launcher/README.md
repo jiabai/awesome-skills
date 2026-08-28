@@ -1,166 +1,166 @@
 # Vibe Coding Launcher
 
-> 项目脚手架工具 —— 搭好 AI 友好的开发框架，然后退场。
+> A project scaffolding tool—establish an AI-friendly development framework, then step aside.
 
 ---
 
-## 这个技能解决什么问题
+## What Problem Does This Skill Solve?
 
-当你想用 AI 辅助开发一个项目时，最大的摩擦往往不是写代码，而是：
+When you want AI to help build a project, the biggest friction is often not writing code. It is that:
 
-- AI 不了解你的项目结构和约定
-- 每次对话都要重新解释技术栈和架构
-- AI 随意跳过步骤、忘记验证、不更新文档
-- 项目大了之后，AI 的上下文混乱，输出质量下降
+- The AI does not understand your project structure or conventions.
+- You must explain the tech stack and architecture again in every conversation.
+- The AI skips steps, forgets validation, or fails to update documentation.
+- As the project grows, its context becomes confusing and output quality declines.
 
-Vibe Coding Launcher 帮你**一次性解决这些问题**——它为你的项目建立一套 AI 友好的治理体系，让后续的 AI 协作有章可循。
-
----
-
-## 它能做什么
-
-### 1. 新项目启动
-
-从零开始，按阶段帮你搭建：
-
-- **项目骨架**：目录结构、配置文件、初始代码
-- **治理文档**：`AGENTS.md` + `WORKFLOW.md` + `docs/` 体系，让 AI 知道你的约定和推进流程
-- **架构约束**：技术栈选择、代码边界、安全基线
-- **首个计划**：把大目标拆成可执行的 Spec 和 ExecPlan
-
-### 2. 旧项目恢复
-
-中断一段时间后，帮你快速恢复上下文：
-
-- 读取 `AGENTS.md` 了解项目现状
-- 读取 `TASKS.md` 找到上次断点
-- Inspect 代码确认当前状态
-- 从断点继续，不重复已完成的工作
+Vibe Coding Launcher addresses these problems at the source. It establishes an AI-friendly governance system for your project so future AI collaboration follows clear rules.
 
 ---
 
-## 使用时机
+## What Can It Do?
 
-| 场景 | 是否使用 |
-|------|---------|
-| 从零开始一个新项目 | ✅ **使用** |
-| 项目已存在，需要恢复上下文继续开发 | ✅ **使用** |
-| 项目骨架已搭好，进入日常迭代开发 | ❌ **不再使用** |
-| 修复 bug、添加小功能、重构代码 | ❌ **不再使用** |
+### 1. Launch a New Project
 
-### 退场信号
+Starting from scratch, it guides you phase by phase through:
 
-当项目完成以下阶段，这个技能就完成了使命：
+- **Project scaffold**: directory structure, configuration files, and initial code.
+- **Governance documents**: an `AGENTS.md` + `WORKFLOW.md` + `docs/` system that teaches AI your conventions and workflow.
+- **Architecture constraints**: tech stack choices, code boundaries, and a security baseline.
+- **First plan**: an executable Spec and ExecPlan derived from the larger goal.
 
-- `AGENTS.md` 已生成并稳定
-- `WORKFLOW.md` 已定义任务推进流程
-- `docs/` 目录结构已建立
-- 工作流治理规则已落地
-- 首个 Spec / ExecPlan 已创建
+### 2. Recover an Existing Project
 
-之后，日常开发应该依赖**项目内部已沉淀的治理文档**，而不是重新加载这个技能。
+After a pause, it restores context quickly:
+
+- Reads `AGENTS.md` to understand the project.
+- Reads `TASKS.md` to locate the last stopping point.
+- Inspects code to confirm the current state.
+- Continues from that point without repeating completed work.
 
 ---
 
-## 日常开发怎么做
+## When to Use It
 
-项目进入迭代期后，AI agent 会自动按以下流程工作：
+| Scenario | Use It? |
+|----------|---------|
+| Starting a new project from scratch | ✅ **Yes** |
+| Recovering context and continuing an existing project | ✅ **Yes** |
+| The project scaffold exists and routine iteration has begun | ❌ **No** |
+| Fixing a bug, adding a small feature, or refactoring code | ❌ **No** |
+
+### Exit Signals
+
+The skill has completed its mission once the project reaches these milestones:
+
+- `AGENTS.md` has been generated and stabilized.
+- `WORKFLOW.md` defines how tasks move forward.
+- The `docs/` structure is established.
+- Workflow governance rules are in place.
+- The first Spec / ExecPlan has been created.
+
+Afterward, routine development should rely on the governance documents stored inside the project instead of loading this skill again.
+
+---
+
+## How Routine Development Works
+
+Once the project enters its iteration phase, an AI agent follows this flow:
 
 ```
-读取 AGENTS.md → Inspect 代码 → 判断任务类型 → 执行 → 验证 → 同步文档
+Read AGENTS.md → Inspect code → Classify the task → Execute → Validate → Sync documentation
 ```
 
-**轻量任务**（修 typo、调样式、单函数改动）：
-直接实现 → 跑相关测试 → 完成。
+**Lightweight tasks** (fix a typo, adjust styling, change one function):
+implement directly → run relevant tests → finish.
 
-**非平凡任务**（新功能、跨模块、改架构）：
-写 Spec → 写 ExecPlan → 拆任务 → 逐步实现 → 完成门禁 → 归档计划。
+**Non-trivial tasks** (new features, cross-module changes, architecture changes):
+write a Spec → write an ExecPlan → break down tasks → implement incrementally → satisfy completion gates → archive the plan.
 
-详细流程见 [`references/ai-coding-workflow.md`](references/ai-coding-workflow.md) 和 [`references/workflow-governance.md`](references/workflow-governance.md)。
+See [`references/ai-coding-workflow.md`](references/ai-coding-workflow.md) and [`references/workflow-governance.md`](references/workflow-governance.md) for details.
 
 ---
 
-## 核心原则
+## Core Principle
 
 **Humans steer. Agents execute.**
 
-- 人类决定方向和目标
-- AI 负责执行和细节
-- 每个关键阶段都等人类确认后再推进
-- 不跳过验证，不合并计划和执行
+- Humans decide direction and goals.
+- AI handles execution and details.
+- Direction-setting gates—requirements, stack, document set, Spec, and ExecPlan—wait for human confirmation; approved execution continues through meaningful milestones.
+- Validation is never skipped, and planning is never merged with execution.
 
 ---
 
-## 技能自身怎么优化
+## Maintaining the Skill
 
-以下内容是维护者说明，不属于 `SKILL.md` 运行时指令；不要复制到 `SKILL.md` 或 `references/`。
+This section is for maintainers. It is not part of the runtime instructions in `SKILL.md`; do not copy it into `SKILL.md` or `references/`.
 
-### 维护规则归属
+### Rule Ownership
 
-维护时只在对应文件修改规则细节，运行时文件之间只保留必要交叉引用，避免同一规则多处漂移。
+Change rule details only in their owning file. Runtime files should contain only necessary cross-references so the same rule does not drift across multiple locations.
 
-| 规则类型 | 维护位置 |
-|----------|----------|
-| 触发/不触发边界 | `SKILL.md` frontmatter `description` |
-| 阶段顺序、恢复模式硬门禁 | `SKILL.md` |
-| 阶段确认话术、术语、常见陷阱 | `references/phase-guidance.md` |
-| 需求采集方法论（阶段 1.5） | `references/requirements-elicitation.md` |
-| 技术栈推荐 | `references/tech-stack-recommendations.md` |
-| 项目文件结构 | `references/project-structure.md` |
-| 核心集文档模板（AGENTS/WORKFLOW/TASKS/验证脚本） | `references/document-templates.md` |
-| 扩展集文档模板（docs/ 子文档、CONTEXT.md、ADR） | `references/docs-templates.md` |
-| 文档验证标准 | `references/validation-standards.md` |
-| 架构约束与 linter 模式 | `references/architecture-constraints.md` |
-| 特殊架构（桌面/TUI/Rust workspace/跨代码库）详解 | `references/architecture-special-cases.md` |
-| Spec / ExecPlan / 轻量路径 / 完成门禁判断 | `references/workflow-governance.md` |
-| `TASKS.md` 格式与生命周期 | `references/task-management.md` |
-| ExecPlan 文档格式 | `references/execplan-format.md` |
-| 日常执行、文档同步、渐进验证顺序 | `references/ai-coding-workflow.md` |
-| 部署规范生成与部署引导 | `references/deployment-spec.md` |
+| Rule Type | Owning Location |
+|-----------|-----------------|
+| Invocation and exclusion boundaries | `SKILL.md` frontmatter `description` |
+| Phase order and recovery hard gates | `SKILL.md` |
+| Phase confirmation language, terminology, and pitfalls | `references/phase-guidance.md` |
+| Requirements elicitation methodology (Phase 1.5) | `references/requirements-elicitation.md` |
+| Tech stack recommendations | `references/tech-stack-recommendations.md` |
+| Project file structure | `references/project-structure.md` |
+| Core document templates (AGENTS/WORKFLOW/TASKS/validator) | `references/document-templates.md` |
+| Extended document templates (`docs/`, CONTEXT.md, ADR) | `references/docs-templates.md` |
+| Document validation standards | `references/validation-standards.md` |
+| Architecture constraints and linter modes | `references/architecture-constraints.md` |
+| Special architectures (desktop/TUI/Rust workspace/cross-codebase) | `references/architecture-special-cases.md` |
+| Spec / ExecPlan / lightweight-path / completion-gate decisions | `references/workflow-governance.md` |
+| `TASKS.md` format and lifecycle | `references/task-management.md` |
+| ExecPlan document format | `references/execplan-format.md` |
+| Routine execution, document synchronization, and progressive validation | `references/ai-coding-workflow.md` |
+| Deployment specification generation and guidance | `references/deployment-spec.md` |
 
 ---
 
-## 技能文件结构
+## Skill File Structure
 
 ```
 vibe-coding-launcher/
-├── SKILL.md                          # 技能入口（AI agent 读取）
-├── README.md                         # 本文件（用户指南）
+├── SKILL.md                          # Skill entry point (read by AI agents)
+├── README.md                         # This file (user guide)
 ├── references/
-│   ├── ai-coding-workflow.md         # 日常开发执行流程
-│   ├── architecture-constraints.md   # 架构约束配置
-│   ├── architecture-special-cases.md # 特殊架构详解（桌面/TUI/Rust workspace）
-│   ├── deployment-spec.md            # 部署规范生成与引导
-│   ├── docs-templates.md             # 扩展集文档模板（阶段 4）
-│   ├── document-templates.md         # 核心集文档模板（阶段 3）
-│   ├── execplan-format.md            # ExecPlan 格式
-│   ├── phase-guidance.md             # 阶段互动细则
-│   ├── project-structure.md          # 项目结构推荐
-│   ├── requirements-elicitation.md   # 需求采集方法论（阶段 1.5）
-│   ├── task-management.md            # 任务管理规范
-│   ├── tech-stack-recommendations.md # 技术栈推荐
-│   ├── validation-standards.md       # 验证标准
-│   └── workflow-governance.md        # 工作流治理与完成门禁
+│   ├── ai-coding-workflow.md         # Routine development execution workflow
+│   ├── architecture-constraints.md   # Architecture constraint configuration
+│   ├── architecture-special-cases.md # Desktop/TUI/Rust workspace details
+│   ├── deployment-spec.md            # Deployment specification and guidance
+│   ├── docs-templates.md             # Extended document templates (Phase 4)
+│   ├── document-templates.md         # Core document templates (Phase 3)
+│   ├── execplan-format.md            # ExecPlan format
+│   ├── phase-guidance.md             # Phase interaction guidance
+│   ├── project-structure.md          # Project structure recommendations
+│   ├── requirements-elicitation.md   # Requirements elicitation (Phase 1.5)
+│   ├── task-management.md            # Task management standards
+│   ├── tech-stack-recommendations.md # Tech stack recommendations
+│   ├── validation-standards.md        # Validation standards
+│   └── workflow-governance.md        # Workflow governance and completion gates
 └── scripts/
-    └── validate_agents_docs.py       # 文档结构验证脚本
+    └── validate_agents_docs.py       # Documentation structure validator
 ```
 
 ---
 
-## 关键概念速查
+## Key Concepts
 
-| 概念 | 一句话说明 |
-|------|-----------|
-| `AGENTS.md` | 项目入口地图，AI 默认读取的上下文入口 |
-| `WORKFLOW.md` | 项目怎么推进任务，定义从需求到实现的默认流程和轻量路径 |
-| `docs/` | 详细规则存放处，避免 `AGENTS.md` 膨胀 |
-| Spec | 产品规格文档，回答"做什么、不做什么、验收标准" |
-| ExecPlan | 实施计划，回答"怎么做、按什么顺序、怎么验证" |
-| 完成门禁 | 代码已 inspect、验证已通过、文档已同步 |
-| 轻量路径 | 低风险、小范围、无新边界时的快速执行通道 |
+| Concept | One-Sentence Explanation |
+|---------|--------------------------|
+| `AGENTS.md` | The project entry-point map and default source of context for AI agents. |
+| `WORKFLOW.md` | How the project advances work, including the default process and lightweight path. |
+| `docs/` | Detailed rules kept outside `AGENTS.md` so the entry point stays concise. |
+| Spec | A product specification answering what to build, what not to build, and how it will be accepted. |
+| ExecPlan | An implementation plan answering how to build it, in what order, and how to validate it. |
+| Completion gates | Proof that code was inspected, validation passed, and documentation was synchronized. |
+| Lightweight path | A fast execution path for low-risk, small-scope work with no new boundary. |
 
 ---
 
-## 一句话总结
+## In One Sentence
 
-> Vibe Coding Launcher 是**脚手架**，不是**日常工具**。搭完架子就退场，日常开发靠项目内部的 `AGENTS.md`、`WORKFLOW.md` 和 `docs/` 体系。
+> Vibe Coding Launcher is **scaffolding**, not a **daily tool**. Once the structure is built, routine development runs on the project's own `AGENTS.md`, `WORKFLOW.md`, and `docs/` system.

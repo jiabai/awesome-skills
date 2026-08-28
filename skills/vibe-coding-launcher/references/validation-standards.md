@@ -1,236 +1,228 @@
-# 文档验证标准
+# Document Validation Standard
 
-这是文档验证的唯一 canonical 来源；`SKILL.md` 和其他流程文档只引用这里，不重复维护校验细则。
+This is the canonical source for document validation. `SKILL.md` and other workflow documents link here instead of duplicating validation details.
 
-## 目录
+## Contents
 
-- [验证时机](#验证时机)
-- [验证清单](#验证清单)
-- [严重程度分级](#严重程度分级)
-- [简化版与完整版标准](#简化版与完整版标准)
-- [测试与验证质量基线](#测试与验证质量基线)
-- [验证命令](#验证命令)
-
----
-
-## 验证时机
-
-| 时机 | 检查范围 | 严重程度 |
-|------|---------|---------|
-| 约束机制落地后 | 核心文档（AGENTS.md + WORKFLOW.md + 架构信息 + 完成门禁 + scripts/validate_agents_docs.py；TASKS.md 可选） | ERROR |
-| 每次对话结束前 | TASKS.md 进度一致性 | WARN |
-| 项目恢复时 | 文档完整性 + 知识新鲜度 | ERROR + WARN |
-| 提交前 | 全量检查 | INFO |
+- [When to Validate](#when-to-validate)
+- [Validation Checklist](#validation-checklist)
+- [Severity Levels](#severity-levels)
+- [Simplified and Mature AGENTS.md](#simplified-and-mature-agentsmd)
+- [Test and Validation Quality](#test-and-validation-quality)
+- [Commands](#commands)
 
 ---
 
-## 验证清单
+## When to Validate
 
-### 核心文档验证（必须通过）
+| Timing | Scope | Minimum Severity |
+|--------|-------|------------------|
+| After establishing constraints | Core documents: AGENTS.md + WORKFLOW.md + architecture information + completion gates + scripts/validate_agents_docs.py; TASKS.md optional | WARN |
+| Before ending every conversation | TASKS.md progress consistency | WARN |
+| During project recovery | Document completeness + knowledge freshness | ERROR + WARN |
+| Before committing | Full check | INFO |
 
-| 文件 | 检查项 | 说明 |
-|------|--------|------|
-| `AGENTS.md` | 存在 | 项目根目录必须有 |
-| `AGENTS.md` | 章节完整 | 根级/子级分别按各自标准检查 |
-| `AGENTS.md` | 行数范围 | 简化版≤150，完整版≤140 |
-| `AGENTS.md` | 快速入口无死链 | 引用的文档都存在 |
-| `WORKFLOW.md` | 存在或在 AGENTS.md 中有轻量流程替代 | 项目默认工作流 |
-| `scripts/validate_agents_docs.py` | 存在 | 所有项目的核心验证脚本 |
-| `TASKS.md` | 存在时检查标准区段（`进行中` / `待办` / `已完成`）和每条任务的 `✅` 验证条件 | 不存在不算错误，全部完成后可删除 |
-| `tasks.md` | 旧命名兼容检查 | 存在时提示重命名为根目录 `TASKS.md` |
-| `docs/ARCHITECTURE.md` | 存在（多文件项目必须；CLI/单文件项目替代方案：AGENTS.md 包含“架构”章节） | 描述项目架构 |
-| `docs/ARCHITECTURE.md` | 内容完整性（概述/模块或代码地图/关键文件/架构约束信息） | 缺项记 WARN，不阻断下一阶段 |
-| `docs/EXECUTION_GATES.md` | 多文件项目存在；CLI/单文件项目替代方案：AGENTS.md 包含完成门禁摘要 | 描述验证、风险和收尾标准 |
-| 根 `AGENTS.md` | `约束机制` 章节存在 | 项目级元数据只在根级声明 |
-| 根 `AGENTS.md` | `约束机制.模式` 合法 | 只能是 `agents-only` 或 `linter+agents` |
-| 根 `AGENTS.md` | `约束机制.配置` 合法 | `agents-only` 时必须为 `N/A`；`linter+agents` 时必须为真实配置文件路径 |
+## Validation Checklist
 
-> 子级/模块级 `AGENTS.md` 继承根级 `约束机制`，不要求重复声明；若为了可读性保留也允许，但不是校验必需项。
+### Core Documents (Must Pass)
 
-### 条件文档验证（存在时检查）
+| File | Check | Requirement |
+|------|-------|-------------|
+| `AGENTS.md` | Exists | Required at project root |
+| `AGENTS.md` | Complete sections | Root and child files follow their selected standard |
+| `AGENTS.md` | Line count | Simplified ≤150; mature ≤140 |
+| `AGENTS.md` | Quick Entry has no dead links | Every referenced document exists |
+| `WORKFLOW.md` | Exists, or AGENTS.md contains a lightweight alternative | Default project workflow |
+| `scripts/validate_agents_docs.py` | Exists | Core validator required for every project |
+| `TASKS.md` | When present, standard sections (`In Progress`, `To Do`, `Completed`) and `✅` validation on every task | Absence is allowed after all tasks finish |
+| `tasks.md` | Legacy-name compatibility | When present, request renaming to root `TASKS.md` |
+| `docs/ARCHITECTURE.md` | Required for multi-file projects; CLI/single-file alternative is an AGENTS.md `Architecture` section | Describes architecture |
+| `docs/ARCHITECTURE.md` | Overview, module/code map, key files, constraints/invariants | Missing concepts produce WARN |
+| `docs/EXECUTION_GATES.md` | Required for multi-file projects; CLI/single-file alternative is a gate summary in AGENTS.md | Defines validation, risk, and closeout |
+| Root `AGENTS.md` | `Constraint Mechanism` exists | Project metadata is declared at root only |
+| Root `AGENTS.md` | `Constraint Mechanism.Mode` valid | `agents-only` or `linter+agents` |
+| Root `AGENTS.md` | `Constraint Mechanism.Configuration` valid | `N/A` for agents-only; real path for linter+agents |
+| Root `AGENTS.md` | Verbatim workflow and active-ExecPlan hard constraints exist | Must contain `MUST NOT skip documentation...`, `Lightweight path ONLY...`, `Formal coding starts only after...`, and `Treat the active ExecPlan as the execution source of truth...`; see `document-templates.md` |
 
-| 文件 | 检查项 | 说明 |
-|------|--------|------|
-| `docs/exec-plans/` | 子目录结构 | 按需生成，存在时检查 active/completed 子目录 |
-| `docs/product-specs/` | 索引和 spec 结构 | 存在时检查 index.md 和单个 spec 的目标/非目标/验收标准 |
-| `docs/DESIGN.md` | 章节结构 | 设计规范存在时检查 |
-| `docs/QUALITY_SCORE.md` | 评分表格式 | 质量追踪存在时检查 |
-| `docs/SECURITY.md` | 安全约束 | 安全文档存在时检查 |
-| AGENTS.md 中声明的约束配置文件 | 文件存在性 | `模式=linter+agents` 时，`配置` 指向的文件必须存在 |
+Child/module AGENTS.md inherits the root Constraint Mechanism. It may repeat it for readability, but validation does not require that repetition.
 
-### 知识新鲜度验证
+### Conditional Documents (Validate When Present)
 
-| 检查项 | 说明 | 严重程度 |
-|--------|------|---------|
-| 快速入口无死链 | AGENTS.md 中引用的文档都存在 | WARN |
-| TASKS.md 进度一致 | 已完成的已勾选，新增的已记录 | WARN |
-| ARCHITECTURE.md 模块表准确 | 反映当前代码结构 | WARN |
+| File | Check | Requirement |
+|------|-------|-------------|
+| `docs/exec-plans/` | Subdirectory structure | Check `active/` and `completed/` when the directory exists |
+| `docs/product-specs/` | Index and Spec structure | Check goals, non-goals, and acceptance criteria |
+| `docs/DESIGN.md` | Section structure | Check when present |
+| `docs/QUALITY_SCORE.md` | Score-table format | Check when present |
+| `docs/SECURITY.md` | Security constraints | Check when present |
+| Constraint configuration declared by AGENTS.md | File exists | Required in `linter+agents` mode |
 
----
+### Knowledge Freshness
 
-## 严重程度分级
+| Check | Requirement | Severity |
+|-------|-------------|----------|
+| Quick Entry links | Every path exists | WARN |
+| TASKS.md progress | Completed work checked; new work recorded | WARN |
+| ARCHITECTURE.md module map | Matches current code structure | WARN |
 
-| 级别 | 含义 | 处理方式 |
-|------|------|---------|
-| **ERROR** | 必须修复 | 不修复不能进入下一阶段 |
-| **WARN** | 建议修复 | 记录但可继续，尽快修复 |
-| **INFO** | 状态信息 | 纯信息，无需处理 |
+## Severity Levels
 
-### ERROR 类问题
+| Level | Meaning | Response |
+|-------|---------|----------|
+| **ERROR** | Must fix | Cannot enter the next phase until resolved |
+| **WARN** | Review required | Resolve it, or record the acceptance reason and residual risk before proceeding or claiming completion |
+| **INFO** | Status | No action required |
 
-- 核心文档不存在（AGENTS.md；WORKFLOW.md 且 AGENTS.md 无轻量流程替代；多文件项目缺少 docs/ARCHITECTURE.md 且 AGENTS.md 无“架构”章节；CLI/单文件项目 AGENTS.md 缺少“架构”章节；多文件项目缺少 docs/EXECUTION_GATES.md 且 AGENTS.md 无完成门禁摘要）
-- 缺少 `scripts/validate_agents_docs.py`
-- 必需章节缺失
-- 根 AGENTS.md 缺少 `约束机制` 章节或 `模式`
-- 根 AGENTS.md 的 `模式=agents-only` 但 `配置` 不是 `N/A`
-- 根 AGENTS.md 的 `模式=linter+agents` 但缺少真实配置文件路径，或路径不存在
-- TASKS.md 存在但无法识别任务状态
-- TASKS.md 缺少标准区段（`进行中` / `待办` / `已完成`）
-- TASKS.md 中存在缺少 `✅` 验证条件的任务
+`--level` controls which findings are displayed. Every ERROR blocks progress. A WARN keeps the validator's exit status nonzero until resolved; the workflow may proceed only when the WARN is either resolved or explicitly accepted with its reason and residual risk. Use `--level WARN` at completion gates so both actionable levels remain visible.
 
-### WARN 类问题
+### ERROR Conditions
 
-- 存在旧命名 `tasks.md`，应重命名为根目录 `TASKS.md`
-- 行数超限（可读性下降）
-- 快速入口有死链
-- ARCHITECTURE.md 缺少概述 / 模块或代码地图 / 关键文件 / 架构约束信息中的任一概念组
+- Missing core documents: AGENTS.md; WORKFLOW.md without an AGENTS.md lightweight alternative; architecture information; or completion-gate information.
+- Missing `scripts/validate_agents_docs.py`.
+- Missing required section.
+- Root AGENTS.md lacks `Constraint Mechanism` or Mode.
+- `Mode=agents-only` with Configuration other than `N/A`.
+- `Mode=linter+agents` without a real existing configuration path.
+- Root AGENTS.md lacks either hard workflow phrase or the active ExecPlan gate, or softens them to generic wording such as "Follow the workflow."
+- TASKS.md exists but task state cannot be recognized.
+- TASKS.md lacks `In Progress`, `To Do`, or `Completed`.
+- A TASKS.md item lacks a `✅` validation condition.
 
-### INFO 类信息
+### WARN Conditions
 
-- 文件行数统计
-- TASKS.md 任务统计
-- 版本识别结果
+- Legacy root `tasks.md` must be renamed to `TASKS.md`.
+- Line-count limit exceeded.
+- Dead Quick Entry link.
+- ARCHITECTURE.md lacks any concept group: overview, module/code map, key files, or architecture constraints/invariants.
 
----
+### INFO Conditions
 
-## 简化版与完整版标准
+- File line counts.
+- TASKS.md task counts.
+- AGENTS.md version detection.
 
-### 版本判断
+## Simplified and Mature AGENTS.md
 
-| 判断条件 | 版本 |
-|---------|------|
-| 包含 `## Scope` 章节 | 完整版 |
-| 不包含 `## Scope` | 简化版 |
+### Version Detection
 
-### 简化版标准
+| Condition | Version |
+|-----------|---------|
+| Contains `## Scope` | Mature |
+| Does not contain `## Scope` | Simplified |
 
-**适用**：≤3模块、新手项目、单人开发
+### Simplified Standard
 
-**根级 AGENTS.md 必需章节**：
-- 快速入口
-- 核心信念
-- 开发流程
-- 常用命令
-- 架构（仅 CLI/单文件项目必需，替代 docs/ARCHITECTURE.md）
-- 约束机制（仅根级 AGENTS.md 必需）
+**Use for:** three or fewer modules, beginner projects, one developer.
 
-**行数限制**：≤150 行
+Required root sections:
 
-### 完整版标准
+- Quick Entry
+- Core Beliefs
+- Development Workflow
+- Common Commands
+- Architecture, for CLI/single-file projects only
+- Constraint Mechanism, at root only
 
-**适用**：>3模块、多人协作、多AI工具
+**Limit:** 150 lines.
 
-**根级 AGENTS.md 必需章节**：
+### Mature Standard
+
+**Use for:** more than three modules, multiple collaborators, or multiple AI tools.
+
+Required root sections:
+
 - Scope
 - Do
 - Avoid
-- 约束机制
+- Constraint Mechanism
 - Commands
 - Tests
 - Related Skills
 
-**行数限制**：≤140 行
+**Limit:** 140 lines.
 
-### 根级与子级 AGENTS.md 规则
+### Root and Child Rules
 
-- 根级 `AGENTS.md` 必须声明项目级 `约束机制`
-- 子级/模块级 `AGENTS.md` 继承根级 `约束机制`，不要求重复声明
-- 子级/模块级 `AGENTS.md` 仍需满足其采用模板的其余章节完整性
+- Root AGENTS.md declares the project Constraint Mechanism.
+- Child/module AGENTS.md inherits it and need not repeat it.
+- Child/module AGENTS.md still satisfies every other required section of its selected template.
 
----
+## Test and Validation Quality
 
-## 测试与验证质量基线
+When writing tests or validators for a project:
 
-验证方式本身也有好坏。为项目编写测试或验证脚本时遵守：
+- **Test behavior, not implementation:** use public entry points such as page behavior, API responses, or command output. A refactor should not break tests merely because internals changed.
+- **Use independent expected values:** compare against a known literal, specification, or hand-calculated example. Do not compute expected output with the same logic as the implementation.
+- **One loop at a time:** one check → one implementation increment → the next check. A batch of speculative tests validates imagined behavior rather than observed behavior.
+- **Reproduce before fixing bugs:** follow the reproduction-loop discipline in `ai-coding-workflow.md` under Bugs During Execution.
 
-- **测行为，不测实现细节**：通过公开入口验证（页面行为、API 响应、命令输出），不测内部函数和私有细节。重构不应该弄坏任何测试——一重构测试就红，说明测错了地方。
-- **预期值来自独立来源**：用已知正确的字面值、规格或手工算过的例子做预期，不要用和实现相同的方式重算一遍预期——那种测试永远通过，也永远发现不了错误。
-- **一次一个循环**：一条验证 → 一段实现 → 再下一条。不要先批量写完所有测试再实现；批量测试验证的是想象中的行为，不是真实行为。
-- **修 bug 前先让错误可复现**：复现回路纪律见 `ai-coding-workflow.md` 的"执行中遇到 bug"。
+## Commands
 
----
-
-## 验证命令
-
-### 基本用法
+### Basic
 
 ```bash
 python scripts/validate_agents_docs.py
 ```
 
-### 按严重程度过滤
+### Severity Filter
 
 ```bash
-# 只显示 ERROR
+# ERROR only
 python scripts/validate_agents_docs.py --level ERROR
 
-# 显示 ERROR + WARN
+# ERROR + WARN
 python scripts/validate_agents_docs.py --level WARN
 
-# 显示全部（默认）
+# Everything (default)
 python scripts/validate_agents_docs.py --level INFO
 ```
 
-### 指定项目目录
+### Target Project
 
 ```bash
 python scripts/validate_agents_docs.py --project /path/to/project
 ```
 
-说明：当脚本在项目本地运行时，如果 `scripts/validate_agents_docs.py` 本身已被删除，命令会先失败；从 skill 包或其他项目使用 `--project` 校验目标项目时，仍应检测并报告这一缺失。
+When run from inside the target project, a deleted local validator prevents the command itself from starting. When this skill's copy validates another project through `--project`, it must still report that missing file.
 
-### 输出示例
-
-```
-[INFO] AGENTS.md: 简化版, 45 行
-[INFO] TASKS.md: 5 项待办, 3 项已完成
-[INFO] docs/ARCHITECTURE.md: 32 行
-[INFO] docs/exec-plans/: 目录不存在（按需生成，无需修复）
-[WARN] AGENTS.md: 快速入口死链: docs/DESIGN.md
-
-验证完成: 0 个错误, 1 个警告
-```
-
----
-
-## 验证流程嵌入
-
-### 约束机制落地后验证
-
-生成核心文档、按需扩展文档，并在根 `AGENTS.md` 写入有效 `约束机制` 后立即验证：
+### Example Output
 
 ```
-完成阶段 5 → 运行验证 → 有 ERROR 则修复 → 进入阶段 6
+[INFO] AGENTS.md: simplified, 45 lines
+[INFO] TASKS.md: 5 pending, 3 completed
+[INFO] docs/ARCHITECTURE.md: 32 lines
+[INFO] docs/exec-plans/: directory absent (generated only when needed)
+[WARN] AGENTS.md: dead Quick Entry link: docs/DESIGN.md
+
+Validation requires review: 0 errors, 1 warning
 ```
 
-### 每次对话结束验证
+## Embedding Validation in the Workflow
 
-更新 TASKS.md 后验证：
+### After Constraints
 
-```
-对话结束 → 更新 TASKS.md → 运行验证 --level WARN → 发现问题立即修复
-```
-
-### 项目恢复验证
-
-恢复时先尝试验证文档状态；如果项目内 `scripts/validate_agents_docs.py` 缺失，改用本 skill 自带脚本加 `--project` 校验，或把缺失记录到恢复摘要中，不阻断恢复定位：
+After generating core and conditional documents and recording a valid root Constraint Mechanism:
 
 ```
-读取 AGENTS.md → 尝试运行验证 --level ERROR → 记录 ERROR/WARN/缺失脚本 → 输出恢复摘要并等待确认
+Complete Phase 5 → Run validation → Resolve every ERROR → Resolve or explicitly accept each WARN → Enter Phase 6
 ```
 
----
+### End of Conversation
 
-## 总结
+After updating TASKS.md:
 
-vibe-coding-launcher 的验证更注重**结构完整性**而非**内容逐字匹配**，因为项目内容会随用户需求变化。
+```
+End work → Update TASKS.md when present → Run --level WARN → Resolve findings or record accepted WARNs and residual risk
+```
+
+### Recovery
+
+Attempt validation before summarizing. If the project lacks the script, use this skill's copy with `--project` or record the omission without blocking orientation:
+
+```
+Read AGENTS.md → Attempt --level WARN → Record unresolved ERRORs as blockers and WARNs as resolved or accepted risks → Present recovery summary and wait
+```
+
+## Summary
+
+The validator prioritizes **structural completeness** over **verbatim content** because project content changes with user needs. The root AGENTS.md workflow and active ExecPlan hard constraints remain marker-checked so they cannot be softened over time.

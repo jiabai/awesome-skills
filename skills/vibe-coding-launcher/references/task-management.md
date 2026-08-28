@@ -1,144 +1,135 @@
-# 任务管理标准
+# Task Management Standard
 
-本文件只管 `TASKS.md` 如何记录和推进；提交节奏、验证深度和执行流程分别见 `ai-coding-workflow.md` 与 `validation-standards.md`。
+This document governs how `TASKS.md` records and advances work. See `ai-coding-workflow.md` for execution and commit policy, and `validation-standards.md` for validation depth.
 
-## 目录
+## Contents
 
-- [TASKS.md 与 ExecPlan 的分工](#tasksmd-与-execplan-的分工)
-- [TASKS.md 格式](#tasksmd-格式)
-- [任务写入标准](#任务写入标准)
-- [垂直切片与依赖顺序](#垂直切片与依赖顺序)
-- [使用规则](#使用规则)
-- [知识新鲜度维护](#知识新鲜度维护)
-- [原子提交原则](#原子提交原则)
-- [渐进验证策略](#渐进验证策略)
+- [TASKS.md vs. ExecPlan](#tasksmd-vs-execplan)
+- [TASKS.md Format](#tasksmd-format)
+- [Task Writing Rules](#task-writing-rules)
+- [Vertical Slices and Dependencies](#vertical-slices-and-dependencies)
+- [Usage Rules](#usage-rules)
+- [Knowledge Freshness](#knowledge-freshness)
+- [Commit Policy](#commit-policy)
+- [Progressive Validation](#progressive-validation)
 
 ---
 
-## TASKS.md 与 ExecPlan 的分工
+## TASKS.md vs. ExecPlan
 
-| 维度 | TASKS.md | ExecPlan Progress |
-|------|----------|----------|
-| 定位 | 轻量执行清单 | 功能级计划文档 |
-| 粒度 | 执行级任务（1-30 分钟，如“安装 flask”） | 计划级里程碑（30 分钟到数小时，如“API 框架就绪”） |
-| 格式 | checkbox 列表 | 完整文档（Purpose/Progress/Steps/Validation） |
-| 适合 | 修 bug、小改动、配置调整、依赖安装、当前会话断点恢复 | 新功能、架构调整、多步骤开发 |
-| 存放位置 | 项目根目录 `TASKS.md` | `docs/exec-plans/active/` |
-| 生命周期 | 全部完成后删除，历史由 ExecPlan 归档 | 完成后移入 `docs/exec-plans/completed/` |
-| 更新时机 | 每完成一项任务立即勾选 | 当一批计划任务对应同一里程碑全部完成时，标记该里程碑 |
+| Dimension | TASKS.md | ExecPlan Progress |
+|-----------|----------|-------------------|
+| Role | Lightweight execution checklist | Feature-level planning document |
+| Granularity | 1–30 minute execution tasks such as installing Flask | 30-minute to multi-hour milestones such as API framework ready |
+| Format | Checkbox list | Full document with Purpose, Progress, Steps, and Validation |
+| Best for | Bugs, small changes, configuration, dependencies, and session recovery | Features, architecture changes, and multi-step development |
+| Location | Root `TASKS.md` | `docs/exec-plans/active/` |
+| Lifecycle | Delete when all work completes; ExecPlan preserves history | Move to `completed/` after completion |
+| Update | Check immediately after each task | Mark a milestone after its task batch passes |
 
-## TASKS.md 格式
+## TASKS.md Format
 
 ```markdown
 # Tasks
 
-## 进行中
-- [ ] 安装 flask 依赖 ✅ `pip install flask && python -c "import flask; print(flask.__version__)"`
-- [ ] 添加 /health 端点 ✅ `curl localhost:5000/health` 返回 200
+## In Progress
+- [ ] Install Flask ✅ `pip install flask && python -c "import flask; print(flask.__version__)"`
+- [ ] Add `/health` endpoint ✅ `curl localhost:5000/health` returns 200
 
-## 待办
-- [ ] 配置 .gitignore ✅ `cat .gitignore` 包含 __pycache__、.env、node_modules
-- [ ] 添加环境变量支持 ✅ `python -c "from config import SETTINGS; print(SETTINGS)"` 不报错
+## To Do
+- [ ] Configure `.gitignore` ✅ `cat .gitignore` contains `__pycache__`, `.env`, and `node_modules`
+- [ ] Add environment-variable support ✅ `python -c "from config import SETTINGS; print(SETTINGS)"` exits successfully
 
-## 已完成
-- [x] 初始化项目结构（2026-04-17）✅ `ls AGENTS.md TASKS.md docs/` 文件均存在
-- [x] 创建 AGENTS.md（2026-04-17）✅ `wc -l AGENTS.md` 输出 ≤ 150
+## Completed
+- [x] Initialize project structure (2026-04-17) ✅ `ls AGENTS.md TASKS.md docs/` finds every file
+- [x] Create AGENTS.md (2026-04-17) ✅ `wc -l AGENTS.md` reports ≤150
 ```
 
-## 任务写入标准
+## Task Writing Rules
 
-每条任务**必须**包含完成验证条件，格式为：
+Every task includes a completion check:
 
 ```
-- [ ] 任务描述 ✅ 验证命令或验证标准
+- [ ] Task description ✅ validation command or acceptance condition
 ```
 
-验证条件的三种写法：
+| Type | Format | Example |
+|------|--------|---------|
+| Command | `✅ <command> <expected output>` | `✅ pip install flask` exits without error |
+| File | `✅ cat/ls <file> contains/exists` | `✅ cat .gitignore` contains node_modules |
+| Behavior | `✅ <observable runtime behavior>` | `✅ Browser opens /health and receives 200` |
 
-| 类型 | 格式 | 示例 |
-|------|------|------|
-| 命令验证 | `✅ \`具体命令\` 预期输出` | `✅ \`pip install flask\` 无报错` |
-| 文件验证 | `✅ \`cat/ls 文件\` 包含/存在` | `✅ \`cat .gitignore\` 包含 node_modules` |
-| 行为验证 | `✅ 可观察的运行时行为` | `✅ 浏览器打开 /health 返回 200` |
+Do not write:
 
-禁止写入的任务：
+- Vague tasks without validation, such as "improve performance" or "clean up code." Split them into concrete outcomes.
+- Tasks that cannot finish within 30 minutes. Split them or promote the work to an ExecPlan.
+- Blocked tasks in In Progress. Put later dependent work under To Do.
 
-- 无验证条件的模糊任务，如“优化性能”、“改进代码” — 必须拆解为可验证的具体任务
-- 无法在 30 分钟内完成的任务 — 拆小或升级为 ExecPlan
-- 依赖未完成任务的后续任务 — 只写当前可执行的，后续任务放“待办”
+Change `- [ ]` to `- [x]` only after the condition following `✅` actually passes. Run the command or observe the behavior; never check a task by intuition.
 
-勾选标准：
+## Vertical Slices and Dependencies
 
-只有当 `✅` 后的验证条件**实际通过**时，才能将 `- [ ]` 改为 `- [x]`。不要凭感觉勾选，必须运行验证命令或确认验证行为。
+**Vertical slice:** each milestone or batch crosses all necessary layers and produces behavior the user can verify. The test is simple: after completion, can you say, "You can now try X"?
 
-## 垂直切片与依赖顺序
+| Split | Example | Consequence |
+|-------|---------|-------------|
+| ❌ Horizontal | Build every backend endpoint, then every frontend page | Intermediate states cannot be validated; integration problems arrive late |
+| ✅ Vertical | One expense path: form → storage → list | Every slice is testable and exposes misunderstandings early |
 
-任务怎么拆才算拆对了：
+Organize ExecPlan batches and TASKS.md groups as vertical slices.
 
-**垂直切片**：每个里程碑或任务批次打穿所有相关层，完成后产生用户可验证的行为。判断标准只有一条——完成后能不能对用户说"现在你可以试试 X 了"。
+When tasks block one another, put prerequisites first and state the dependency in one sentence. Ordering plus prose is sufficient; do not invent a dependency schema.
 
-| 拆法 | 示例 | 后果 |
-|------|------|------|
-| ❌ 水平切片 | "先写完所有后端接口" → "再写完所有前端页面" | 中间态无法验证，问题集中在联调时爆发 |
-| ✅ 垂直切片 | "记账一条链路：表单 → 存储 → 列表展示" | 每片完成即可验证，尽早暴露理解偏差 |
+**Exception—large mechanical changes:** a repository-wide rename or shared-type migration may not form a vertical slice. Migrate by directory or module, keeping the project runnable after each batch, then remove the old form in the final batch.
 
-ExecPlan 的 `Plan of Work` 批次和根级 `TASKS.md` 的任务分组都按垂直切片组织。
+## Usage Rules
 
-**依赖顺序**：任务有先后阻塞关系时，被依赖的排前面，依赖关系在任务描述中用一句话写明（如"先完成环境变量任务"）。不引入更复杂的依赖格式——排序 + 文字说明足够。
+- Put small work in root TASKS.md. Use an ExecPlan plus `docs/exec-plans/active/<feature-slug>-tasks.md` for large work, with milestones in ExecPlan Progress.
+- For formal work, read the approved active ExecPlan and its sibling checklist when present before coding; otherwise use the plan's `Progress` as the checklist. The plan governs scope, sequence, acceptance, validation, and constraints.
+- Derive execution tasks from milestones: define the milestone, then split it into independently verifiable tasks. The two levels differ and are not duplicates.
+- Read TASKS.md at conversation start and update it at the end. Delete it after everything completes; the archived ExecPlan preserves history.
+- For large work, use a sibling checklist beside the ExecPlan. Keep root TASKS.md short and focused on recovering the current execution context.
+- Each checklist names affected files/modules, dependencies, and validation expectations.
 
-**例外——大范围机械改动**：全库统一的机械变更（重命名一列、换一个共享类型）无法切出垂直切片。改为分批迁移（按目录/模块一批一批改），每批完成后项目保持可运行，最后一批删掉旧形式。
+### Execution
 
-## 使用规则
+1. Work through TASKS.md or the active plan's sibling checklist.
+2. Complete one task → run its validation → update its checkbox and the active plan records.
+3. When the user or repository policy authorizes commits, stage only the verified task's files and commit a meaningful batch.
+4. Repeat until every task completes.
+5. Delete a fully complete root TASKS.md; archive a plan-level checklist with its ExecPlan.
 
-- 小任务直接写入根目录 `TASKS.md`；大功能用 `ExecPlan + docs/exec-plans/active/<feature-slug>-tasks.md`，里程碑留在 ExecPlan Progress。
-- TASKS.md 的任务从 ExecPlan 里程碑拆解而来：先定里程碑，再将每个里程碑拆为可独立验证的执行级小任务。两层粒度不同，不存在重复。
-- 每次对话开始读取 `TASKS.md`，结束时更新它；全部完成后删除，历史由 ExecPlan 归档。
-- `TASKS.md` 记录执行级任务，ExecPlan Progress 记录计划级里程碑，不要重复写同一粒度的内容。
-- 对大型任务，使用 `docs/exec-plans/active/<feature-slug>-tasks.md` 作为 ExecPlan 的 sibling checklist；根级 `TASKS.md` 只保留恢复当前执行上下文所需的短清单。
-- 任务清单应写明触碰的文件或模块区域、依赖关系和验证期望。
+## Knowledge Freshness
 
-### 执行流程
+- Stale documentation is more dangerous than missing documentation.
+- Before ending a conversation, inspect TASKS.md progress, AGENTS.md Quick Entry, and `docs/ARCHITECTURE.md` or the AGENTS.md Architecture section.
+- When modules or interfaces change, update the relevant documentation. See `validation-standards.md` for complete rules.
 
-1. 按 `TASKS.md` 或 active plan 的 sibling task checklist 逐项执行
-2. 完成一项 → 勾选该项 → 立即原子提交
-3. 原子提交：`git add -A && git commit -m "完成：{任务描述}"`
-4. 重复直到所有任务完成
-5. 根级 `TASKS.md` 全部完成 → 删除 `TASKS.md`；计划级 task checklist 随 ExecPlan 归档
+## Commit Policy
 
-## 知识新鲜度维护
+Create commits only when the user or repository workflow authorizes them. Prefer a meaningful, independently verifiable batch over a commit for every checkbox. Stage explicit task-scoped paths with `git add -- <path>...`, inspect `git diff --cached`, and leave unrelated or incomplete work unstaged.
 
-- 过时文档比没有文档更危险。
-- 对话结束前检查 `TASKS.md` 进度、`AGENTS.md` 快速入口和 `docs/ARCHITECTURE.md`（或 AGENTS.md 架构章节）。
-- 新模块或接口变化时，优先回写相关文档；更完整的验证规则见 `validation-standards.md`。
+Before committing, confirm:
 
----
+1. TASKS.md is current.
+2. The validation command passed.
+3. AGENTS.md does not require synchronization.
+4. The active ExecPlan records current Progress, decisions, and validation when a plan governs the work.
 
-## 原子提交原则
+## Progressive Validation
 
-每完成一项 TASKS.md 任务就更新勾选并立即提交；多项相关任务可合并，但不要把未完成的内容一起提交。
+Keep the sequence minimum → expanded → full. See `ai-coding-workflow.md` for selection criteria.
 
-提交前确认三件事：
+- Single-module code: test that module first.
+- Cross-module interface: test both modules, then integration.
+- Shared DTO/type: typecheck every consumer, then run the full suite.
 
-1. `TASKS.md` 已更新
-2. 验证命令已通过
-3. `AGENTS.md` 不需要同步修改
+## Relationship to Completion Gates
 
----
+Checking every task does not make the overall work complete. Before closing, satisfy `workflow-governance.md`:
 
-## 渐进验证策略
-
-验证顺序保持最小 → 扩大 → 全量；具体怎么选见 `ai-coding-workflow.md`。
-
-- 单模块代码先跑该模块测试
-- 跨模块接口先跑两模块测试，再扩大到集成测试
-- 共享 DTO/类型先做所有消费者类型检查，再跑全量测试
-
-## 与完成门禁的关系
-
-任务勾选不等于整项工作完成。收尾前还要满足 `workflow-governance.md` 中的完成门禁：
-
-- 受影响路径已 inspect
-- 最小有效验证已通过
-- 文档结构验证已通过
-- active ExecPlan 的 Progress / Decision Log / 验证记录已更新
-- 最终交付说明 Passed / Not run / Residual risk，非平凡任务另加 Spec / Standards 自审两行（统一格式见 `workflow-governance.md` 的"最终交付格式"）
+- Affected paths were inspected.
+- Minimum effective validation passed.
+- Document structure validation passed.
+- Active ExecPlan Progress, Decision Log, and validation records are current.
+- Final delivery reports Passed, Not run, and Residual risk; non-trivial work also includes separate Spec and Standards review lines.

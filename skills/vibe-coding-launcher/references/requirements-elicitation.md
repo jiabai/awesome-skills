@@ -1,153 +1,161 @@
-# 需求采集方法论（阶段 1.5）
+# Requirements Elicitation Method (Phase 1.5)
 
-本文件定义阶段 1.5（了解用户之后、推荐技术栈之前）如何把用户的一句想法采集成可写进 spec 的需求。Spec 模板见 `workflow-governance.md`；阶段互动话术见 `phase-guidance.md`。
+This document defines how Phase 1.5—after learning about the user but before recommending a tech stack—turns a one-sentence idea into requirements suitable for a spec. See `workflow-governance.md` for the Spec template and `phase-guidance.md` for interaction language.
 
-## 目录
+## Contents
 
-- [定位与产出](#定位与产出)
-- [采集深度分级](#采集深度分级)
-- [三种采集技术](#三种采集技术)
-- [用户故事清单](#用户故事清单)
-- [术语表（CONTEXT.md）](#术语表contextmd)
-- [语气原则](#语气原则)
-- [完成条件](#完成条件)
-- [常见错误](#常见错误)
+- [Purpose and Outputs](#purpose-and-outputs)
+- [Elicitation Depth](#elicitation-depth)
+- [Three Elicitation Techniques](#three-elicitation-techniques)
+- [User-Story List](#user-story-list)
+- [Glossary (CONTEXT.md)](#glossary-contextmd)
+- [Tone](#tone)
+- [Completion Criteria](#completion-criteria)
+- [Common Mistakes](#common-mistakes)
 
 ---
 
-## 定位与产出
+## Purpose and Outputs
 
-阶段 1 知道了用户做什么、用什么语言、什么系统；阶段 1.5 回答的是**"这个项目到底要做什么、做到什么程度算好"**。没有这一步，阶段 7 的 spec 只能凭对话印象合成。
+Phase 1 establishes what the user is building, which languages they know, and which OS they use. Phase 1.5 answers: **What exactly should this project do, and what would make it good enough?** Without this step, Phase 7 can only synthesize a spec from vague conversational memory.
 
-| 产出物 | 形成于 | 落盘于 |
-|--------|--------|--------|
-| 用户故事清单 | 对话中逐条确认 | 阶段 7 写入 product spec 的"用户故事"章节 |
-| 术语表（澄清的领域概念） | 对话中随手记录 | 阶段 4 按需生成根目录 `CONTEXT.md`（见下文判定） |
-| "怎么算做好了" | 对话中确认 | 阶段 7 写入 product spec 的"验收标准"章节 |
+| Output | Formed | Persisted |
+|--------|--------|-----------|
+| User-story list | Confirmed one item at a time in conversation | Written to the Product Spec's User Stories section in Phase 7 |
+| Glossary of clarified domain concepts | Captured throughout the conversation | Written to root `CONTEXT.md` in Phase 4 when warranted |
+| Definition of success | Confirmed in conversation | Written to the Product Spec's Acceptance Criteria section in Phase 7 |
 
-阶段 1.5 期间项目目录可能还不存在，产出先在对话中暂存；落盘动作分别由阶段 4 和阶段 7 完成。
+The project directory may not exist during Phase 1.5. Hold these outputs in the conversation until Phase 4 and Phase 7 persist them.
 
-## 采集深度分级
+## Elicitation Depth
 
-| 项目规模 | 判断信号 | 采集强度 |
-|----------|---------|---------|
-| 小 | 一句话能说清、单用户、无支付/权限/多角色 | 轻量：3-5 个核心问题，一轮确认 |
-| 中 | 有 2 类以上使用者、有状态流转、有数据积累 | 标准：用户故事 + 术语 + 场景压力测试 |
-| 大 | 多角色、多端、涉及支付/协作/外部系统集成 | 完整：标准流程 + 原型验证边界争议 |
+| Project Size | Signals | Intensity |
+|--------------|---------|-----------|
+| Small | Explainable in one sentence, one user, no payments/permissions/roles | Lightweight: 3–5 core questions and one confirmation round |
+| Medium | Two or more user types, state transitions, accumulating data | Standard: user stories + terminology + scenario stress tests |
+| Large | Multiple roles or clients, payments, collaboration, or external integrations | Full: standard flow + prototypes for disputed boundaries |
 
-宁浅勿深：用户答不上来的问题不要硬问，降级用原型或二选一引导。
+When scope or risk is uncertain, ask targeted follow-ups before choosing a shallower depth. Use a shallow path only for a clearly small project or when the user explicitly prioritizes speed. If the user cannot answer, offer a binary choice or disposable prototype, then confirm the decision.
 
-## 三种采集技术
+## Three Elicitation Techniques
 
-### 1. 术语锐化
+### 1. Sharpen Terminology
 
-用户用模糊或多义词时，当场提出精确的规范术语：
-
-```text
-用户："我要记录每笔账。"
-追问："每笔账记的是花的钱，还是也包括别人欠你的？这两个我们后面分别叫'支出'和'应收'，可以吗？"
-```
-
-规则：
-
-- 同一个词被用户用于两个含义、或两个词被用户混用时，必须当场澄清。
-- 澄清结果立即记入暂存术语表：**标准术语 + 一两句定义 + 要避免的别名**。
-- 只收录本项目特有的概念；"超时""缓存"这类通用编程词不入表。
-
-### 2. 场景压力测试
-
-主动编造边界场景，逼出概念边界。用户在正常路径上说不出需求，但看到反例会立刻纠正：
+When the user uses an ambiguous or overloaded word, propose precise canonical terms immediately:
 
 ```text
-"假设你记了一笔账，然后发现金额填错了——你希望是改掉这笔，还是删了重记？这两个操作对'月度统计'的影响不一样。"
-"两个家庭成员在同一天各记了一笔，月度报表要合并显示还是分开看？"
+User: "I want to record every transaction."
+Follow-up: "Does a transaction mean money you spent, or also money someone owes you? We can call these 'expense' and 'receivable' from here on. Does that distinction work?"
 ```
 
-规则：
+Rules:
 
-- 每轮 1-3 个场景，问完等回答，不要连环轰炸。
-- 优先编"应该失败"的场景（不该允许的操作），最容易暴露边界漏洞。
-- 用户说"没想过"是正常信号，给出二选一帮他决定，并记入决策。
+- Clarify immediately when one word is used for two meanings or two words are mixed for one meaning.
+- Add the result to a working glossary: **canonical term + one- or two-sentence definition + aliases to avoid**.
+- Include only concepts specific to this project. Generic programming terms such as timeout and cache do not belong.
 
-### 3. 原型验证（需求含糊或用户说不清时）
+### 2. Stress-Test Scenarios
 
-用户答不好抽象问题，但点得动原型。生成**抛弃式单 HTML 文件**（双击即可打开，无框架无构建无安装），让用户点按钮、看状态：
-
-**逻辑原型**（验证状态流转/业务规则）：
-- 页面顶部写清这个原型在回答什么问题。
-- 按钮和状态用领域语言标注（"记一笔支出"，不是"调用 addExpense()"）。
-- 每次点击后完整显示当前状态，让用户看到变化。
-- 业务逻辑写成独立的纯函数/纯模块块，决策验证后可整体迁入真实代码。
-
-**UI 变体原型**（验证界面长什么样）：
-- 同一文件内 3 个**结构性不同**的方案（不同布局/信息层级，不是换个颜色）。
-- 文件底部放一个切换条，点箭头轮换方案，当前方案名常显。
-
-原型规则：
-
-- 抛弃式：无持久化、无测试、无错误处理，回答完问题就完成使命。
-- 写入当前工作目录，命名 `prototype-<主题>.html`；决策捕获后提醒用户可删除。
-- 用户点出"等等，这不应该允许"的瞬间就是需求发现——立即回写用户故事或术语表，再继续。
-- 用户反馈"我要 A 的布局加 B 的输入方式"是最佳产出，原样记录，不要替用户取舍。
-
-## 用户故事清单
-
-采集的主线产出。格式：
+Invent edge cases to reveal conceptual boundaries. Users may struggle to state requirements along a happy path but immediately correct a counterexample:
 
 ```text
-作为<角色>，我想要<功能>，以便<好处>。
-
-1. 作为记账的人，我想给每笔账打分类，以便月底知道钱花在哪。
-2. 作为记账的人，我想按月看汇总，以便对比各月开销。
+"Suppose you record an expense and later notice the amount is wrong. Should you edit it, or delete it and create a new one? Those choices affect the monthly report differently."
+"Two family members each record an expense on the same day. Should the monthly report combine them or show them separately?"
 ```
 
-规则：
+Rules:
 
-- 角色用具体的人（"记账的人""查看报表的家长"），不用"用户"这种空词。
-- 覆盖所有已确认的使用场景，包括边界场景转化来的故事（"作为记账的人，我想修改填错金额的账，以便月度统计保持准确"）。
-- 3-8 条为宜；超过 10 条说明项目偏大，提醒用户考虑缩减首批范围。
-- 每条用户故事在对话中获得用户确认，不替用户编造。
+- Ask 1–3 scenarios per round, then wait for an answer.
+- Prefer scenarios that should fail or actions that should not be allowed; they expose boundary gaps quickly.
+- "I haven't thought about that" is normal. Offer a binary choice and record the decision.
 
-## 术语表（CONTEXT.md）
+### 3. Prototype Validation
 
-落盘判定（阶段 4 执行）：
+When requirements remain unclear or the user cannot answer abstract questions, generate a **disposable single-file HTML prototype** that opens directly with no framework, build, or installation.
 
-| 条件 | 动作 |
-|------|------|
-| 澄清的项目特有术语 ≥ 3 个 | 生成根目录 `CONTEXT.md`，模板见 `docs-templates.md` |
-| 术语 < 3 个或无歧义 | 不生成；关键概念写进 AGENTS.md 核心信念即可 |
+**Logic prototype** (validates state transitions or business rules):
 
-生成 `CONTEXT.md` 后，在根级 `AGENTS.md` 快速入口追加一行 `- 术语表：见 CONTEXT.md`。
+- State the question the prototype is answering at the top of the page.
+- Label controls and states in domain language ("Record an expense," not "Call addExpense()").
+- Show the complete current state after every action.
+- Put business logic in independent pure functions or modules so validated decisions can later move into real code.
 
-后续所有产出（spec 标题、任务名、测试名、代码命名）必须使用 `CONTEXT.md` 的标准术语，不漂移到被标记为"避免"的别名。
+**UI variant prototype** (validates visual structure):
 
-## 语气原则
+- Include three **structurally different** options in one file: different layouts or information hierarchies, not just different colors.
+- Add a switcher at the bottom with arrows and an always-visible current variant name.
 
-**对想法无情追问，对人有情引导。**
+Prototype rules:
 
-- 连环追问的是概念边界和场景漏洞，不是质疑用户；措辞永远是"这两种情况怎么区分"，不是"你没说清楚"。
-- 每轮只问 1-3 个问题，问完就停。
-- 用户说"我不懂/没想过"时：换生活类比、给二选一、或降级到原型，绝不换个方式继续问同一个抽象问题。
-- 允许用户改主意；改动的不是错误，是采集在起作用。
+- Disposable: no persistence, tests, or error handling. Its mission ends when it answers the question.
+- Write it to the current working directory as `prototype-<topic>.html`; after capturing the decision, tell the user it can be deleted.
+- When the user says, "Wait, that should not be allowed," immediately update the working user stories or glossary before continuing.
+- Feedback such as "use A's layout with B's input method" is an ideal result. Record it verbatim instead of choosing for the user.
 
-## 完成条件
+## User-Story List
 
-阶段 1.5 结束需同时满足：
+This is the primary elicitation output. Format:
 
-1. 用户故事清单成型（≥ 3 条）且用户逐条确认过。
-2. 出现过歧义的关键术语均已澄清并暂存。
-3. 能用一段话回答"这个项目做好之后，用户拿它做什么、怎么算做好了"。
-4. 用户明确说需求讲完了/确认采集完整。
+```text
+As a <role>, I want <capability> so that <benefit>.
 
-向用户复述采集摘要（用户故事数、术语数、验收雏形一句话）并确认后，进入阶段 2 推荐技术栈。
+1. As a person tracking expenses, I want to categorize each transaction so that I know where my money went at the end of the month.
+2. As a person tracking expenses, I want monthly summaries so that I can compare spending across months.
+```
 
-## 常见错误
+Rules:
 
-| 错误 | 后果 | 正确做法 |
-|------|------|---------|
-| 跳过采集直接推荐技术栈 | 阶段 7 spec 凭印象合成，返工 | 技术栈推荐前先过完成条件 |
-| 连环审讯式提问 | 非技术用户被问懵，开始编答案 | 每轮 1-3 个问题，答不上就换原型 |
-| 替用户编用户故事 | spec 写的是 agent 的想象 | 每条故事都要用户确认 |
-| 所有项目都生成 CONTEXT.md | 空文档比没有更危险 | 术语 ≥ 3 个才生成 |
-| 原型做精致 | 时间花在样式上，问题没回答 | 抛弃式，回答完问题即止 |
-| 原型验证完不回写 | 发现的边界修正丢失 | 用户每次"这不对"立即回写暂存产出 |
+- Use a concrete person as the role ("person tracking expenses," "parent reviewing reports"), not an empty word such as "user."
+- Cover every confirmed scenario, including stories derived from edge cases.
+- Aim for 3–8 stories. More than 10 suggests the project may be too large; ask whether the first release should be narrowed.
+- Obtain user confirmation for every story. Do not invent stories on the user's behalf.
+
+## Glossary (CONTEXT.md)
+
+Persistence decision, applied in Phase 4:
+
+| Condition | Action |
+|-----------|--------|
+| Three or more project-specific terms were clarified | Generate root `CONTEXT.md` using the template in `docs-templates.md` |
+| Fewer than three terms, with no significant ambiguity | Do not generate it; put essential concepts in `AGENTS.md` core beliefs |
+
+After generating `CONTEXT.md`, add `- Glossary: see CONTEXT.md` to the root `AGENTS.md` Quick Entry section.
+
+Every later artifact—Spec titles, task names, test names, and code identifiers—must use canonical terms from `CONTEXT.md`, never aliases marked Avoid.
+
+## Tone
+
+**Be relentless with the idea and compassionate with the person.**
+
+- Challenge conceptual boundaries and scenario gaps, not the user's competence. Ask "How should these two cases differ?" instead of "You did not explain this clearly."
+- Ask only 1–3 questions per round, then stop.
+- When the user says "I don't know" or "I haven't thought about it," switch to a real-life analogy, a binary choice, or a prototype. Do not repeat the same abstract question in different words.
+- Let the user change their mind. A changed decision means elicitation is working, not that someone made a mistake.
+
+## Coverage Check
+
+Before completion, inspect the applicable categories: happy path, edge and negative cases, actors and permissions, data lifecycle, failure and recovery, integrations, and security or deployment. Ask a follow-up for each unaddressed category; mark a category N/A only after the user confirms it.
+
+## Completion Criteria
+
+Phase 1.5 is complete only when all of the following are true:
+
+1. The user-story list contains at least three stories, each confirmed by the user.
+2. Every ambiguous key term has been clarified and captured in the working glossary.
+3. One paragraph can explain what users will do with the finished project and what counts as success.
+4. The user explicitly confirms that requirements are complete.
+5. All applicable coverage categories are answered or marked N/A, and unresolved assumptions are explicit.
+
+Summarize the elicitation—the number of user stories, number of terms, and a one-sentence draft of acceptance—then obtain confirmation before entering Phase 2 tech stack recommendations.
+
+## Common Mistakes
+
+| Mistake | Consequence | Correct Approach |
+|---------|-------------|------------------|
+| Recommend a tech stack before elicitation | Phase 7 invents a Spec from impressions, causing rework | Meet the elicitation completion criteria first |
+| Interrogate the user with a long question chain | Non-technical users become overwhelmed and invent answers | Ask 1–3 questions per round; switch to a prototype when needed |
+| Choose shallow depth because scope is uncertain | Material assumptions survive into implementation | Ask targeted follow-ups and complete the applicable coverage check |
+| Invent user stories | The Spec reflects the agent's imagination | Confirm every story with the user |
+| Generate CONTEXT.md for every project | Empty documents are more dangerous than missing ones | Generate only with at least three terms |
+| Polish the prototype | Time is spent on appearance instead of answering the question | Keep it disposable and stop once the question is answered |
+| Fail to record prototype findings | Newly discovered boundaries are lost | Update working outputs after every "that's not right" moment |

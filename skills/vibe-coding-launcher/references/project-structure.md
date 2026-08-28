@@ -1,90 +1,95 @@
-# 项目结构标准
+# Project Structure Standard
 
-## 目录
+## Contents
 
-- [核心集](#核心集所有项目必须生成)
-- [扩展集](#扩展集按需生成)
-- [文档生成判定](#文档生成判定)
-- [按项目类型调整](#按项目类型调整)
+- [Core Set](#core-set-phase-3)
+- [Extended Set](#extended-set-generated-when-needed)
+- [Document Generation Rules](#document-generation-rules)
+- [Adjustments by Project Type](#adjustments-by-project-type)
 
 ---
 
-## 核心集（所有项目必须生成，阶段 3 完成）
+## Core Set (Phase 3)
+
+Generate the mandatory items in Phase 3 and add conditional items only when their conditions are met:
 
 ```
 project-name/
-├── AGENTS.md                  # 代理入口地图（~150行，含初始约束机制）
-├── WORKFLOW.md                # 项目默认工作流（非平凡任务的门禁流程）
-├── TASKS.md                   # 执行清单（轻量任务追踪）
-├── README.md                  # 项目说明
+├── AGENTS.md                    # Agent entry-point map (~150 lines, including initial constraint mechanism)
+├── WORKFLOW.md                  # Default workflow and non-trivial-work gates
+├── TASKS.md                     # Conditional: present only while execution tasks exist
+├── README.md                    # Project overview
 ├── scripts/
-│   └── validate_agents_docs.py  # 文档验证脚本（从本 skill 的 scripts/ 原样写入）
+│   └── validate_agents_docs.py  # Copied verbatim from this skill
 └── docs/
-    ├── ARCHITECTURE.md        # 架构地图（CLI/单文件项目不生成 docs/，架构信息写入 AGENTS.md）
-    └── EXECUTION_GATES.md     # 完成门禁（验证、风险、收尾标准）
+    ├── ARCHITECTURE.md          # Architecture map (omitted for CLI/single-file projects)
+    └── EXECUTION_GATES.md       # Validation, risk, and completion gates
 ```
 
-> **CLI/单文件项目例外**：命令行/单文件项目的核心集只生成 AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录。架构信息（概述 + 关键文件 + 2-3 条不变量）、完成门禁摘要和初始 `约束机制` 写入 AGENTS.md。
+> **CLI/single-file exception:** Generate AGENTS.md + WORKFLOW.md + README.md + scripts/validate_agents_docs.py; add TASKS.md while execution tasks exist. Do not generate `docs/`. Put the architecture overview, key files, 2–3 invariants, completion-gate summary, and initial `Constraint Mechanism` in AGENTS.md.
 
-根级 `AGENTS.md` 在核心集阶段就必须写入有效 `约束机制`。简单项目默认 `模式=agents-only`、`配置=N/A`；复杂项目若选择 `linter+agents`，必须同时生成真实配置文件路径，避免后续文档验证因缺少配置而失败。
+The root `AGENTS.md` must contain a valid `Constraint Mechanism` during the core-set phase. Simple projects default to `Mode=agents-only` and `Configuration=N/A`. If a complex project chooses `linter+agents`, generate the real configuration file and record its path at the same time so document validation does not fail later.
 
-## 扩展集（按需生成，阶段 4 完成）
+## Extended Set (Generated When Needed)
+
+Complete in Phase 4:
 
 ```
 project-name/
-├── CONTEXT.md                 # 项目术语表（需求采集中澄清的术语 ≥ 3 个时生成）
+├── CONTEXT.md                  # Project glossary (when 3+ terms were clarified)
 ├── docs/
-│   ├── DESIGN.md              # 设计规范
-│   ├── QUALITY_SCORE.md       # 质量评分追踪
-│   ├── SECURITY.md            # 安全规范
-│   ├── DEPLOYMENT.md          # 部署规范（可部署的服务端项目）
+│   ├── DESIGN.md               # Design standards
+│   ├── QUALITY_SCORE.md        # Quality score tracking
+│   ├── SECURITY.md             # Security standards
+│   ├── DEPLOYMENT.md           # Deployment specification for deployable server projects
 │   ├── design-docs/
-│   │   ├── index.md           # 设计文档索引
-│   │   ├── core-beliefs.md    # 核心信念和原则
-│   │   └── *.md              # 其他设计文档
+│   │   ├── index.md            # Design-document index
+│   │   ├── core-beliefs.md     # Core beliefs and principles
+│   │   └── *.md                # Other design documents
 │   ├── exec-plans/
-│   │   ├── active/            # 正在执行的计划
-│   │   ├── completed/         # 已完成的计划
-│   │   └── tech-debt-tracker.md  # 技术债追踪
+│   │   ├── active/             # Plans in progress
+│   │   ├── completed/          # Completed or superseded plans
+│   │   └── tech-debt-tracker.md
 │   ├── product-specs/
-│   │   ├── index.md           # 产品规格索引
-│   │   └── *.md              # 各功能规格
+│   │   ├── index.md
+│   │   └── *.md
 │   ├── references/
-│   │   ├── *.txt             # 技术参考（LLM友好格式）
-│   │   └── *.md              # API文档等
+│   │   ├── *.txt               # LLM-friendly technical references
+│   │   └── *.md                # API documentation and similar material
 │   └── generated/
-│       └── db-schema.md      # 自动生成的文档
-├── src/                       # 源代码
+│       └── db-schema.md
+├── src/
 └── .gitignore
 ```
 
-## 文档生成判定
+## Document Generation Rules
 
-下表覆盖核心集中的条件项（`WORKFLOW.md`、`docs/EXECUTION_GATES.md`）与全部扩展集文档，统一说明各自的生成条件与不生成时的替代方案。
+This table covers conditional core documents (`WORKFLOW.md`, `docs/EXECUTION_GATES.md`) and every extended document, including what replaces a document when it is omitted.
 
-| 文件/目录 | 生成条件 | 不生成时的替代方案 |
-|-----------|---------|-----------------|
-| `WORKFLOW.md` | 所有项目默认生成；极小一次性脚本可并入 AGENTS.md | AGENTS.md 写明轻量流程 |
-| `CONTEXT.md` | 需求采集（阶段 1.5）中澄清的项目特有术语 ≥ 3 个 | 不生成；关键概念写入 AGENTS.md 核心信念 |
-| `docs/EXECUTION_GATES.md` | 多文件项目或需要测试/发布/交付标准 | AGENTS.md 写明最小验证和收尾格式 |
-| `docs/DESIGN.md` | 项目有 UI 或 API | 设计规范写入 AGENTS.md 核心信念 |
-| `docs/QUALITY_SCORE.md` | 项目超过 3 个模块 | 不生成，待模块增长后再创建 |
-| `docs/SECURITY.md` | 项目涉及网络请求、数据存储或 API Key | 安全约束写入 AGENTS.md 核心信念 |
-| `docs/DEPLOYMENT.md` | Web/API/需长期运行的服务端项目，且用户有云服务器部署需求（模板见 `deployment-spec.md`） | CLI 本地工具或无服务器项目不生成；待需要部署时补生成 |
-| `docs/design-docs/` | 项目有 3 条以上核心信念需要展开 | 核心信念直接写入 AGENTS.md |
-| `docs/exec-plans/` | 项目需要多步骤开发计划（见 task-management.md） | 小任务用根目录 TASKS.md 追踪，无需建此目录 |
-| `docs/product-specs/` | 项目有多个功能需要规格描述 | 不生成，待功能明确后再创建 |
-| `docs/references/` | 项目依赖外部 API 或复杂技术 | 不生成，待需要时再创建 |
-| `docs/generated/` | 项目使用数据库 | 不生成 |
-| `src/` | 非单文件项目 | 单文件项目直接放根目录 |
+| File / Directory | Generate When | If Omitted |
+|------------------|---------------|------------|
+| `WORKFLOW.md` | By default for every project; a tiny one-off script may inline it into AGENTS.md | Describe the lightweight workflow in AGENTS.md |
+| `TASKS.md` | Concrete execution tasks exist | Create it when execution starts; delete it after all tasks complete |
+| `CONTEXT.md` | Phase 1.5 clarified at least three project-specific terms | Put essential concepts in AGENTS.md core beliefs |
+| `docs/EXECUTION_GATES.md` | Multi-file project or any project needing test/release/delivery standards | Put minimum validation and final-delivery format in AGENTS.md |
+| `docs/DESIGN.md` | Project has a UI or API | Put 2–3 key design constraints in AGENTS.md core beliefs |
+| `docs/QUALITY_SCORE.md` | Project has more than three modules | Create later if the module count grows |
+| `docs/SECURITY.md` | Project makes network requests, stores data, or uses API keys | Put key security constraints in AGENTS.md core beliefs |
+| `docs/DEPLOYMENT.md` | Web/API/long-running server project and the user wants cloud-server deployment; see `deployment-spec.md` | Omit for local CLI/serverless projects; create when deployment becomes necessary |
+| `docs/design-docs/` | At least three core beliefs need fuller treatment | Keep core beliefs in AGENTS.md |
+| `docs/exec-plans/` | Project needs multi-step development plans; see `task-management.md` | Track active small tasks in root TASKS.md |
+| `docs/product-specs/` | Multiple features require specifications | Create after feature scope becomes clear |
+| `docs/references/` | Project depends on external APIs or complex technology | Create when reference material becomes necessary |
+| `docs/generated/` | Project uses a database | Omit |
+| `src/` | Project has more than one source file | Keep a single-file project at root |
 
-判断原则：宁少勿多。项目启动时只生成核心集 + 满足条件的扩展集。不要一次性生成空文档——空文档比没有文档更危险。
+Prefer fewer documents. At launch, generate only the core set and extended documents whose conditions are met. Never pre-generate empty documents; an empty document is more dangerous than no document.
 
-经验规则：`AGENTS.md` 只做快速入口地图；流程细节放 `WORKFLOW.md`，收尾标准放 `docs/EXECUTION_GATES.md`，功能意图放 `docs/product-specs/`，实施过程放 `docs/exec-plans/`。不要把这些内容混进一个超长 `AGENTS.md`。
+Keep `AGENTS.md` as an entry-point map. Put process detail in `WORKFLOW.md`, completion standards in `docs/EXECUTION_GATES.md`, feature intent in `docs/product-specs/`, and implementation history in `docs/exec-plans/`. Do not combine them into an oversized `AGENTS.md`.
 
-## 按项目类型调整
+## Adjustments by Project Type
 
-- **Web应用**：添加 `templates/`、`static/`，src 下按 `ui/` `service/` `repo/` 分层
-- **API服务**：src 下按 `routes/` `models/` `services/` 分层
-- **命令行**：单文件即可，核心集只生成 AGENTS.md + WORKFLOW.md + TASKS.md + README.md + scripts/validate_agents_docs.py，不生成 docs/ 目录
-- **AI应用**：添加 `config.py`（API Key），docs/references/ 放 API 文档
+- **Web app:** add `templates/` and `static/`; layer `src/` as `ui/`, `service/`, and `repo/`.
+- **API service:** layer `src/` as `routes/`, `models/`, and `services/`.
+- **CLI:** a single file is acceptable. Generate AGENTS.md + WORKFLOW.md + README.md + scripts/validate_agents_docs.py, add TASKS.md while work is active, and omit `docs/`.
+- **AI application:** add `config.py` for API-key configuration and put API documentation in `docs/references/`.

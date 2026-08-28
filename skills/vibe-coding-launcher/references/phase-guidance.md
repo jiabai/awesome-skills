@@ -1,139 +1,139 @@
-# 阶段互动指南
+# Phase Interaction Guide
 
-`SKILL.md` 只保留入口和阶段总览；具体确认话术、步骤模板、术语解释、常见陷阱和示例放在这里。验证规则、任务管理和架构约束分别见 `validation-standards.md`、`task-management.md`、`architecture-constraints.md`。
+`SKILL.md` contains only entry points and the phase overview. This document contains confirmation language, step templates, terminology, pitfalls, and examples. See `validation-standards.md`, `task-management.md`, and `architecture-constraints.md` for their respective rules.
 
-## 阶段确认
+## Human-Gate Confirmation
 
-通用确认格式：
-
-```text
-{阶段名}已完成：
-- {已完成内容 1}
-- {已完成内容 2}
-
-请确认是否继续下一阶段。回复格式：
-- "继续" 或 "OK" — 进入下一阶段
-- "有问题：xxx" — 先解决问题再继续
-- "暂停" — 结束本次对话，下次恢复
-```
-
-- 用户没有回复时，不推进到下一阶段。
-- 阶段之间只做一件事：完成、展示、等待确认。
-
-## 触发后自检
-
-进入本 skill 后，先判断当前请求是否真的是“项目启动”或“项目恢复定位”。
-
-| 请求类型 | 处理 |
-|----------|------|
-| 从零做项目 / 用户不确定技术栈 / 需要 AI 友好项目体系 | 继续阶段流程 |
-| 已有项目，用户说继续、接着做、上次项目 | 进入恢复模式，先读上下文、尝试验证并总结 |
-| 单个函数、代码片段、编程问答 | 退出启动流程，直接回答或实现 |
-| bug 修复、调试报错、日常小功能、重构 | 退出启动流程；如有 `AGENTS.md`，只把它作为项目上下文读取 |
-| 项目治理体系已建立后的普通迭代 | 退出启动流程，按项目自己的 `AGENTS.md` / `WORKFLOW.md` 执行 |
-
-退出启动流程时，用一句话说明原因即可，不要生成项目结构、Spec、ExecPlan 或 docs。
-
-## 恢复确认
-
-恢复模式的第一轮只做定位，不做推进。即使用户说“接着做”，也要先输出恢复摘要并等待二次确认。
-
-验证脚本缺失时，不要自动生成或修复项目治理文档。优先用本 skill 自带的 `scripts/validate_agents_docs.py --project <项目根目录>` 做外部检查；如果无法运行，就把“验证脚本缺失/未验证”列为不确定项，仍然完成恢复摘要。
-
-恢复摘要格式：
+Use this format at a direction-setting gate: requirements, stack, generated document set, Product Spec, or ExecPlan.
 
 ```text
-已恢复上下文：
-- 来源：AGENTS.md、TASKS.md、docs/exec-plans/active/...
-- 当前阶段/断点：...
-- 已完成：...
-- 下一步候选：...
-- 不确定项：...
+{Phase Name} is complete:
+- {Completed item 1}
+- {Completed item 2}
 
-是否从「...」继续？
+Confirm whether to continue to the next phase. Reply with:
+- "Continue" or "OK" — enter the next phase
+- "Issue: xxx" — resolve the issue first
+- "Pause" — end this conversation and recover next time
 ```
 
-用户再次回复“继续/确认/从这里开始”后，才进入创建计划、更新任务或执行代码。
+- Wait for a reply at these gates.
+- After the user approves an ExecPlan or lightweight task, continue autonomously through meaningful milestones. Pause again only for the exceptions defined in `SKILL.md`.
 
-## 第八阶段步骤模板
+## Applicability Check
+
+After invocation, verify that the request is genuinely a project launch or project-recovery orientation.
+
+| Request | Response |
+|---------|----------|
+| New project / uncertain tech stack / needs AI-friendly project system | Continue the phase workflow |
+| Existing project; user says continue, resume, or previous project | Enter recovery mode: read context, attempt validation, summarize |
+| Isolated function, snippet, or programming question | Exit launch workflow and answer or implement directly |
+| Bug, debugging, routine small feature, or refactor | Exit launch workflow; if AGENTS.md exists, read it only as project context |
+| Routine iteration after governance exists | Exit launch workflow and follow the project's AGENTS.md / WORKFLOW.md |
+
+When exiting, explain why in one sentence. Do not generate project structure, Specs, ExecPlans, or docs.
+
+## Recovery Confirmation
+
+The first recovery round performs orientation only. Even when the user says "continue," present a recovery summary and wait for a second confirmation before advancing.
+
+If the project's validator is missing, do not generate or repair governance documents automatically. Prefer this skill's `scripts/validate_agents_docs.py --project <project-root>`. If that cannot run, record "validator missing / not validated" as an uncertainty and still complete the summary.
+
+Format:
 
 ```text
-## 步骤 N：{步骤名}
-{具体操作指令}
+Context recovered:
+- Sources: AGENTS.md, TASKS.md, docs/exec-plans/active/...
+- Current phase/stopping point: ...
+- Completed: ...
+- Candidate next step: ...
+- Uncertainties: ...
 
-完成后告诉我："成功了" 或 "遇到问题：xxx"
+Continue from "..."?
 ```
 
-- 每完成一步，先等用户反馈，再决定下一步。
-- 步骤指令尽量短，只有一个目标。
+Only after the user replies "continue," "confirmed," or "start here" may the agent create a plan, update tasks, or execute code.
 
-## 遇到问题
-
-当用户说“遇到问题”时：
-
-1. 先问具体错误信息，优先要截图或原始报错文本。
-2. 给出针对性的解决方案。
-3. 解决完再继续，不跳步骤。
-
-## 交付后部署引导
-
-阶段 8 完成门禁通过后，检查项目是否可部署（存在 `docs/DEPLOYMENT.md`，或属于 Web/API/服务端项目）：
-
-- 可部署 → 在交付说明末尾主动提示：
+## Phase 8 Milestone Update
 
 ```text
-项目已开发完成。如果要部署到云服务器，回复"部署"，
-我会按 docs/DEPLOYMENT.md 一步步引导你操作（你在 SSH 终端执行，我验证结果）。
+## Milestone N: {Milestone Name}
+- Result: {observable outcome}
+- Validation: {check and result}
+- Next: {next approved milestone}
 ```
 
-- 引导模式与第八阶段一致：一次只给一步命令 → 用户在 SSH 终端执行 → 用户回报“成功”或报错原文 → 验证通过再给下一步。
-- Agent 不直接执行远程命令，不索要服务器密码；细则和话术模板见 `deployment-spec.md`。
-- 不可部署（CLI 本地工具、无服务器）或用户暂不部署 → 不提示，正常收尾。
+- Continue after the update when the next milestone is already approved.
+- Pause when authorization, a new decision, changed scope or risk, or an unresolved error requires user input.
 
-## 语言风格
+## Handling Problems
 
-- 简洁：一句话只做一件事。
-- 具体：给出明确命令或操作。
-- 友好：允许用户说“我不懂”，耐心解释。
-- 新手不懂术语时，用生活类比，不用术语解释术语。
+When the user reports a problem:
 
-## 常用术语
+1. Ask for the exact error, preferably a screenshot or original text.
+2. Provide a targeted resolution.
+3. Resume only after the problem is resolved; do not skip the step.
 
-| 概念 | 一句话解释 |
-|------|-----------|
-| 终端/命令行 | 输入命令让电脑执行的程序 |
-| 编辑器 | 写代码的工具，常见的是 VS Code |
-| 依赖/库 | 别人写好的代码，可以直接拿来用 |
-| API | 网站或服务提供的接口 |
-| AGENTS.md | AI 代理的入口地图，告诉它项目结构 |
-| 用户故事 | 描述需求的一句话格式："作为<角色>，我想要<功能>，以便<好处>" |
-| CONTEXT.md | 项目术语表，记录关键概念的标准叫法和要避免的别名 |
-| TASKS.md | 项目的待办清单，记录要做的事和做完的事 |
-| ExecPlan | 执行计划，让 AI 代理按步骤完成任务 |
-| 架构约束 | 规则，防止代码越写越乱 |
+## Deployment Guidance After Delivery
 
-## 常见陷阱
+After Phase 8 completion gates pass, check whether the project is deployable: it has `docs/DEPLOYMENT.md` or is a Web/API/server project.
 
-| 说法 | 现实 | 正确做法 |
-|------|------|---------|
-| 用户已经描述过项目，所以不用再问 | 通常还缺语言熟悉度和操作系统 | 只补缺失项，仍要问齐 3 个问题 |
-| 用户说了项目想法就直接推荐技术栈 | 需求没采集，阶段 7 的 spec 只能凭印象合成 | 阶段 1 和阶段 2 之间先做需求采集，方法见 `requirements-elicitation.md` |
-| 需求采集做成连环审讯 | 非技术用户被问懵，开始编答案 | 每轮只问 1-3 个问题；答不上就换原型或给二选一 |
-| 项目很简单，直接写代码更快 | 没有项目体系，后续会越来越慢 | 先建立核心集，再开始开发 |
-| 用户只是要函数或修 bug，也进入 8 阶段 | 这是任务级请求，不是项目启动 | 直接处理任务；已有 AGENTS.md 时只读作上下文 |
-| 直接开始开发，恢复模式太慢 | 不读 AGENTS.md 会丢失架构信息 | 先恢复，再进入当前阶段 |
-| 用户说“接着做”，就直接推进 | 可能还有疑问或未完成事项 | 先简述当前状态，等“继续” |
-| CLI 项目也要 docs/ 目录以防万一 | 空文档比没有文档更危险 | CLI/单文件项目不生成 docs/ |
-| 第八阶段可以直接写代码，不用再确认 | 容易偏离用户目标 | 每完成一步都要确认 |
-| 开发完成就结束，不提部署 | 有 DEPLOYMENT.md 的项目断在“最后一公里” | 交付说明末尾主动提示可引导部署 |
-| 约束机制以后再补 | 架构会自然退化 | 第五阶段必须落地约束 |
-| TASKS.md 只要勾选，不用写验证条件 | 无法确认是否真正完成 | 每条任务必须带 `✅` 验证条件 |
+For a deployable project, append:
 
-## 场景示例
+```text
+Development is complete. To deploy to a cloud server, reply "Deploy."
+I will guide you through docs/DEPLOYMENT.md one step at a time—you run commands in your SSH terminal, and I validate the results.
+```
 
-| 场景 | 用户输入 | 推荐响应 |
-|------|---------|---------|
-| 新手项目 | “我想做一个记账小网页” | 问 3 个问题 → 需求采集（用户故事 + 术语澄清）→ 推荐最简单技术栈 → 生成核心结构 |
-| CLI 工具 | “我要做一个自动发邮件的工具” | 推荐 Python → 识别 CLI 项目 → 先建核心集 |
-| AI 应用 | “帮我写个聊天机器人” | 推荐最简单可行方案 → 按复杂项目流程走 |
-| 恢复场景 | “继续开发上次的项目” | 读 AGENTS.md + TASKS.md → 简述当前状态 → 等用户确认 |
+- Use deployment pacing: one command → user runs it → user reports success or exact error → validate before the next command.
+- The agent never runs remote commands directly or requests server passwords. See `deployment-spec.md`.
+- Do not offer deployment for local CLI or serverless projects, or when the user does not want it.
+
+## Language Style
+
+- Concise: one sentence, one purpose.
+- Concrete: provide an exact command or action.
+- Friendly: let users say "I don't understand" and explain patiently.
+- For beginners, use real-life analogies rather than explaining jargon with more jargon.
+
+## Common Terms
+
+| Concept | Plain-Language Explanation |
+|---------|----------------------------|
+| Terminal / command line | A program where you type commands for the computer to run |
+| Editor | A tool for writing code, such as VS Code |
+| Dependency / library | Code written by someone else that the project can reuse |
+| API | An interface exposed by a website or service |
+| AGENTS.md | The entry-point map that tells AI agents how the project is organized |
+| User story | "As a <role>, I want <capability> so that <benefit>" |
+| CONTEXT.md | A project glossary of canonical terms and aliases to avoid |
+| TASKS.md | A temporary checklist of work and its validation |
+| ExecPlan | A step-by-step implementation plan for an AI agent |
+| Architecture constraint | A rule that prevents code structure from degrading |
+
+## Common Pitfalls
+
+| Claim | Reality | Correct Response |
+|-------|---------|------------------|
+| The user already described the project, so no questions are needed | Language familiarity and OS are often missing | Ask only for missing items, but complete all three Phase 1 questions |
+| Recommend a stack immediately after hearing the idea | Without elicitation, Phase 7 invents the Spec | Perform requirements elicitation between Phases 1 and 2 |
+| Elicitation should be exhaustive questioning | Non-technical users become overwhelmed and invent answers | Ask 1–3 questions per round; use a prototype or binary choice |
+| A simple project is faster if code starts immediately | Without governance, later work slows down | Establish the core set first |
+| An isolated function or bug should enter all eight phases | It is a task, not a project launch | Handle directly; read existing AGENTS.md only as context |
+| Recovery is too slow; start coding | Skipping AGENTS.md loses architecture context | Recover first, then enter the current phase |
+| "Continue" authorizes immediate action | There may be uncertainty or unfinished work | Summarize state and wait for confirmation |
+| A CLI should get `docs/` just in case | Empty documents are more dangerous than missing ones | Do not generate `docs/` for CLI/single-file projects |
+| An approved Phase 8 plan still needs confirmation after every task | Excess pauses fragment execution without adding a decision | Continue through approved milestones; pause only at human gates |
+| Development ends without deployment guidance | Projects with DEPLOYMENT.md stop before the last mile | Offer guided deployment in the final report |
+| Add constraints later | Architecture degrades naturally | Establish constraints in Phase 5 |
+| TASKS.md needs checkboxes but no validation | Completion cannot be proven | Every task includes a `✅` condition |
+
+## Scenarios
+
+| Scenario | User Input | Recommended Response |
+|----------|------------|----------------------|
+| Beginner project | "I want a small expense-tracking web page" | Ask three questions → elicit user stories and terms → recommend the simplest stack → generate core structure |
+| CLI tool | "I want a tool that sends email automatically" | Recommend Python → identify CLI → build core set first |
+| AI application | "Build me a chatbot" | Recommend the simplest viable approach → follow the complex-project workflow |
+| Recovery | "Continue the project from last time" | Read AGENTS.md + TASKS.md → summarize current state → wait for confirmation |
