@@ -5,6 +5,7 @@ This document defines how Phase 1.5—after learning about the user but before r
 ## Contents
 
 - [Purpose and Outputs](#purpose-and-outputs)
+- [Domain Adaptation](#domain-adaptation)
 - [Elicitation Depth](#elicitation-depth)
 - [Three Elicitation Techniques](#three-elicitation-techniques)
 - [User-Story List](#user-story-list)
@@ -26,6 +27,21 @@ Phase 1 establishes what the user is building, which languages they know, and wh
 | Definition of success | Confirmed in conversation | Written to the Product Spec's Acceptance Criteria section in Phase 7 |
 
 The project directory may not exist during Phase 1.5. Hold these outputs in the conversation until Phase 4 and Phase 7 persist them.
+
+## Domain Adaptation
+
+Use the generic elicitation framework to generate domain-specific questions dynamically. The framework determines how to ask; the project context determines what to ask.
+
+Before the first elicitation round:
+
+1. Identify the likely domain and business model from the user's words. State the inference briefly and invite correction.
+2. Build a temporary domain map covering actors and permissions, core entities, lifecycle and state transitions, business rules, integrations, failure and recovery, and security, compliance, or deployment risks.
+3. Rank unanswered questions by their impact on scope, architecture, and risk. Ask only the next 1–3 highest-value questions, then wait for the user's answers.
+4. Use the user's domain language. If the user cannot answer, offer concrete alternatives or a real-life scenario; treat every model-generated option as a suggestion until the user confirms it.
+5. Track each item as **confirmed**, **open**, or **assumption**. Never promote an assumption into a user story, acceptance criterion, or implementation decision without confirmation.
+6. Rebuild or refine the domain map after every answer and use it to select the next questions. For legal, tax, payment, privacy, or other regulated boundaries, identify the jurisdiction and flag the rule for authoritative verification before implementation.
+
+For example, after "I want an e-commerce independent site," derive a map around customers, administrators, products and variants, inventory, carts, orders, payments, shipments, refunds, and notifications. Then ask about the product type and target market before asking about page layout or technology.
 
 ## Elicitation Depth
 
@@ -144,7 +160,8 @@ Phase 1.5 is complete only when all of the following are true:
 2. Every ambiguous key term has been clarified and captured in the working glossary.
 3. One paragraph can explain what users will do with the finished project and what counts as success.
 4. The user explicitly confirms that requirements are complete.
-5. All applicable coverage categories are answered or marked N/A, and unresolved assumptions are explicit.
+5. The domain map has been confirmed by the user or its remaining items are explicitly marked as assumptions.
+6. All applicable coverage categories are answered or marked N/A, and unresolved assumptions are explicit.
 
 Summarize the elicitation—the number of user stories, number of terms, and a one-sentence draft of acceptance—then obtain confirmation before entering Phase 2 tech stack recommendations.
 
