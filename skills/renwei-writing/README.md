@@ -14,7 +14,7 @@ AI 有点委屈，毕竟每一处都改得有理有据。两个人就着这件�
 
 "AI 改东西，缺乏一个存在感。我感受不到背后的那个人。"
 
-这份心法就是那一晚的沉淀。它管的事情很窄：当 AI 要去动一个人的文字时，怎么保证改完之后，那个人还在。
+这份心法从那一晚开始：当 AI 要去动一个人的文字时，怎么保证改完之后，那个人还在。现在也支持依据素材写观点文章、参照样文学习口吻，让判断有依据，让读者跟得上思考。
 
 ## 人味儿是三件事
 
@@ -28,25 +28,29 @@ AI 有点委屈，毕竟每一处都改得有理有据。两个人就着这件�
 
 ## 怎么用
 
-把它放进你的 agent 的 skills 路径：
+安装这个定制版时，把当前 `renwei-writing` 目录完整复制到所用 agent 的
+技能发现目录，并按该 agent 的方式刷新技能。保留 `SKILL.md`、`references/`
+和 `LICENSE.md`，不要只复制入口文件。
 
-```bash
-git clone https://github.com/orange2ai/renwei-writing.git ~/.cola/skills/renwei-writing
-```
+本版本位于 awesome-skills 仓库的 `skills/renwei-writing/`。
+[原作者仓库](https://github.com/orange2ai/renwei-writing)是来源说明，不是本定制版的安装入口。
 
-然后正常让 AI 改稿就行。心法会管住它的手：
+然后正常让 AI 改稿，或给它素材和写作目标。心法会帮助它判断怎么动笔：
 
-1. 只做减法。一段文字动三处是常态，动十处是事故
+1. 轻度润色优先少动；重写、扩写可以补必要的解释。改动数量不作为质量指标
 2. 毛边先当手迹，不当瑕疵。删之前问一句：删掉以后，说话的人还在吗
-3. 改稿时写出了漂亮句子，是警报。那是它在表演，不是作者在说话
-4. 每处改动给理由，拿不准的标出来。否决权永远在作者手里
-5. 改完拿清单扫一遍自己动过的句子，看有没有带进 AI 的痕迹
+3. 保留有效的比喻、设问和收束句；新写的凝练表达要从论证里长出来
+4. 按需要说明关键改动，拿不准的标出来；用户只要正文就交正文
+5. 润色检查动过的部分，新作检查全文；按语境判断表达，不机械删句式和标点
+
+观点文章的文风参考来自用户提供、署名愚人的《文化、文明与历史》：用聊天的口气拆开问题，讲清机制，长句解释、短句收住，最后回到人的处境。学习表达方法，不借用作者身份，也不把样文的历史判断和数字当成已核实的事实。
 
 ## 里面有什么
 
-- [SKILL.md](SKILL.md)：心法本体。人味儿的定义，改稿的规矩，和那次失败换来的几条 gotchas
+- [SKILL.md](SKILL.md)：心法本体。人味儿的定义，润色、重写和观点写作的入口，事实边界与交稿标准
+- [references/essay-style.md](references/essay-style.md)：样文的口吻、机制推理、生活类比、句子节奏和收束方式，含短例和适用边界
 - [references/case-study.md](references/case-study.md)：开头那次失败的完整解剖。原文、改砸的版本、被接受的版本，三个并排放着，砸在哪儿逐条写清了
-- [references/post-edit-checklist.md](references/post-edit-checklist.md)：事后检查清单。改完之后扫自己动过的句子用，提炼自 Wikipedia 的 [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing)（经 [blader/humanizer](https://github.com/blader/humanizer)，MIT），按中文写作适配过
+- [references/post-edit-checklist.md](references/post-edit-checklist.md)：事后检查清单。检查修辞有没有作用、判断有没有依据。参考 Wikipedia 的 [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) 和 [blader/humanizer](https://github.com/blader/humanizer)（MIT），按中文语境和样文调整
 
 心法管改之前，清单管改之后。先想清楚动不动，再检查动过的地方。顺序反了，就会拿着清单去扫作者的原文，把手迹当成待修的瑕疵。
 
